@@ -1,0 +1,5 @@
+/assets
+/scripts
+/scenes/__pycache__
+/src/core/__pycache__
+/src/components/__pycache__
