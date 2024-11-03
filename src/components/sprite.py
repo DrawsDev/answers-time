@@ -4,12 +4,13 @@ from pygame.math import Vector2
 class Sprite(pygame.sprite.Sprite):
     def __init__(self,
                  image: pygame.Surface,
-                 position: Vector2 = (0, 0),
+                 position: pygame.math.Vector2 = (0, 0),
                  anchor: str = "topleft"
                  ) -> None:
         super().__init__()
         self._position = position
         self._anchor = anchor
+        self._anchor_offset = Vector2()
         self._update_image(image)
     
     @property
@@ -25,13 +26,22 @@ class Sprite(pygame.sprite.Sprite):
     def anchor(self) -> str:
         return self._anchor
     
-    @position.setter
+    @anchor.setter
     def anchor(self, value: str) -> None:
         self._anchor = value
         self._update_rect()
 
+    @property
+    def anchor_offset(self) -> str:
+        return self._anchor_offset
+    
+    @anchor_offset.setter
+    def anchor_offset(self, value: Vector2) -> None:
+        self._anchor_offset = value
+        self._update_rect()
+
     def _update_rect(self) -> None:
-        self.rect = self.image.get_rect(**{self._anchor: self._position})
+        self.rect = self.image.get_rect(**{self._anchor: self._position - self._anchor_offset})
     
     def _update_image(self, image: pygame.Surface) -> None:
         self.image = image

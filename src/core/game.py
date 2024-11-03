@@ -1,5 +1,6 @@
-import pygame
 import sys
+import pygame
+from src.settings import *
 from src.components.scene import Scene
 
 game = None
@@ -7,8 +8,9 @@ game = None
 class Game:
     def __init__(self) -> None:
         pygame.init()
-        pygame.display.set_caption("TEST")
-        self.screen = pygame.display.set_mode((500, 500))
+        pygame.display.set_caption(WINDOW_TITLE)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF)
+        self.surface = pygame.Surface(SURFACE_SIZE)
         self.clock = pygame.Clock()
         self._init_scenes()
 
@@ -45,6 +47,8 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit()
+            elif event.type == pygame.VIDEORESIZE:
+                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE | pygame.DOUBLEBUF)
     
     def _update(self, delta: float) -> None:
         if self._scene:
@@ -52,6 +56,8 @@ class Game:
 
     def _draw(self) -> None:
         if self._scene:
-            self._scene.draw(self.screen)
+            self._scene.draw(self.surface)
+        
+        self.screen.blit(pygame.transform.scale(self.surface, self.screen.get_size()))
 
         pygame.display.flip()
