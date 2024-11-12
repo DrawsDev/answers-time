@@ -13,12 +13,22 @@ class Timer:
         return result
 
     @property
+    def time(self) -> float:
+        return self._time
+    
+    @time.setter
+    def time(self, value: float) -> None:
+        self._time = value
+        self.reset()
+
+    @property
     def loop(self) -> bool:
         return self._loop
     
     @loop.setter
     def loop(self, value: bool) -> None:
         self._loop = value
+        self.reset()
 
     def reset(self) -> None:
         self._start_t = time()

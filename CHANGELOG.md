@@ -4,6 +4,16 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2024-11-12
+### Added
+- New component - `dialogue.py`: classes `Dialogue` and `Line` to replace the spaghetti code in `intro.py`:
+  - `Line` contains the text and the effects that will be applied to it;
+  - `Dialogue` is used to display the `Line` with effects.
+- New `etu_voice` sound, which is being used experimentally in the `Dialogue`.
+
+### Removed
+- Experimental label tags from the `intro.py` (spaghetti code too).
+
 ## [0.0.3] - 2024-11-11
 ### Added
 - New core `timer.py`: class `Timer`;
