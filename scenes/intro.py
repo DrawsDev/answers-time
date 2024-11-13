@@ -41,21 +41,33 @@ class Intro(Scene):
 
         self.dialogue = Dialogue()
         self.current_dialogue = 0
-        self.test_dialogue = [Line("Привет!", rgb=True, pause=1, speed=2), Line("Как дела?"), Line("ЧЕЕЕ...", shake=True, shake_amplitude=1, color=(255, 0, 0))]
-        self.text_dialogue2 = [Line("Ты", shake=True, color=(255, 0, 0)), Line("Кто", shake=True, color=(255, 0, 0)), Line("???", shake=True, color=(255, 0, 0))]
-        self.text_dialogue3 = [Line("ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ", rgb=True)]
+        self.test_dialogue = [Line("Привет!", rgb=True), 
+                              Line(" Как ", speed=0.3), 
+                              Line("дела", color=(100, 255, 0)), 
+                              Line("?", speed=10)]
+        self.text_dialogue2 = [Line("ЧЕЕЕ... ", shake=True, shake_amplitude=2, color=(255, 0, 0), speed=0), 
+                               Line("Ты... ", shake=True, color=(255, 0, 0), speed=0, pause=1), 
+                               Line("Кто???", shake=True, color=(255, 0, 0), speed=0, pause=0.5)]
+        self.text_dialogue3 = [Line("ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ", rgb=True, speed=0)]
 
     def update(self, delta: float) -> None:
         keys = pygame.key.get_just_pressed()
         if keys[pygame.K_RETURN]:
-            self.current_dialogue += 1
-            if self.current_dialogue > 2:
-                self.current_dialogue = 0
+            finished = self.dialogue.is_typing_finished()
+            
+            if finished:
+                self.current_dialogue += 1
+                if self.current_dialogue > 2:
+                    self.current_dialogue = 0
+            else:
+                self.dialogue.skip_typing()
 
         super().update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill((180, 180, 180))
+
+        super().draw(surface)
 
         if self.current_dialogue == 0:
             self.dialogue.render_lines(self.test_dialogue, surface)
@@ -63,5 +75,3 @@ class Intro(Scene):
             self.dialogue.render_lines(self.text_dialogue2, surface)
         elif self.current_dialogue == 2:  
             self.dialogue.render_lines(self.text_dialogue3, surface)
-
-        super().draw(surface)

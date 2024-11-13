@@ -1,22 +1,25 @@
 import math
+import time
 import random
 import pygame
 from typing import List
 
 BLACK = (0, 0, 0)
+MS_IN_SEC = 1000
+SPACE = " "
 
 class Line:
-    def __init__(self, text: str, 
+    def __init__(self, text: str,
                  color: pygame.Color = BLACK,
                  rgb=False, 
                  shake=False, shake_amplitude=1,
-                 pause=0, speed=1) -> None:
+                 pause=0, speed=0.05) -> None:
         self.text = text
         self.color = color
         self.rgb = rgb
         self.shake = shake
         self.shake_amplitude = shake_amplitude
-        self.pause = pause
+        self.pause = 1#pause
         self.speed = speed
 
     def get_shake_amplitude(self) -> float:
@@ -32,7 +35,14 @@ class Dialogue:
 
         self._prev_text = ""
         self._ss = pygame.mixer.Sound("content/sounds/etu_voice.wav")
+        self._ss2 = pygame.mixer.Sound("content/sounds/00000ef7.wav")
         self._ss_start_time = 0
+
+        self._current_line: Line = None 
+        self._previous_line: Line = None
+        self._typing_start_ms: int = 0
+
+        self._TT = ""
 
     def render(self, text: str, color: pygame.Color = BLACK) -> pygame.Surface:
         """Отрисовывает текст и возвращает результат в виде поверхности. 
@@ -46,6 +56,17 @@ class Dialogue:
         """        
         return self.font.render(text, self.antialias, color)
 
+    def get_text_from_lines(self, lines: List[Line]) -> str:
+        """Получить общий текст из списка с объектами Line.
+
+        Args:
+            lines (List[Line]): Список с объектами Line.
+
+        Returns:
+            str: Общий текст.
+        """        
+        return "".join([line.text for line in lines])
+
     def render_lines(self, lines: List[Line], surface: pygame.Surface) -> None:
         """Отрисовывает текст с эффектами на поверхности.
 
@@ -58,30 +79,47 @@ class Dialogue:
         line_size = [0, 0]
 
         step = (pygame.time.get_ticks() / 2000.0) * 4.0
+        current_ms = time.time() * MS_IN_SEC
 
         characters = 0
+        text = self.get_text_from_lines(lines)
 
         # Обновление видимых символов при изменении текста
         if self.char_by_char:
-            text = "".join([line.text for line in lines])
-
+            # Если текущий текст не совпадает с полученным, то всё обнулить
             if self._prev_text != text:
-                self.visible_characters = -1
+                characters = 0
+                self.visible_characters = 0
                 self._prev_text = text
+                self._typing_start_ms = current_ms
 
-            if self.visible_characters < len(text):
-                self.visible_characters += 1
-                if pygame.time.get_ticks() - self._ss_start_time >= (self._ss.get_length()) * 1000:
-                    self._ss_start_time = pygame.time.get_ticks()
-                    self._ss.play()
+            # if self._current_line != self._previous_line:
+            #     #print("NEXT LINE")
+            #     self._previous_line = self._current_line
+            #     self._typing_start_ms = current_ms + self._current_line.pause * MS_IN_SEC
+            #     self._ss2.play()
+
+            if self.visible_characters < len(text) - 1 and self._current_line:
+                if current_ms - self._typing_start_ms >= self._current_line.speed * MS_IN_SEC:
+                    self._typing_start_ms = current_ms
+                    
+                    self.visible_characters += 1
+
+                    # Voice
+                    if text[self.visible_characters] != SPACE:
+                        if current_ms - self._ss_start_time >= (self._ss.get_length() * 0.3) * MS_IN_SEC:
+                            self._ss_start_time = current_ms
+                            self._ss.play()
 
         # Отрисовка строк по символам
-        for line in lines:
+        for _, line in enumerate(lines):
             for index, char in enumerate(line.text):
                 # Если количество символов больше видимых, то пропустить итерацию
-                if self.visible_characters > -1 and characters >= self.visible_characters:
+                if characters > self.visible_characters:
                     continue 
-                
+
+                self._current_line = line
+
                 # Отрисовка символа с эффектами
                 if line.rgb:
                     hue = (step * 32 + index) % 360
@@ -101,13 +139,25 @@ class Dialogue:
                 line_size[0] += char_render.get_width()
 
                 # Перенос на новую строку, если ширина строки больше лимита ширины
-                if self.width_limit > 0 and line_size[0] > self.width_limit and char == " ":
+                if self.width_limit > 0 and line_size[0] > self.width_limit and char == SPACE:
                     line_size[0] = 0
                     line_size[1] += char_render.get_height()
 
-                # Добавление пробелма в конец строки
-                if index == len(line.text) - 1:
-                    line_size[0] += self.render(" ").get_width()
+                # Добавление пробела в конец строки
+                #if index == len(line.text) - 1:
+                #    line_size[0] += self.render(" ").get_width()
 
                 characters += 1
-        
+
+    def skip_typing(self) -> None:
+        """Пропустить появление символов и сразу показать весь текст."""        
+        self.visible_characters = len(self._prev_text) - 1
+
+    def is_typing_finished(self) -> bool:
+        """Проверить выведен весь текст или нет.
+
+        Returns:
+            bool: True - выведен весь текст. 
+                  False - выведен не весь текст.
+        """        
+        return self._prev_text != "" and self.visible_characters >= len(self._prev_text) - 1
