@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG.ru.md;
 - New methods in the `Dialogue` class from the component `dialogue.py`:
   - `is_typing_finished` allows you to know whether the text is typed or not;
-  - `skip_typing` allows you to skip typing text.
+  - `skip_typing` allows you to skip typing text;
   - `get_text_from_lines` allows you to get the total text from a list with `Line`.
 
 ### Changed
