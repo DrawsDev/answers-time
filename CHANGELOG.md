@@ -26,8 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Game crash with TypeError error when running `main.py`. (2024-11-14)
 
-Translated with DeepL.com (free version)
-
 ## [0.0.5] - 2024-11-13
 ### Added
 - CHANGELOG.ru.md;
