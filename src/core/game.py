@@ -58,6 +58,6 @@ class Game:
         if self._scene:
             self._scene.draw(self.surface)
         
-        self.screen.blit(pygame.transform.scale(self.surface, self.screen.get_size()))
+        self.screen.blit(pygame.transform.scale(self.surface, self.screen.get_size()), (0, 0))
 
         pygame.display.flip()

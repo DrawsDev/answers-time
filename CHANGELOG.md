@@ -4,6 +4,30 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Added.
+- In `Dialogue`:
+  - `get_result_surface_size` method. Returns the final size of the dialogue box;
+  - Drawing of dialogue box;
+  - Drawing an icon indicating that the dialogue has ended;
+  - Animation of character appearance. Text shifts from top to bottom, also from invisible to visible;
+  - Test sound of dialogue ending; (Yes, from Katana ZERO)
+  - Test sound of evil dialogue; (Yes, and this is from Katana ZERO)
+  - Test sound of dialogue. (Also from Katana ZERO).
+- In `Line`:
+  - The `angry` parameter. Makes text shake for a while, be red, appear abruptly; (BOOM)
+  - The `wave` parameter. Makes the text move in a wave, similar to `rgb`;
+  - The `quiet` parameter. Makes the text appear without sound.
+### Changed
+- In `Dialogue`:
+  - Rewritten the `render_lines` method. Now the correct character-by-character text output works with effects, pauses, and speeds of each `Line`. (2024-11-14);
+  - Rewritten `skip_typing` method. Outputs the text that didn't have time to appear;
+  - Rewritten `is_typing_finished` method. Works the same way.
+- New `Dialogue` functionality is demonstrated in `intro.py`.
+### Fixed
+- Game crash with TypeError error when running `main.py`. (2024-11-14)
+
+Translated with DeepL.com (free version)
+
 ## [0.0.5] - 2024-11-13
 ### Added
 - CHANGELOG.ru.md;
