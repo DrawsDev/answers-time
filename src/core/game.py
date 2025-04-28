@@ -3,8 +3,6 @@ import pygame
 from src.settings import *
 from src.components.scene import Scene
 
-game = None
-
 class Game:
     def __init__(self) -> None:
         pygame.init()
@@ -38,7 +36,7 @@ class Game:
 
     def run(self) -> None:
         while True:
-            delta = self.clock.tick(60) / 1000
+            delta = self.clock.tick(FPS) / 1000
             self._input()
             self._update(delta)
             self._draw()
@@ -61,3 +59,5 @@ class Game:
         self.screen.blit(pygame.transform.scale(self.surface, self.screen.get_size()), (0, 0))
 
         pygame.display.flip()
+
+game: Game = None

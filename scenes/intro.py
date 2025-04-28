@@ -1,27 +1,25 @@
 import os
-import random
+import math
 import pygame
 from pygame.math import Vector2
 from src.components.scene import Scene
 from src.components.sprite import Sprite
-from src.components.player import Player
 from src.components.cursor import Cursor
-from src.components.dialogue import Dialogue, Line
+from src.components.dialogue import Dialogue
+from src.components.line import parse_string
 from src.components.label import Label, FontParams
 
 class Intro(Scene):
     def __init__(self) -> None:
         super().__init__()
 
+        from src.core.game import game
+        self.game_clock: pygame.Clock = game.clock
+
         etu_img = pygame.image.load("assets/images/etu_1.png")
         etu_img.set_colorkey("Black")
-        self.sprite = Sprite(etu_img, (350, 250), "center")
+        self.sprite = Sprite(etu_img, (320, 250), "center")
         self.sprite.add(self.sprites)
-
-        etu_img2 = pygame.image.load("assets/images/etu_0.png")
-        etu_img2.set_colorkey("Black")
-        self.player = Player(etu_img2, (30, 30), "center")
-        self.player.add(self.sprites)
 
         hand = pygame.image.load("content/images/hand_1.png")
         hand.set_colorkey("Black")
@@ -29,87 +27,47 @@ class Intro(Scene):
         self.cursor.add(self.sprites)       
 
         self.fontparams = FontParams()
-        self.fontparams.size += 10
-        self.fontparams.fontpath = os.path.join("content", "fonts", "Ramona-Bold.ttf")
-        self.fontparams.color = (255, 0, 200)
-        self.fontparams.align = 1
+        self.fontparams.fontpath = os.path.join("content", "fonts", "Tiny5-Regular.ttf")
+        self.fontparams.size = 8
+        self.fontparams.color = "White"
+        self.fontparams.align = 0
         self.fontparams.wraplength = 0
 
-        self.label = Label("Hello World!", self.fontparams, (100, 100), "center")
+        self.label = Label("", self.fontparams, (5, 5), "topleft")
         self.label.add(self.sprites)
 
         self.dialogue = Dialogue()
         self.test_dialogue_pos = Vector2(640 / 2, 360 / 2)
         self.test_dialogue_index = 0
         self.test_dialogue = [
-            [Line("Привет!", rgb=True), 
-             Line(" Как ", color="White", speed=0.3), 
-             Line("дела", color="Lime"), 
-             Line("?", color="White", speed=0.5)],
-
-            [Line("Погоди... ", color="Red", speed=0.1), 
-             Line("ТЫ... ", angry=True, speed=0, pause=0.5), 
-             Line("КТО???", angry=True, shake_amplitude=2, speed=0, pause=0.75)],
-
-            [Line("ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ", rgb=True, speed=0)],
-
-            [Line("Ладно... ", color="White", speed=0.1), 
-             Line("ЛАДНО. ", angry=True, pause=0.3), 
-             Line("КАК ", angry=True, pause=0.5),
-             Line("дела", rgb=True, pause=0.5), 
-             Line("?", color="White")],
-
-            [Line("О! ", rgb=True),
-             Line("Тут есть некоторые диалоги из ", color="White", pause=1),
-             Line("Katana ZERO", color="Cyan", wave=True)],
-
-            [Line("На месте?", color="White")],
-
-            [Line("Такого шанса ", color="Orange", speed=0.02),
-             Line("второй раз не будет. ", color="White", speed=0.02),
-             Line("Действовать нужно ", color="White", speed=0.02, pause=0.3),
-             Line("максимально быстро.", color="Yellow", speed=0.02)],
-
-            [Line("Самое главное. ", color="White"),
-             Line("Не ", angry=True, pause=0.5),
-             Line("должно ", angry=True, pause=0.2),
-             Line("быть ", angry=True, pause=0.45),
-             Line("никаких ", angry=True, pause=0.75),
-             Line("свидетелей. ", angry=True, pause=0.5)],
-            
-            [Line("Да, ", color="White"),
-             Line("там что-то про ", color="White", pause=0.3),
-             Line("заговоры, хунту, такое, ", color="Red", wave=True),
-             Line("да?", color="White",  pause=0.3)],
-
-            [Line("Вроде как дело-то серьёзное... ", color="Cyan", shake=True, shake_amplitude=0.55, speed=0.02),
-             Line("Может, надо ", color="White", pause=0.3, speed=0.02),
-             Line("удвоить патрулирование", color="Orange", speed=0.02),
-             Line("?", color="White", speed=0.02)],
-
-            [Line("Да ладно, ", color="White"),
-             Line("что может пойти не так?", color="Cyan", pause=0.3)],
-            
-            [Line("(Если че их потом дакнули :P )", color="#505050", quiet=True, speed=0)],
-
-            [Line("А ", color="White"),
-             Line("всё! ", rgb=True),
-             Line("Больше ничего не скажу.", color="White", pause=0.5)],
-            
-            [Line("ы", angry=True)]
+            # parse_string("<f color=White flash=Grey wobble=True>Привет мир!</f>"),
+            # parse_string("<f rgb=True pause=1>Привет! </f><f color=White typing_speed=0.3>Как </f><f color=Lime flash=Orange wobble=True>дела</f><f color=White typing_speed=0.5>?</f>"),
+            # parse_string("<f color=Red typing_speed=0.1>Погоди... </f><f angry=1 pause=0.5>ТЫ... </f><f angry=2 pause=0.75>КТО???</f>"),
+            parse_string("<f color=Red gradient=Yellow wave=True typing_speed=0>ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ ЧЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ</f>"),
+            parse_string("<f color=White speed=0.1>Ладно... </f><f angry=1 pause=0.3>ЛАДНО. </f><f color=White pause=0.5>как </f><f rgb=True pause=0.5>дела</f><f color=White pause=0.5>?</f>"),
+            parse_string("<f rgb=True>О! </f><f color=White pause=1>Тут есть некоторые диалоги из </f><f color=Cyan flash=Blue wave=True>Katana ZERO</f>"),
+            parse_string("<f color=White typing_speed=0.02>На месте?</f>"),
+            parse_string("<f color=Orange typing_speed=0.02>Такого шанса </f><f color=White typing_speed=0.02>второй раз не будет. </f><f color=White typing_speed=0.02 pause=0.3>Действовать нужно </f><f color=Yellow typing_speed=0.02>максимально быстро.</f>"),
+            parse_string("<f color=White typing_speed=0.02>Самое главное. </f><f angry=1 pause=0.2>Не должно быть </f><f angry=1 pause=0.5>никаких </f><f angry=1 pause=0.5>свидетелей.</f>"),
+            parse_string("<f color=White>Да, </f><f color=White pause=0.3>там что-то про </f><f color=Red wave=True>заговоры, хунту, такое, </f><f color=White pause=0.3>да?</f>"),
+            parse_string("<f color=Cyan shake=0.55 typing_speed=0.02>Вроде как дело-то серьёзное... </f><f color=White pause=0.3 typing_speed=0.02>Может, надо </f><f color=Orange typing_speed=0.02>удвоить патрулирование</f><f color=White typing_speed=0.02>?</f>"),
+            parse_string("<f color=White>Да ладно, </f><f color=Cyan pause=0.3>что может пойти не так?</f>"),
+            parse_string("<f color=#505050 quiet=True speed=0>(Если че их потом дакнули :P)</f>"),
+            parse_string("<f color=White>А </f><f rgb=True>всё! </f><f color=White pause=0.5>Больше ничего не скажу.</f>"),
+            parse_string("<f angry=1>ы</f>")
         ]
 
     def update(self, delta: float) -> None:
         keys = pygame.key.get_just_pressed()
         if keys[pygame.K_RETURN]:
-            finished = self.dialogue.is_typing_finished()
-            
-            if finished:
+            if self.dialogue.finished:
                 self.test_dialogue_index += 1
                 if self.test_dialogue_index > len(self.test_dialogue) - 1:
                     self.test_dialogue_index = 0
             else:
                 self.dialogue.skip_typing()
+        
+        self.label.text = f"FPS: {math.floor(self.game_clock.get_fps())}"
 
         super().update(delta)
 

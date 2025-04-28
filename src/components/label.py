@@ -1,5 +1,4 @@
 import os
-import sys
 import pygame
 from typing import List
 from src.components.sprite import Sprite
