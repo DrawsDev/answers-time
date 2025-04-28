@@ -7,34 +7,23 @@ from src.components.sprite import Sprite
 from src.components.cursor import Cursor
 from src.components.dialogue import Dialogue
 from src.components.line import parse_string
-from src.components.label import Label, FontParams
+from src.ui.debug_frame import DebugFrame
 
 class Intro(Scene):
-    def __init__(self) -> None:
+    def __init__(self, game) -> None:
         super().__init__()
 
-        from src.core.game import game
-        self.game_clock: pygame.Clock = game.clock
+        self.debug_frame = DebugFrame(game)
 
-        etu_img = pygame.image.load("assets/images/etu_1.png")
+        etu_img = pygame.image.load("content/sprites/etu_1.png")
         etu_img.set_colorkey("Black")
         self.sprite = Sprite(etu_img, (320, 250), "center")
         self.sprite.add(self.sprites)
 
-        hand = pygame.image.load("content/images/hand_1.png")
+        hand = pygame.image.load("content/sprites/hand_1.png")
         hand.set_colorkey("Black")
         self.cursor = Cursor(hand, (0, 0), "topleft")
-        self.cursor.add(self.sprites)       
-
-        self.fontparams = FontParams()
-        self.fontparams.fontpath = os.path.join("content", "fonts", "Tiny5-Regular.ttf")
-        self.fontparams.size = 8
-        self.fontparams.color = "White"
-        self.fontparams.align = 0
-        self.fontparams.wraplength = 0
-
-        self.label = Label("", self.fontparams, (5, 5), "topleft")
-        self.label.add(self.sprites)
+        self.cursor.add(self.sprites)
 
         self.dialogue = Dialogue()
         self.test_dialogue_pos = Vector2(640 / 2, 360 / 2)
@@ -67,8 +56,6 @@ class Intro(Scene):
             else:
                 self.dialogue.skip_typing()
         
-        self.label.text = f"FPS: {math.floor(self.game_clock.get_fps())}"
-
         super().update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
@@ -76,4 +63,5 @@ class Intro(Scene):
 
         super().draw(surface)
 
+        self.debug_frame.draw(surface)
         self.dialogue.render_lines(self.test_dialogue[self.test_dialogue_index], (self.sprite.position[0], self.sprite.position[1] - self.sprite.image.get_height() / 2), surface)

@@ -7,7 +7,7 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
         pygame.display.set_caption(WINDOW_TITLE)
-        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF, vsync=1)
         self.surface = pygame.Surface(SURFACE_SIZE)
         self.clock = pygame.Clock()
         self._init_scenes()
@@ -27,7 +27,7 @@ class Game:
         if name in self._scenes:
             if self._scene:
                 self._scene.on_exit()
-            self._scene = self._scenes[name]()
+            self._scene = self._scenes[name](self)
             self._scene.on_enter(**kwargs)
 
     def quit(self) -> None:
