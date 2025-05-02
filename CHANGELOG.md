@@ -4,8 +4,9 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2024-11-15
 ### Added.
-- In `Dialogue`:
+- `Dialogue`:
   - `get_result_surface_size` method. Returns the final size of the dialogue box;
   - Drawing of dialogue box;
   - Drawing an icon indicating that the dialogue has ended;
@@ -13,27 +14,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Test sound of dialogue ending; (Yes, from Katana ZERO)
   - Test sound of evil dialogue; (Yes, and this is from Katana ZERO)
   - Test sound of dialogue. (Also from Katana ZERO).
-- In `Line`:
+- `Line`:
   - The `angry` parameter. Makes text shake for a while, be red, appear abruptly; (BOOM)
   - The `wave` parameter. Makes the text move in a wave, similar to `rgb`;
   - The `quiet` parameter. Makes the text appear without sound.
 ### Changed
-- In `Dialogue`:
+- `Dialogue`:
   - Rewritten the `render_lines` method. Now the correct character-by-character text output works with effects, pauses, and speeds of each `Line`. (2024-11-14);
   - Rewritten `skip_typing` method. Outputs the text that didn't have time to appear;
   - Rewritten `is_typing_finished` method. Works the same way.
-- New `Dialogue` functionality is demonstrated in `intro.py`.
+- `Intro`:
+  - Scene has been changed. Demonstrated new `Dialogue` functionality.
 ### Fixed
 - Game crash with TypeError error when running `main.py`. (2024-11-14)
 
 ## [0.0.5] - 2024-11-13
 ### Added
-- CHANGELOG.ru.md;
-- New methods in the `Dialogue` class from the component `dialogue.py`:
+- Added CHANGELOG.ru.md;
+- Added new methods in `Dialogue`:
   - `is_typing_finished` allows you to know whether the text is typed or not;
   - `skip_typing` allows you to skip typing text;
   - `get_text_from_lines` allows you to get the total text from a list with `Line`.
-
 ### Changed
 - The new `Dialogue` functionality is demonstrated in `intro.py`.
 
@@ -43,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Line` contains the text and the effects that will be applied to it;
   - `Dialogue` is used to display the `Line` with effects.
 - New `etu_voice` sound, which is being used experimentally in the `Dialogue`.
-
 ### Removed
 - Experimental label tags from the `intro.py` (spaghetti code too).
 
@@ -68,10 +68,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New core `utility.py`: functions `clamp` and `lerp`;
 - New component `label.py`: classes `Label` and `FontParams`;
 - New `hand_1` sprite.
-
 ### Changed
 - New `Label` and `FontParams` are demonstrated in `intro.py`.
 
 ## [0.0.1] - 2024-10-05
-### Added
-- A full rework of the project in python 3.8.10 has begun!
+### Beginning
+- The beginning of a complete rework of the project on `Python 3.8.10`!
