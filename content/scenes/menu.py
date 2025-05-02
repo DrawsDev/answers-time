@@ -16,7 +16,7 @@ class Menu(Scene):
         image = pygame.image.load(path(f"{SPRITES}logo.png"))
         image.set_colorkey("Black")
 
-        self.sprite = Sprite(image, (game.surface.width / 2, game.surface.height / 2), Anchor.Center)
+        self.sprite = Sprite(image, (game.surface.get_width() / 2, game.surface.get_height() / 2), Anchor.Center)
         
         self.sprites = pygame.sprite.Group()
         self.sprites.add(self.sprite)
