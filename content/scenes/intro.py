@@ -1,7 +1,8 @@
-import os
-import math
 import pygame
 from pygame.math import Vector2
+from src.settings import *
+from src.core.game import Game
+from src.core.utility import path
 from src.components.scene import Scene
 from src.components.sprite import Sprite
 from src.components.cursor import Cursor
@@ -10,17 +11,17 @@ from src.components.line import parse_string
 from src.ui.debug_frame import DebugFrame
 
 class Intro(Scene):
-    def __init__(self, game) -> None:
+    def __init__(self, game: Game) -> None:
         super().__init__()
 
         self.debug_frame = DebugFrame(game)
 
-        etu_img = pygame.image.load("content/sprites/etu_1.png")
+        etu_img = pygame.image.load(path(f"{SPRITES}etu_1.png"))
         etu_img.set_colorkey("Black")
         self.sprite = Sprite(etu_img, (320, 250), "center")
         self.sprite.add(self.sprites)
 
-        hand = pygame.image.load("content/sprites/hand_1.png")
+        hand = pygame.image.load(path(f"{SPRITES}hand_1.png"))
         hand.set_colorkey("Black")
         self.cursor = Cursor(hand, (0, 0), "topleft")
         self.cursor.add(self.sprites)
