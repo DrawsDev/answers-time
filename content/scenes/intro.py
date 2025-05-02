@@ -4,7 +4,7 @@ from src.settings import *
 from src.core.game import Game
 from src.core.utility import path
 from src.components.scene import Scene
-from src.components.sprite import Sprite
+from src.components.sprite import *
 from src.components.cursor import Cursor
 from src.components.dialogue import Dialogue
 from src.components.line import parse_string
@@ -18,12 +18,12 @@ class Intro(Scene):
 
         etu_img = pygame.image.load(path(f"{SPRITES}etu_1.png"))
         etu_img.set_colorkey("Black")
-        self.sprite = Sprite(etu_img, (320, 250), "center")
+        self.sprite = Sprite(etu_img, (320, 250), Anchor.Center)
         self.sprite.add(self.sprites)
 
         hand = pygame.image.load(path(f"{SPRITES}hand_1.png"))
         hand.set_colorkey("Black")
-        self.cursor = Cursor(hand, (0, 0), "topleft")
+        self.cursor = Cursor(hand, (0, 0))
         self.cursor.add(self.sprites)
 
         self.dialogue = Dialogue()
