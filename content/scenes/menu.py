@@ -1,3 +1,4 @@
+import os
 import random
 import pygame
 from src.settings import *
@@ -13,7 +14,7 @@ class Menu(Scene):
         self.game = game
         self.debug_frame = DebugFrame(game)
 
-        image = pygame.image.load(path(f"{SPRITES}logo.png"))
+        image = pygame.image.load(path(os.path.join(SPRITES, "logo.png")))
         image.set_colorkey("Black")
 
         self.sprite = Sprite(image, (game.surface.get_width() / 2, game.surface.get_height() / 2), Anchor.Center)

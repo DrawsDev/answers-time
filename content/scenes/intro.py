@@ -1,3 +1,4 @@
+import os
 import pygame
 from pygame.math import Vector2
 from src.settings import *
@@ -16,12 +17,12 @@ class Intro(Scene):
 
         self.debug_frame = DebugFrame(game)
 
-        etu_img = pygame.image.load(path(f"{SPRITES}etu_1.png"))
+        etu_img = pygame.image.load(path(os.path.join(SPRITES, "etu_1.png")))
         etu_img.set_colorkey("Black")
         self.sprite = Sprite(etu_img, (320, 250), Anchor.Center)
         self.sprite.add(self.sprites)
 
-        hand = pygame.image.load(path(f"{SPRITES}hand_1.png"))
+        hand = pygame.image.load(path(os.path.join(SPRITES, "hand_1.png")))
         hand.set_colorkey("Black")
         self.cursor = Cursor(hand, (0, 0))
         self.cursor.add(self.sprites)
