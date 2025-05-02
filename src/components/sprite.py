@@ -1,11 +1,23 @@
 import pygame
 from pygame.math import Vector2
+from enum import Enum
+
+class Anchor(str, Enum):
+    TopLeft = "topleft"
+    BottomLeft = "bottomleft"
+    TopRight = "topright"
+    BottomRight = "bottomright"
+    MidTop = "midtop"
+    MidLeft = "midleft"
+    MidBottom = "midbottom"
+    MidRight = "midright"
+    Center = "center"
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self,
                  image: pygame.Surface,
                  position: pygame.math.Vector2 = (0, 0),
-                 anchor: str = "topleft"
+                 anchor: Anchor = Anchor.TopLeft
                  ) -> None:
         super().__init__()
         self._position = position
@@ -27,7 +39,7 @@ class Sprite(pygame.sprite.Sprite):
         return self._anchor
     
     @anchor.setter
-    def anchor(self, value: str) -> None:
+    def anchor(self, value: Anchor) -> None:
         self._anchor = value
         self._update_rect()
 
@@ -47,3 +59,4 @@ class Sprite(pygame.sprite.Sprite):
         self.image = image
         self._update_rect()
 
+__all__ = ["Sprite", "Anchor"]
