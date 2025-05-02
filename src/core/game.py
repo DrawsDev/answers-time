@@ -12,9 +12,6 @@ class Game:
         self.clock = pygame.Clock()
         self._init_scenes()
 
-        global game
-        game = self
-
     def _init_scenes(self) -> None:
         self._scene: Scene = None
         self._scenes: dict[str, Scene] = {}
