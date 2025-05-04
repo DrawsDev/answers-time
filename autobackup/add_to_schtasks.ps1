@@ -9,8 +9,9 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 if (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) {
     exit
 }
-# Создание задания
-$action = New-ScheduledTaskAction -Execute $ScriptPath
-$trigger = New-ScheduledTaskTrigger -Daily -At "12:00"
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -RunOnlyIfNetworkAvailable
-Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
+# Создание и запуск задания
+$Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-File `"$ScriptPath`""
+$Trigger = New-ScheduledTaskTrigger -Daily -At "12:00"
+$Settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -RunOnlyIfNetworkAvailable
+Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Settings $Settings -Force | Out-Null
+Start-ScheduledTask -TaskName $TaskName
