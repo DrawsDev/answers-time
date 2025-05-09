@@ -1,11 +1,11 @@
 import os
 import pygame
-from pygame.math import Vector2
+from src.enums import *
 from src.settings import *
 from src.core.game import Game
 from src.core.utility import path
 from src.components.scene import Scene
-from src.components.sprite import *
+from src.components.sprite import Sprite
 from src.components.cursor import Cursor
 from src.components.dialogue import Dialogue
 from src.components.line import parse_string
@@ -13,22 +13,21 @@ from src.ui.debug_frame import DebugFrame
 
 class Intro(Scene):
     def __init__(self, game: Game) -> None:
-        super().__init__()
-
+        self.sprites = pygame.sprite.Group()
         self.debug_frame = DebugFrame(game)
 
         etu_img = pygame.image.load(path(os.path.join(SPRITES, "etu_1.png")))
         etu_img.set_colorkey("Black")
-        self.sprite = Sprite(etu_img, (320, 250), Anchor.Center)
+        self.sprite = Sprite(etu_img, [320, 250], Anchor.Center)
         self.sprite.add(self.sprites)
 
         hand = pygame.image.load(path(os.path.join(SPRITES, "hand_1.png")))
         hand.set_colorkey("Black")
-        self.cursor = Cursor(hand, (0, 0))
+        self.cursor = Cursor(hand, [0, 0])
         self.cursor.add(self.sprites)
 
         self.dialogue = Dialogue()
-        self.test_dialogue_pos = Vector2(640 / 2, 360 / 2)
+        self.test_dialogue_pos = [640 / 2, 360 / 2]
         self.test_dialogue_index = 0
         self.test_dialogue = [
             # parse_string("<f color=White flash=Grey wobble=True>Привет мир!</f>"),
