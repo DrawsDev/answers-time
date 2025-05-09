@@ -1,6 +1,7 @@
 import os
 import random
 import pygame
+from src.enums import *
 from src.settings import *
 from src.core.game import Game
 from src.core.timer import Timer
@@ -12,14 +13,13 @@ from src.ui.debug_frame import DebugFrame
 class Menu(Scene):
     def __init__(self, game: Game):
         self.game = game
+        self.sprites = pygame.sprite.Group()
         self.debug_frame = DebugFrame(game)
 
         image = pygame.image.load(path(os.path.join(SPRITES, "logo.png")))
         image.set_colorkey("Black")
 
         self.sprite = Sprite(image, (game.surface.get_width() / 2, game.surface.get_height() / 2), Anchor.Center)
-        
-        self.sprites = pygame.sprite.Group()
         self.sprites.add(self.sprite)
 
         self.timer = Timer(1, True)
@@ -33,12 +33,5 @@ class Menu(Scene):
 
     def draw(self, surface: pygame.Surface):
         surface.fill("Gray")
-        self.debug_frame.draw(surface)
         self.sprites.draw(surface)
-    
-    def on_enter(self, **kwargs):
-        pass
-    
-    def on_exit(self, **kwargs):
-        pass
-    
+        self.debug_frame.draw(surface)
