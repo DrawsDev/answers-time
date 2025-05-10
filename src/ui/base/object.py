@@ -75,7 +75,8 @@ class UIObject(pygame.sprite.Sprite):
     
     def _mouse_handler(self, delta: float) -> None:
         mouse_position = pygame.mouse.get_pos()
-        ratio = [WINDOW_SIZE[0] / SURFACE_SIZE[0], WINDOW_SIZE[1] / SURFACE_SIZE[1]]
+        window_size = pygame.display.get_window_size()
+        ratio = [window_size[0] / SURFACE_SIZE[0], window_size[1] / SURFACE_SIZE[1]]
 
         if self.rect.collidepoint(mouse_position[0] / ratio[0], mouse_position[1] / ratio[1]):
             self._mouse_enter_handler()
