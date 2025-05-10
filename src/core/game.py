@@ -1,6 +1,7 @@
 import sys
 import pygame
 from src.settings import *
+from src.core.input import Input
 from src.components.scene import Scene
 
 class Game:
@@ -10,6 +11,7 @@ class Game:
         self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF, vsync=1)
         self.surface = pygame.Surface(SURFACE_SIZE)
         self.clock = pygame.Clock()
+        self.input = Input()
         self._init_scenes()
 
     def _init_scenes(self) -> None:
@@ -39,11 +41,11 @@ class Game:
             self._draw()
 
     def _input(self) -> None:
+        self.input.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit()
-            elif event.type == pygame.VIDEORESIZE:
-                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE | pygame.DOUBLEBUF)
+            self.input.handle_event(event)
     
     def _update(self, delta: float) -> None:
         if self._scene:
