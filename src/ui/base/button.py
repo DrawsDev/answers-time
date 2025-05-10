@@ -11,27 +11,43 @@ class UIButton(UIObject):
                  ):
         super().__init__(game, size, position)
 
+        self._down = False
+        self._pressed = False
         self._button_color = "lavenderblush1"
         self._button_hover_color = "lavenderblush2"
         self._button_press_color = "lavenderblush3"
         self.image.fill(self._button_color)
 
-    def on_mouse_pressed(self, buttons: Tuple[bool, bool, bool, bool, bool]) -> None:
-        if buttons[0]:
-            self.image.fill(self._button_press_color)
+    @property
+    def pressed(self) -> bool:
+        return self._pressed
 
-    def on_mouse_released(self, buttons: Tuple[bool, bool, bool, bool, bool]) -> None:
-        if buttons[0]:
-            self.image.fill(self._button_hover_color if self._mouse_entered else self._button_color)
+    def on_mouse_pressed(self) -> None:
+        self.image.fill(self._button_press_color)
+        self._down = True
+
+    def on_mouse_released(self) -> None:
+        self.image.fill(self._button_hover_color if self._mouse_entered else self._button_color)
+        if self._down:
+            self._pressed = True
+        self._down = False
 
     def on_mouse_enter(self):
-        self.image.fill(self._button_hover_color)
+        self.image.fill(self._button_press_color if self._down else self._button_hover_color)
     
     def on_mouse_leave(self):
         self.image.fill(self._button_color)
 
     def _mouse_handler(self, delta):
         super()._mouse_handler(delta)
+
         if self._mouse_entered:
-            self.on_mouse_pressed(pygame.mouse.get_just_pressed())
-            self.on_mouse_released(pygame.mouse.get_just_released())
+            self._pressed = False
+
+            if self.game.input.is_key_pressed("m_left"):
+                self.on_mouse_pressed()
+            if self.game.input.is_key_released("m_left"):
+                self.on_mouse_released()
+        else:
+            if self._down and self.game.input.is_key_released("m_left"):
+                self._down = False
