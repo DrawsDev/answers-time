@@ -4,7 +4,6 @@ import pygame
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
-from src.core.timer import Timer
 from src.core.utility import path
 from src.components.scene import Scene
 from src.components.sprite import *
@@ -28,14 +27,12 @@ class Menu(Scene):
         self.button.anchor = Anchor.Center
         self.ui_objects.add(self.button)
 
-        self.timer = Timer(1, True)
-
     def update(self, delta: float):
         self.debug_frame.update(delta)
         self.ui_objects.update(delta)
         self.sprites.update(delta)
 
-        if self.timer.expired:
+        if self.button.pressed:
             self.sprite.anchor = random.choice(list(Anchor))
 
     def draw(self, surface: pygame.Surface):
