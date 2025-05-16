@@ -61,6 +61,10 @@ class Label(UIObject):
     def align(self) -> int:
         return self._align
 
+    @property
+    def antialias(self) -> bool:
+        return self._antialias
+
     @fontpath.setter
     def fontpath(self, value: str = None) -> None:
         if not value is None and os.path.exists(value) and os.path.splitext(value)[1] == ".ttf":
@@ -108,6 +112,11 @@ class Label(UIObject):
             self._align = value
             self._font.align = value
             self._update_image()
+
+    @antialias.setter
+    def antialias(self, value: bool) -> None:
+        self._antialias = value
+        self._update_image()
 
     def _update_image(self) -> None:
         render = self._font.render(self._text, self._antialias, self._color, None, self._wraplength)
