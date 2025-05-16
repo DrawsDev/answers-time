@@ -34,9 +34,11 @@ class UIButton(UIObject):
 
     def on_mouse_enter(self):
         self.image.fill(self._button_press_color if self._down else self._button_hover_color)
+        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
     
     def on_mouse_leave(self):
         self.image.fill(self._button_color)
+        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
     def _mouse_handler(self, delta):
         super()._mouse_handler(delta)
