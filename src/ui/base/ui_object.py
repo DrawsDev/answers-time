@@ -12,9 +12,10 @@ class UIObject(pygame.sprite.Sprite):
                  ):
         super().__init__()
         self.game = game
-        self.image = pygame.Surface(size)
+        self.image = pygame.Surface(size, pygame.SRCALPHA)
         
         self._active = True
+        self._size = size
         self._position = position
         self._anchor = Anchor.TopLeft
         self._mouse_entered = False
@@ -24,6 +25,10 @@ class UIObject(pygame.sprite.Sprite):
     @property
     def active(self) -> bool:
         return self._active
+
+    @property
+    def size(self) -> Tuple[int, int]:
+        return self._size
 
     @property
     def position(self) -> Tuple[int, int]:
@@ -36,6 +41,11 @@ class UIObject(pygame.sprite.Sprite):
     @active.setter
     def active(self, value: bool) -> None:
         self._active = value
+
+    @size.setter
+    def size(self, value: Tuple[int, int]) -> None:
+        self._size = value
+        self._update_image()
 
     @position.setter
     def position(self, value: Tuple[int, int]) -> None:
@@ -83,6 +93,10 @@ class UIObject(pygame.sprite.Sprite):
             self._mouse_moved_handler()
         else:
             self._mouse_leave_handler()
+
+    def _update_image(self) -> None:
+        self.image = pygame.Surface(self._size, pygame.SRCALPHA)
+        self._update_rect()
 
     def _update_rect(self) -> None:
         self.rect = self.image.get_rect(**{self._anchor: self._position})
