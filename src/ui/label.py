@@ -1,8 +1,8 @@
-import os
 import pygame
-from typing import Tuple
+from typing import Tuple, Optional
 from src.core.game import Game
-from src.ui.base.object import UIObject
+from src.core.utility import path
+from src.ui.base.ui_object import UIObject
 
 class Label(UIObject):
     def __init__(self, 
@@ -19,7 +19,7 @@ class Label(UIObject):
         self._antialias = True
         self._align = pygame.FONT_LEFT
         self._color = "WHITE"
-        self._background_color = "BLACK"
+        self._background_color = None
         self._background_padding = 5
         self._font = pygame.Font(self._fontpath, self._fontsize)
 
@@ -46,11 +46,11 @@ class Label(UIObject):
         return self._text
 
     @property
-    def color(self) -> pygame.Color:
+    def color(self) -> Optional[pygame.Color]:
         return self._color
 
     @property
-    def background_color(self) -> pygame.Color:
+    def background_color(self) -> Optional[pygame.Color]:
         return self._background_color
 
     @property
@@ -67,10 +67,9 @@ class Label(UIObject):
 
     @fontpath.setter
     def fontpath(self, value: str = None) -> None:
-        if not value is None and os.path.exists(value) and os.path.splitext(value)[1] == ".ttf":
-            self._fontpath = value
-            self._font = pygame.Font(value, self._fontsize)
-            self._update_image()
+        self._fontpath = None if value is None else path(value)
+        self._font = pygame.Font(self._fontpath, self._fontsize)
+        self._update_image()
 
     @fontsize.setter
     def fontsize(self, value: int) -> None:
@@ -91,12 +90,12 @@ class Label(UIObject):
         self._update_image()
 
     @color.setter
-    def color(self, value: pygame.Color) -> None:
+    def color(self, value: Optional[pygame.Color]) -> None:
         self._color = value
         self._update_image()
 
     @background_color.setter
-    def background_color(self, value: pygame.Color) -> None:
+    def background_color(self, value: Optional[pygame.Color]) -> None:
         self._background_color = value
         self._update_image()
     
@@ -126,8 +125,8 @@ class Label(UIObject):
 
     def _get_background_surface(self, size: Tuple[int, int]) -> pygame.Surface:
         padding = self._background_padding + self._background_padding
-        surface = pygame.Surface([size[0] + padding, size[1] + padding])
-        surface.fill(self._background_color)
+        surface = pygame.Surface([size[0] + padding, size[1] + padding], pygame.SRCALPHA)
+        if self._background_color: surface.fill(self._background_color)
         return surface
 
 __all__ = ["Label"]
