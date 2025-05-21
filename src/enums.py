@@ -10,3 +10,13 @@ class Anchor(str, Enum):
     MidBottom = "midbottom"
     MidRight = "midright"
     Center = "center"
+
+class ButtonState(Enum):
+    Idle = 0
+    Hover = 1
+    Press = 2
+    Error = 3
+
+    @classmethod
+    def _missing_(cls, value):
+        return cls.Error
