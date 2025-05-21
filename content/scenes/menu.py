@@ -34,7 +34,7 @@ class Menu(Scene):
         self.frame = Frame(self.game, [144, self.game.surface.get_height()], [32, 0])
         self.frame.transparency = 175
         # Кнопки
-        self.texts = ["Начать тест", "Редактор", "Настройки", "Об программе", "Выход"]
+        self.texts = ["Начать тест", "Редактор", "Настройки", "О программе", "Выход"]
         self.buttons = []
         for i in range(0, 5):
             button = TextButton(self.game, self.texts[i], [self.frame.image.get_width(), 40], [32, 50 + 40 * i])
@@ -55,14 +55,14 @@ class Menu(Scene):
         # Кнопки
         # 1
         self.start_menu_button_1 = TextButton(self.game, "Обучение", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 50])
-        self.start_menu_button_1.text_align = pygame.FONT_CENTER
+        self.start_menu_button_1.text_align = TextAlign.Center
         self.start_menu_button_1.text_wraplength = self.start_menu_frame.image.get_width() - 10
         self.start_menu_button_1.button_color = [0, 0, 0, 0]
         self.start_menu_button_1.button_hover_color = "#64646E"
         self.start_menu_button_1.button_press_color = "#000000"
         # 2
         self.start_menu_button_2 = TextButton(self.game, "Выбрать тест", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 90])
-        self.start_menu_button_2.text_align = pygame.FONT_CENTER
+        self.start_menu_button_2.text_align = TextAlign.Center
         self.start_menu_button_2.text_wraplength = self.start_menu_frame.image.get_width() - 10
         self.start_menu_button_2.button_color = [0, 0, 0, 0]
         self.start_menu_button_2.button_hover_color = "#64646E"
@@ -79,7 +79,7 @@ class Menu(Scene):
         self.editor_menu_frame.transparency = 225
         # Заголовок
         self.editor_menu_title = Label(self.game, "Редактор", [self.game.surface.get_width() / 2, 0])
-        self.editor_menu_title.align = pygame.FONT_CENTER
+        self.editor_menu_title.align = TextAlign.Center
         self.editor_menu_title.anchor = Anchor.MidTop
         self.editor_menu_title.color = "#3CA4FF"
         # Линия под заголовком
@@ -92,7 +92,7 @@ class Menu(Scene):
         self.editor_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.editor_menu_button_1.position = [self.game.surface.get_width() / 2 - 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_1.anchor = Anchor.BottomRight
-        self.editor_menu_button_1.text_align = pygame.FONT_CENTER
+        self.editor_menu_button_1.text_align = TextAlign.Center
         self.editor_menu_button_1.text_wraplength = self.editor_menu_button_1.image.get_width() - 10
         self.editor_menu_button_1.button_color = [0, 0, 0, 0]
         self.editor_menu_button_1.button_hover_color = "#64646E"
@@ -101,7 +101,7 @@ class Menu(Scene):
         self.editor_menu_button_2 = TextButton(self.game, "Новый тест", [130, 40])
         self.editor_menu_button_2.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.editor_menu_button_2.anchor = Anchor.MidBottom
-        self.editor_menu_button_2.text_align = pygame.FONT_CENTER
+        self.editor_menu_button_2.text_align = TextAlign.Center
         self.editor_menu_button_2.text_wraplength = self.editor_menu_button_2.image.get_width() - 10
         self.editor_menu_button_2.button_color = [0, 0, 0, 0]
         self.editor_menu_button_2.button_hover_color = "#64646E"
@@ -110,7 +110,7 @@ class Menu(Scene):
         self.editor_menu_button_3 = TextButton(self.game, "Импортировать тест", [130, 40])
         self.editor_menu_button_3.position = [self.game.surface.get_width() / 2 + 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_3.anchor = Anchor.BottomLeft
-        self.editor_menu_button_3.text_align = pygame.FONT_CENTER
+        self.editor_menu_button_3.text_align = TextAlign.Center
         self.editor_menu_button_3.text_wraplength = self.editor_menu_button_3.image.get_width() - 20
         self.editor_menu_button_3.button_color = [0, 0, 0, 0]
         self.editor_menu_button_3.button_hover_color = "#64646E"
@@ -128,7 +128,7 @@ class Menu(Scene):
         self.settings_menu_frame.transparency = 225
         # Заголовок
         self.settings_menu_title = Label(self.game, "Настройки", [self.game.surface.get_width() / 2, 0])
-        self.settings_menu_title.align = pygame.FONT_CENTER
+        self.settings_menu_title.align = TextAlign.Center
         self.settings_menu_title.anchor = Anchor.MidTop
         self.settings_menu_title.color = "#3CA4FF"
         # Линия под заголовком
@@ -141,7 +141,7 @@ class Menu(Scene):
         self.settings_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.settings_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.settings_menu_button_1.anchor = Anchor.MidBottom
-        self.settings_menu_button_1.text_align = pygame.FONT_CENTER
+        self.settings_menu_button_1.text_align = TextAlign.Center
         self.settings_menu_button_1.text_wraplength = self.settings_menu_button_1.image.get_width() - 10
         self.settings_menu_button_1.button_color = [0, 0, 0, 0]
         self.settings_menu_button_1.button_hover_color = "#64646E"
@@ -157,8 +157,8 @@ class Menu(Scene):
         self.about_menu_frame = Frame(self.game, self.game.surface.get_size())
         self.about_menu_frame.transparency = 225
         # Заголовок
-        self.about_menu_title = Label(self.game, "Об программе", [self.game.surface.get_width() / 2, 0])
-        self.about_menu_title.align = pygame.FONT_CENTER
+        self.about_menu_title = Label(self.game, "О программе", [self.game.surface.get_width() / 2, 0])
+        self.about_menu_title.align = TextAlign.Center
         self.about_menu_title.anchor = Anchor.MidTop
         self.about_menu_title.color = "#3CA4FF"
         # Линия под заголовком
@@ -171,7 +171,7 @@ class Menu(Scene):
         self.about_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.about_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.about_menu_button_1.anchor = Anchor.MidBottom
-        self.about_menu_button_1.text_align = pygame.FONT_CENTER
+        self.about_menu_button_1.text_align = TextAlign.Center
         self.about_menu_button_1.text_wraplength = self.about_menu_button_1.image.get_width() - 10
         self.about_menu_button_1.button_color = [0, 0, 0, 0]
         self.about_menu_button_1.button_hover_color = "#64646E"
@@ -225,7 +225,6 @@ class Menu(Scene):
         if self.about_menu_button_1.pressed:
             self.main_menu.enabled = True
             self.about_menu.enabled = False
-            print("cla")
             
     def on_exit(self, **kwargs):
         pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)

@@ -1,5 +1,6 @@
 import pygame
 from typing import Tuple, Optional
+from src.enums import TextAlign
 from src.core.game import Game
 from src.core.utility import path
 from src.ui.base.ui_object import UIObject
@@ -17,7 +18,7 @@ class Label(UIObject):
         self._fontsize = 20
         self._wraplength = 200
         self._antialias = True
-        self._align = pygame.FONT_LEFT
+        self._align = TextAlign.Left
         self._color = "WHITE"
         self._background_color = None
         self._background_padding = 5
@@ -58,7 +59,7 @@ class Label(UIObject):
         return self._background_padding
 
     @property
-    def align(self) -> int:
+    def align(self) -> TextAlign:
         return self._align
 
     @property
@@ -106,11 +107,10 @@ class Label(UIObject):
             self._update_image()
 
     @align.setter
-    def align(self, value: int) -> None:
-        if value in [pygame.FONT_LEFT, pygame.FONT_CENTER, pygame.FONT_RIGHT]:
-            self._align = value
-            self._font.align = value
-            self._update_image()
+    def align(self, value: TextAlign) -> None:
+        self._align = value
+        self._font.align = value
+        self._update_image()
 
     @antialias.setter
     def antialias(self, value: bool) -> None:

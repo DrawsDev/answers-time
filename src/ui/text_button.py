@@ -1,5 +1,6 @@
 import pygame
 from typing import Tuple
+from src.enums import TextAlign
 from src.core.game import Game
 from src.ui.base.ui_button import UIButton
 
@@ -12,7 +13,7 @@ class TextButton(UIButton):
         self._text = text
         self._font_wraplength = 200
         self._font_antialias = True
-        self._font_align = pygame.FONT_LEFT
+        self._font_align = TextAlign.Left
         self._font_color = "WHITE"
         self._font_path = None
         self._font_size = 20
@@ -28,7 +29,7 @@ class TextButton(UIButton):
         return self._font
 
     @property
-    def text_align(self) -> int:
+    def text_align(self) -> TextAlign:
         return self._font_align
 
     @property
@@ -41,8 +42,8 @@ class TextButton(UIButton):
         self._update_image()
 
     @text_align.setter
-    def text_align(self, value: int) -> None:
-        self._font_align = value if value in [0, 1, 2] else 0
+    def text_align(self, value: TextAlign) -> None:
+        self._font_align = value
         self._font.align = self._font_align
         self._update_image()
 
