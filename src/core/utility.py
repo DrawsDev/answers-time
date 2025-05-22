@@ -11,6 +11,6 @@ def path(relative_path: str) -> str:
     """Получение абсолютного пути до файла."""
     base_path = getattr(sys, "_MEIPASS", os.getcwd())
     # Если файл не запакован в exe (на деле костыль :P)
-    if not os.path.exists(base_path):
+    if not os.path.exists(os.path.join(base_path, relative_path)):
         base_path = os.getcwd()
     return os.path.join(base_path, relative_path)
