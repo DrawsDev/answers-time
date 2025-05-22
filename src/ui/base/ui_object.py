@@ -14,6 +14,8 @@ class UIObject(pygame.sprite.Sprite):
         self.game = game
         self.image = pygame.Surface(size, pygame.SRCALPHA)
         
+        self._selectable = False
+        self._selected = False
         self._active = True
         self._size = size
         self._position = position
@@ -21,6 +23,14 @@ class UIObject(pygame.sprite.Sprite):
         self._mouse_entered = False
         self._mouse_previous_position = [0, 0]
         self._update_rect()
+
+    @property
+    def selectable(self) -> bool:
+        return self._selectable
+
+    @property
+    def selected(self) -> bool:
+        return self._selected
 
     @property
     def active(self) -> bool:
@@ -37,6 +47,15 @@ class UIObject(pygame.sprite.Sprite):
     @property
     def anchor(self) -> Anchor:
         return self._anchor
+
+    @selectable.setter
+    def selectable(self, value: bool) -> None:
+        self._selectable = value
+        self._selected = self._selected and value
+
+    @selected.setter
+    def selected(self, value: bool) -> None:
+        self._selected = self._selectable and value
 
     @active.setter
     def active(self, value: bool) -> None:
@@ -74,21 +93,15 @@ class UIObject(pygame.sprite.Sprite):
             self.on_mouse_leave()
 
     def _mouse_moved_handler(self) -> None:
-        mouse_position = pygame.mouse.get_pos()
-        x_diff = mouse_position[0] - self._mouse_previous_position[0]
-        y_diff = mouse_position[1] - self._mouse_previous_position[1]
-
-        if self._mouse_entered and not (x_diff == y_diff == 0):
+        if self.game.input.is_mouse_moved():
             self.on_mouse_moved()
-
-        self._mouse_previous_position = mouse_position
     
     def _mouse_handler(self, delta: float) -> None:
         mouse_position = pygame.mouse.get_pos()
         window_size = pygame.display.get_window_size()
         ratio = [window_size[0] / SURFACE_SIZE[0], window_size[1] / SURFACE_SIZE[1]]
 
-        if self.rect.collidepoint(mouse_position[0] / ratio[0], mouse_position[1] / ratio[1]):
+        if self.rect.collidepoint(mouse_position[0] / ratio[0], mouse_position[1] / ratio[1]) or self._selected:
             self._mouse_enter_handler()
             self._mouse_moved_handler()
         else:
