@@ -1,12 +1,11 @@
-import os
 import pygame
 from src.settings import FONTS, SURFACE_SIZE
 from src.core.game import Game
-from src.core.utility import path
+from src.core.utility import asset_path
 
 class DebugFrame:
     def __init__(self, game: Game):
-        self.font = pygame.font.Font(path(os.path.join(FONTS, "Tiny5-Regular.ttf")), 8)
+        self.font = pygame.Font(asset_path(FONTS, "Tiny5-Regular.ttf"), 8)
         self.charsize = self.font.size(" ")
         self.clock = game.clock
     
