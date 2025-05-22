@@ -1,9 +1,0 @@
-from typing import Tuple
-from src.core.game import Game
-from src.ui.base.ui_image import UIImage
-
-class Image(UIImage):
-    def __init__(self, game: Game, relative_path: str, position: Tuple[int, int] = [0, 0]):
-        super().__init__(game, relative_path, position)
-
-__all__ = ["Image"]
