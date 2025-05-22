@@ -1,4 +1,5 @@
 import pygame
+from typing import Tuple
 
 MOUSE_KEY_ALIASES = ("m_none", "m_left", "m_middle", "m_right", "m_wheel_up", "m_wheel_down", "m_extra_1", "m_extra_2")
 
@@ -8,8 +9,17 @@ class Input:
         self._pressed_keys = set()
         self._down_keys = set()
         self._mouse_moved = False
+        self._mouse_position = (0, 0)
+        self._mouse_activity = False
         self._unicode = ""
     
+    @property
+    def mouse_position(self) -> Tuple[int, int]:
+        return self._mouse_position
+
+    def is_mouse_activity(self) -> bool:
+        return self._mouse_activity
+
     def is_mouse_moved(self) -> bool:
         return self._mouse_moved
 
@@ -37,6 +47,8 @@ class Input:
         self._pressed_keys.clear()
         self._released_keys.clear()
         self._unicode = ""
+        self._mouse_moved = False
+        self._mouse_activity = False
 
     def handle_event(self, event: pygame.Event) -> None:
         if event.type == pygame.KEYUP:
@@ -53,11 +65,21 @@ class Input:
             key_name = MOUSE_KEY_ALIASES[event.button]
             self._down_keys.discard(key_name)
             self._released_keys.add(key_name)
+            self._mouse_activity = True
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             key_name = MOUSE_KEY_ALIASES[event.button]
             self._down_keys.add(key_name)
             self._pressed_keys.add(key_name)
+            self._mouse_activity = True
+
+        if event.type == pygame.MOUSEWHEEL:
+            self._mouse_activity = True
+
+        if event.type == pygame.MOUSEMOTION:
+            self._mouse_moved = True
+            self._mouse_position = event.pos
+            self._mouse_activity = True
 
         if event.type == pygame.TEXTINPUT:
             self._unicode = event.text
@@ -65,4 +87,4 @@ class Input:
         if self.is_key_pressed("f11"):
             pygame.display.toggle_fullscreen()
 
-        self._mouse_moved = event.type == pygame.MOUSEMOTION
+__all__ = ["Input"]
