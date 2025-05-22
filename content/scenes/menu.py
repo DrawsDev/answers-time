@@ -1,27 +1,31 @@
 import os
-import random
 import pygame
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
 from src.components.scene import Scene
 from src.ui.debug_frame import DebugFrame
-from src.ui.label import Label
 from src.ui.frame import Frame
 from src.ui.image import Image
 from src.ui.text_button import TextButton
 from src.ui.layout import Layout
+from src.ui.menu.menu_page import MenuPage
+from src.ui.navigation import UINavigation
 
 class Menu(Scene):
     def __init__(self, game: Game):
         self.game = game
         self.debug_frame = DebugFrame(game)
+        self.navigation = UINavigation(game)
 
         self._create_main_menu()
         self._create_start_menu()
         self._create_editor_menu()
         self._create_settings_menu()
         self._create_about_menu()
+        self._create_select_test_menu()
+
+        self.navigation.set_layout(self.main_menu)
 
     def _create_main_menu(self) -> None:
         # Основное
@@ -74,19 +78,6 @@ class Menu(Scene):
         # Основное
         self.editor_menu = Layout()
         self.editor_menu.enabled = False
-        # Фрейм
-        self.editor_menu_frame = Frame(self.game, self.game.surface.get_size())
-        self.editor_menu_frame.transparency = 225
-        # Заголовок
-        self.editor_menu_title = Label(self.game, "Редактор", [self.game.surface.get_width() / 2, 0])
-        self.editor_menu_title.align = TextAlign.Center
-        self.editor_menu_title.anchor = Anchor.MidTop
-        self.editor_menu_title.color = "#3CA4FF"
-        # Линия под заголовком
-        self.editor_menu_title_line = Frame(self.game, [self.game.surface.get_width() - 10, 2])
-        self.editor_menu_title_line.color = "#3CA4FF"
-        self.editor_menu_title_line.anchor = Anchor.Center
-        self.editor_menu_title_line.position = [self.game.surface.get_width() / 2, self.editor_menu_title.image.get_height()]
         # Кнопки
         # 1
         self.editor_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
@@ -116,26 +107,13 @@ class Menu(Scene):
         self.editor_menu_button_3.button_hover_color = "#64646E"
         self.editor_menu_button_3.button_press_color = "#000000"
         #
-        self.editor_menu.add(self.editor_menu_frame, self.editor_menu_title, self.editor_menu_title_line)
+        self.editor_menu.add(MenuPage(self.game, "Редактор").children)
         self.editor_menu.add(self.editor_menu_button_1, self.editor_menu_button_2, self.editor_menu_button_3)
 
     def _create_settings_menu(self) -> None:
         # Основное
         self.settings_menu = Layout()
         self.settings_menu.enabled = False
-        # Фрейм
-        self.settings_menu_frame = Frame(self.game, self.game.surface.get_size())
-        self.settings_menu_frame.transparency = 225
-        # Заголовок
-        self.settings_menu_title = Label(self.game, "Настройки", [self.game.surface.get_width() / 2, 0])
-        self.settings_menu_title.align = TextAlign.Center
-        self.settings_menu_title.anchor = Anchor.MidTop
-        self.settings_menu_title.color = "#3CA4FF"
-        # Линия под заголовком
-        self.settings_menu_title_line = Frame(self.game, [self.game.surface.get_width() - 10, 2])
-        self.settings_menu_title_line.color = "#3CA4FF"
-        self.settings_menu_title_line.anchor = Anchor.Center
-        self.settings_menu_title_line.position = [self.game.surface.get_width() / 2, self.settings_menu_title.image.get_height()]
         # Кнопки
         # 1
         self.settings_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
@@ -147,25 +125,12 @@ class Menu(Scene):
         self.settings_menu_button_1.button_hover_color = "#64646E"
         self.settings_menu_button_1.button_press_color = "#000000"
         #
-        self.settings_menu.add(self.settings_menu_frame, self.settings_menu_title, self.settings_menu_title_line, self.settings_menu_button_1)
+        self.settings_menu.add(MenuPage(self.game, "Настройки").children, self.settings_menu_button_1)
 
     def _create_about_menu(self) -> None:
         # Основное
         self.about_menu = Layout()
         self.about_menu.enabled = False
-        # Фрейм
-        self.about_menu_frame = Frame(self.game, self.game.surface.get_size())
-        self.about_menu_frame.transparency = 225
-        # Заголовок
-        self.about_menu_title = Label(self.game, "О программе", [self.game.surface.get_width() / 2, 0])
-        self.about_menu_title.align = TextAlign.Center
-        self.about_menu_title.anchor = Anchor.MidTop
-        self.about_menu_title.color = "#3CA4FF"
-        # Линия под заголовком
-        self.about_menu_title_line = Frame(self.game, [self.game.surface.get_width() - 10, 2])
-        self.about_menu_title_line.color = "#3CA4FF"
-        self.about_menu_title_line.anchor = Anchor.Center
-        self.about_menu_title_line.position = [self.game.surface.get_width() / 2, self.about_menu_title.image.get_height()]
         # Кнопки
         # 1
         self.about_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
@@ -177,25 +142,49 @@ class Menu(Scene):
         self.about_menu_button_1.button_hover_color = "#64646E"
         self.about_menu_button_1.button_press_color = "#000000"
         #
-        self.about_menu.add(self.about_menu_frame, self.about_menu_title, self.about_menu_title_line, self.about_menu_button_1)
+        self.about_menu.add(MenuPage(self.game, "О программе").children, self.about_menu_button_1)
+
+    def _create_select_test_menu(self) -> None:
+        # Основное
+        self.select_test_menu = Layout()
+        self.select_test_menu.enabled = False
+        # Кнопки
+        # 1
+        self.select_test_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
+        self.select_test_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
+        self.select_test_menu_button_1.anchor = Anchor.MidBottom
+        self.select_test_menu_button_1.text_align = TextAlign.Center
+        self.select_test_menu_button_1.text_wraplength = self.select_test_menu_button_1.image.get_width() - 10
+        self.select_test_menu_button_1.button_color = [0, 0, 0, 0]
+        self.select_test_menu_button_1.button_hover_color = "#64646E"
+        self.select_test_menu_button_1.button_press_color = "#000000"
+        #
+        self.select_test_menu.add(MenuPage(self.game, "Выбрать тест").children, self.select_test_menu_button_1)        
 
     def _update_main_menu(self, delta: float) -> None:
         self.main_menu.update(delta)
         
         if self.buttons[0].pressed:
             self.start_menu.enabled = not self.start_menu.enabled
+            if self.start_menu.enabled:
+                self.navigation.set_layout(self.main_menu, self.start_menu)
+            else:
+                self.navigation.set_layout(self.main_menu)
         elif self.buttons[1].pressed:
             self.main_menu.enabled = False
             self.start_menu.enabled = False
             self.editor_menu.enabled = True
+            self.navigation.set_layout(self.editor_menu)
         elif self.buttons[2].pressed:
             self.main_menu.enabled = False
             self.start_menu.enabled = False
             self.settings_menu.enabled = True
+            self.navigation.set_layout(self.settings_menu)
         elif self.buttons[3].pressed:
             self.main_menu.enabled = False
             self.start_menu.enabled = False
             self.about_menu.enabled = True
+            self.navigation.set_layout(self.about_menu)
         elif self.buttons[4].pressed:
             self.game.quit()
 
@@ -204,6 +193,12 @@ class Menu(Scene):
 
         if self.start_menu_button_1.pressed:
             self.game.change_scene("Tutorial")
+        
+        if self.start_menu_button_2.pressed:
+            self.main_menu.enabled = False
+            self.start_menu.enabled = False
+            self.select_test_menu.enabled = True
+            self.navigation.set_layout(self.select_test_menu)
 
     def _update_editor_menu(self, delta: float) -> None:
         self.editor_menu.update(delta)
@@ -211,6 +206,7 @@ class Menu(Scene):
         if self.editor_menu_button_1.pressed:
             self.main_menu.enabled = True
             self.editor_menu.enabled = False
+            self.navigation.set_layout(self.main_menu)
 
     def _update_settings_menu(self, delta: float) -> None:
         self.settings_menu.update(delta)
@@ -218,6 +214,7 @@ class Menu(Scene):
         if self.settings_menu_button_1.pressed:
             self.main_menu.enabled = True
             self.settings_menu.enabled = False
+            self.navigation.set_layout(self.main_menu)
 
     def _update_about_menu(self, delta: float) -> None:
         self.about_menu.update(delta)
@@ -225,23 +222,37 @@ class Menu(Scene):
         if self.about_menu_button_1.pressed:
             self.main_menu.enabled = True
             self.about_menu.enabled = False
-            
-    def on_exit(self, **kwargs):
+            self.navigation.set_layout(self.main_menu)
+
+    def _update_select_test_menu(self, delta: float) -> None:
+        self.select_test_menu.update(delta)
+
+        if self.select_test_menu_button_1.pressed:
+            self.main_menu.enabled = True
+            self.start_menu.enabled = True
+            self.select_test_menu.enabled = False
+            self.navigation.set_layout(self.main_menu, self.start_menu)
+
+    def on_exit(self, **kwargs) -> None:
         pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-    def update(self, delta: float):
+    def update(self, delta: float) -> None:
         self.debug_frame.update(delta)
+        self.navigation.update(delta)
         self._update_main_menu(delta)
         self._update_start_menu(delta)
         self._update_editor_menu(delta)
         self._update_settings_menu(delta)
         self._update_about_menu(delta)
+        self._update_select_test_menu(delta)
 
-    def draw(self, surface: pygame.Surface):
+    def draw(self, surface: pygame.Surface) -> None:
         surface.fill("Gray")
         self.main_menu.draw(surface)
         self.start_menu.draw(surface)
         self.editor_menu.draw(surface)
         self.settings_menu.draw(surface)
         self.about_menu.draw(surface)
+        self.select_test_menu.draw(surface)
+        self.navigation.draw(surface)
         self.debug_frame.draw(surface)
