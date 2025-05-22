@@ -11,6 +11,7 @@ class UIButton(UIObject):
                  position: Tuple[int, int] = [0, 0]
                  ):
         super().__init__(game, size, position)
+        self._selectable = True
         self._down = False
         self._pressed = False
         self._button_size = size
@@ -77,13 +78,13 @@ class UIButton(UIObject):
         super()._mouse_handler(delta)
 
         if self._mouse_entered:
-            if self.game.input.is_key_pressed("m_left"):
+            if self.game.input.is_key_pressed("m_left") or self._selected and self.game.input.is_key_pressed("return"):
                 self.on_mouse_pressed()
-            if self.game.input.is_key_released("m_left"):
+            if self.game.input.is_key_released("m_left") or self._selected and self.game.input.is_key_released("return"):
                 self.on_mouse_released()
         else:
-            if self._down and self.game.input.is_key_released("m_left"):
-                self._down = False
+            if self._down and (self.game.input.is_key_released("m_left") or self.game.input.is_key_released("return")):
+                self._down = False #TODO: Здесь ошибка: если зажать мышкой и отвести её, потом нажать Enter, то тоже сработает.
 
     def _set_state(self, state: ButtonState) -> None:
         self._state = state
