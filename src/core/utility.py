@@ -14,3 +14,11 @@ def path(relative_path: str) -> str:
     if not os.path.exists(os.path.join(base_path, relative_path)):
         base_path = os.getcwd()
     return os.path.join(base_path, relative_path)
+
+def asset_path(path: str, *paths: str) -> str:
+    relative_path = os.path.join(path, *paths)
+    base_path = getattr(sys, "_MEIPASS", os.getcwd())
+    # Если файл не запакован в exe (на деле костыль :P)
+    if not os.path.exists(os.path.join(base_path, relative_path)):
+        base_path = os.getcwd()
+    return os.path.join(base_path, relative_path)
