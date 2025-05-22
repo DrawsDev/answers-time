@@ -1,5 +1,5 @@
 import pygame
-from src.enums import Anchor
+from src.enums import Anchor, TextAlign
 from src.core.game import Game
 from src.components.scene import Scene
 from src.ui.text_label import TextLabel
@@ -10,8 +10,8 @@ class Tutorial(Scene):
         self.ui_group = pygame.sprite.Group()
         self.label = TextLabel(game, "Нажми Q чтобы вернуться в меню")
         self.label.anchor = Anchor.Center
-        self.label.align = pygame.FONT_CENTER
         self.label.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() / 2]
+        self.label.text_align = TextAlign.Center
         self.ui_group.add(self.label)
 
     def update(self, delta):
