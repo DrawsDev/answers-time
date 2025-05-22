@@ -5,7 +5,7 @@ from src.core.game import Game
 from src.core.utility import path
 from src.ui.base.ui_object import UIObject
 
-class Label(UIObject):
+class TextLabel(UIObject):
     def __init__(self, 
                  game: Game, 
                  text: str = "Label", 
@@ -129,4 +129,4 @@ class Label(UIObject):
         if self._background_color: surface.fill(self._background_color)
         return surface
 
-__all__ = ["Label"]
+__all__ = ["TextLabel"]
