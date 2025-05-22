@@ -2,13 +2,13 @@ import pygame
 from src.enums import Anchor
 from src.core.game import Game
 from src.components.scene import Scene
-from src.ui.label import Label
+from src.ui.text_label import TextLabel
 
 class Tutorial(Scene):
     def __init__(self, game: Game):
         self.game = game
         self.ui_group = pygame.sprite.Group()
-        self.label = Label(game, "Нажми Q чтобы вернуться в меню")
+        self.label = TextLabel(game, "Нажми Q чтобы вернуться в меню")
         self.label.anchor = Anchor.Center
         self.label.align = pygame.FONT_CENTER
         self.label.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() / 2]
