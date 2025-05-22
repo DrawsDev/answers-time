@@ -1,5 +1,5 @@
 import pygame
-from typing import Union, Iterable
+from typing import Union, Iterable, List
 
 class Layout:
     def __init__(self):
@@ -9,6 +9,10 @@ class Layout:
     @property
     def enabled(self) -> bool:
         return self._enabled
+
+    @property
+    def children(self) -> List[pygame.sprite.Sprite]:
+        return self._group.sprites()
 
     @enabled.setter
     def enabled(self, value: bool) -> None:
