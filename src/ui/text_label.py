@@ -1,6 +1,6 @@
 import pygame
 from typing import Tuple, Optional
-from src.enums import TextAlign
+from src.enums import Align
 from src.core.game import Game
 from src.core.utility import path
 from src.ui.base.ui_object import UIObject
@@ -13,7 +13,7 @@ class TextLabel(UIObject):
                  ):
         super().__init__(game, (0, 0), position)
         self._text = text
-        self._text_align = TextAlign.Center
+        self._text_align = Align.Center
         self._text_wraplength = 200
         self._text_color = "White"
         self._text_antialias = True
@@ -30,7 +30,7 @@ class TextLabel(UIObject):
         return self._text
 
     @property
-    def text_align(self) -> TextAlign:
+    def text_align(self) -> Align:
         return self._text_align
 
     @property
@@ -71,7 +71,7 @@ class TextLabel(UIObject):
         self._update_image()
 
     @text_align.setter
-    def text_align(self, value: TextAlign) -> None:
+    def text_align(self, value: Align) -> None:
         self._text_align = value
         self._font.align = value
         self._update_image()

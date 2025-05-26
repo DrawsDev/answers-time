@@ -1,5 +1,5 @@
 from typing import Tuple
-from src.enums import Anchor, TextAlign
+from src.enums import Anchor, Align
 from src.core.game import Game
 from src.ui.text_label import TextLabel
 from src.ui.frame import Frame
@@ -21,7 +21,7 @@ class MenuPage:
         self.frame.transparency = 225
         # Заголовок
         self.title = TextLabel(self.game, title, [self.game.surface.get_width() / 2, 0])
-        self.title.align = TextAlign.Center
+        self.title.align = Align.Center
         self.title.anchor = Anchor.MidTop
         self.title.color = ATBLUE
         # Линия под заголовком
