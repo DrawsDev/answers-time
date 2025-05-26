@@ -21,7 +21,7 @@ class ButtonState(Enum):
     def _missing_(cls, value):
         return cls.Error
 
-class TextAlign(int, Enum):
+class Align(int, Enum):
     Left = 0
     Center = 1
     Right = 2
