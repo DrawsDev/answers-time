@@ -40,18 +40,19 @@ class Menu(Scene):
         self.frame = Frame(self.game, [144, self.game.surface.get_height()], [32, 0])
         self.frame.transparency = 175
         # Кнопки
-        self.texts = ["Начать тест", "Редактор", "Настройки", "О программе", "Выход"]
+        texts = ("Начать тест", "Редактор", "Настройки", "О программе", "Выход")
+        icons = ("start.png", "edit.png", "settings.png", "about.png", "exit.png")
         self.buttons = []
         
         for i in range(0, 5):
-            button = TextButton(self.game, self.texts[i], [self.frame.image.get_width(), 40], [32, 50 + 40 * i])
+            button = TextButton(self.game, texts[i], [self.frame.image.get_width(), 40], [32, 50 + 40 * i])
             button.button_color = [0, 0, 0, 0]
             button.button_hover_color = "#64646E"
             button.button_press_color = "#000000"
             button.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
-            button.font_size = 13
+            button.font_size = 16
             button.font_align = Align.Center
-            button.button_icon = load_asset(SPRITES, "test2.png")
+            button.button_icon = load_asset(SPRITES, icons[i])
             self.buttons.append(button)
         #
         self.main_menu.add(self.logo, self.frame, self.buttons)
@@ -65,17 +66,23 @@ class Menu(Scene):
         self.start_menu_frame.transparency = 175
         # Кнопки
         # 1
-        self.start_menu_button_1 = TextButton(self.game, "Обучение", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 50])
-        self.start_menu_button_1.font_align = Align.Center
+        self.start_menu_button_1 = TextButton(self.game, "Обучение", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 50]) 
         self.start_menu_button_1.button_color = [0, 0, 0, 0]
         self.start_menu_button_1.button_hover_color = "#64646E"
         self.start_menu_button_1.button_press_color = "#000000"
+        self.start_menu_button_1.button_icon = load_asset(SPRITES, "tutorial.png")
+        self.start_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.start_menu_button_1.font_size = 16
+        self.start_menu_button_1.font_align = Align.Center
         # 2
         self.start_menu_button_2 = TextButton(self.game, "Выбрать тест", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 90])
-        self.start_menu_button_2.font_align = Align.Center
         self.start_menu_button_2.button_color = [0, 0, 0, 0]
         self.start_menu_button_2.button_hover_color = "#64646E"
         self.start_menu_button_2.button_press_color = "#000000"
+        self.start_menu_button_2.button_icon = load_asset(SPRITES, "select.png")
+        self.start_menu_button_2.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.start_menu_button_2.font_size = 16
+        self.start_menu_button_2.font_align = Align.Center
         #
         self.start_menu.add(self.start_menu_frame, self.start_menu_button_1, self.start_menu_button_2)
 
@@ -88,26 +95,35 @@ class Menu(Scene):
         self.editor_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.editor_menu_button_1.position = [self.game.surface.get_width() / 2 - 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_1.anchor = Anchor.BottomRight
-        self.editor_menu_button_1.font_align = Align.Center
         self.editor_menu_button_1.button_color = [0, 0, 0, 0]
         self.editor_menu_button_1.button_hover_color = "#64646E"
         self.editor_menu_button_1.button_press_color = "#000000"
+        self.editor_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
+        self.editor_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.editor_menu_button_1.font_size = 16
+        self.editor_menu_button_1.font_align = Align.Center
         # 2
         self.editor_menu_button_2 = TextButton(self.game, "Новый тест", [130, 40])
         self.editor_menu_button_2.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.editor_menu_button_2.anchor = Anchor.MidBottom
-        self.editor_menu_button_2.font_align = Align.Center
         self.editor_menu_button_2.button_color = [0, 0, 0, 0]
         self.editor_menu_button_2.button_hover_color = "#64646E"
         self.editor_menu_button_2.button_press_color = "#000000"
+        self.editor_menu_button_2.button_icon = load_asset(SPRITES, "add.png")
+        self.editor_menu_button_2.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.editor_menu_button_2.font_size = 16
+        self.editor_menu_button_2.font_align = Align.Center
         # 3
         self.editor_menu_button_3 = TextButton(self.game, "Импортировать тест", [130, 40])
         self.editor_menu_button_3.position = [self.game.surface.get_width() / 2 + 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_3.anchor = Anchor.BottomLeft
-        self.editor_menu_button_3.font_align = Align.Center
         self.editor_menu_button_3.button_color = [0, 0, 0, 0]
         self.editor_menu_button_3.button_hover_color = "#64646E"
         self.editor_menu_button_3.button_press_color = "#000000"
+        self.editor_menu_button_3.button_icon = load_asset(SPRITES, "import.png")
+        self.editor_menu_button_3.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.editor_menu_button_3.font_size = 16
+        self.editor_menu_button_3.font_align = Align.Center
         #
         self.editor_menu.add(MenuPage(self.game, "Редактор").children)
         self.editor_menu.add(self.editor_menu_button_1, self.editor_menu_button_2, self.editor_menu_button_3)
@@ -121,10 +137,13 @@ class Menu(Scene):
         self.settings_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.settings_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.settings_menu_button_1.anchor = Anchor.MidBottom
-        self.settings_menu_button_1.font_align = Align.Center
         self.settings_menu_button_1.button_color = [0, 0, 0, 0]
         self.settings_menu_button_1.button_hover_color = "#64646E"
         self.settings_menu_button_1.button_press_color = "#000000"
+        self.settings_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
+        self.settings_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.settings_menu_button_1.font_size = 16
+        self.settings_menu_button_1.font_align = Align.Center
         #
         self.settings_menu.add(MenuPage(self.game, "Настройки").children, self.settings_menu_button_1)
 
@@ -137,10 +156,13 @@ class Menu(Scene):
         self.about_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.about_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.about_menu_button_1.anchor = Anchor.MidBottom
-        self.about_menu_button_1.font_align = Align.Center
         self.about_menu_button_1.button_color = [0, 0, 0, 0]
         self.about_menu_button_1.button_hover_color = "#64646E"
         self.about_menu_button_1.button_press_color = "#000000"
+        self.about_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
+        self.about_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.about_menu_button_1.font_size = 16
+        self.about_menu_button_1.font_align = Align.Center
         #
         self.about_menu.add(MenuPage(self.game, "О программе").children, self.about_menu_button_1)
 
@@ -153,10 +175,13 @@ class Menu(Scene):
         self.select_test_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.select_test_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.select_test_menu_button_1.anchor = Anchor.MidBottom
-        self.select_test_menu_button_1.font_align = Align.Center
         self.select_test_menu_button_1.button_color = [0, 0, 0, 0]
         self.select_test_menu_button_1.button_hover_color = "#64646E"
         self.select_test_menu_button_1.button_press_color = "#000000"
+        self.select_test_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
+        self.select_test_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.select_test_menu_button_1.font_size = 16
+        self.select_test_menu_button_1.font_align = Align.Center
         #
         self.select_test_menu.add(MenuPage(self.game, "Выбрать тест").children, self.select_test_menu_button_1)        
 
