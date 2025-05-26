@@ -14,7 +14,6 @@ class UIButton(UIObject):
         self._selectable = True
         self._down = False
         self._pressed = False
-        self._button_size = size
         self._button_color = "lavenderblush1"
         self._button_hover_color = "lavenderblush2"
         self._button_press_color = "lavenderblush3"
