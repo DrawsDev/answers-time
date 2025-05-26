@@ -1,16 +1,18 @@
 import os
+import random
 import pygame
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
+from src.core.utility import asset_path, load_asset
 from src.components.scene import Scene
 from src.ui.debug_frame import DebugFrame
-from src.ui.frame import Frame
-from src.ui.image import Image
-from src.ui.text_button import TextButton
-from src.ui.layout import Layout
-from src.ui.menu.menu_page import MenuPage
 from src.ui.navigation import UINavigation
+from src.ui.layout import Layout
+from src.ui.frame import Frame
+from src.ui.image_label import ImageLabel
+from src.ui.text_button import TextButton
+from src.ui.menu.menu_page import MenuPage
 
 class Menu(Scene):
     def __init__(self, game: Game):
@@ -31,7 +33,7 @@ class Menu(Scene):
         # Основное
         self.main_menu = Layout()
         # Логотип
-        self.logo = Image(self.game, os.path.join(SPRITES, "new_logo.png"))
+        self.logo = ImageLabel(self.game, asset_path(SPRITES, "new_logo.png"))
         self.logo.anchor = Anchor.MidRight
         self.logo.position = [self.game.surface.get_width() - 32, self.game.surface.get_height() / 2]
         # Фрейм
@@ -40,11 +42,16 @@ class Menu(Scene):
         # Кнопки
         self.texts = ["Начать тест", "Редактор", "Настройки", "О программе", "Выход"]
         self.buttons = []
+        
         for i in range(0, 5):
             button = TextButton(self.game, self.texts[i], [self.frame.image.get_width(), 40], [32, 50 + 40 * i])
             button.button_color = [0, 0, 0, 0]
             button.button_hover_color = "#64646E"
             button.button_press_color = "#000000"
+            button.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+            button.font_size = 13
+            button.font_align = Align.Center
+            button.button_icon = load_asset(SPRITES, "test2.png")
             self.buttons.append(button)
         #
         self.main_menu.add(self.logo, self.frame, self.buttons)
@@ -59,15 +66,13 @@ class Menu(Scene):
         # Кнопки
         # 1
         self.start_menu_button_1 = TextButton(self.game, "Обучение", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 50])
-        self.start_menu_button_1.text_align = TextAlign.Center
-        self.start_menu_button_1.text_wraplength = self.start_menu_frame.image.get_width() - 10
+        self.start_menu_button_1.font_align = Align.Center
         self.start_menu_button_1.button_color = [0, 0, 0, 0]
         self.start_menu_button_1.button_hover_color = "#64646E"
         self.start_menu_button_1.button_press_color = "#000000"
         # 2
         self.start_menu_button_2 = TextButton(self.game, "Выбрать тест", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 90])
-        self.start_menu_button_2.text_align = TextAlign.Center
-        self.start_menu_button_2.text_wraplength = self.start_menu_frame.image.get_width() - 10
+        self.start_menu_button_2.font_align = Align.Center
         self.start_menu_button_2.button_color = [0, 0, 0, 0]
         self.start_menu_button_2.button_hover_color = "#64646E"
         self.start_menu_button_2.button_press_color = "#000000"
@@ -83,8 +88,7 @@ class Menu(Scene):
         self.editor_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.editor_menu_button_1.position = [self.game.surface.get_width() / 2 - 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_1.anchor = Anchor.BottomRight
-        self.editor_menu_button_1.text_align = TextAlign.Center
-        self.editor_menu_button_1.text_wraplength = self.editor_menu_button_1.image.get_width() - 10
+        self.editor_menu_button_1.font_align = Align.Center
         self.editor_menu_button_1.button_color = [0, 0, 0, 0]
         self.editor_menu_button_1.button_hover_color = "#64646E"
         self.editor_menu_button_1.button_press_color = "#000000"
@@ -92,8 +96,7 @@ class Menu(Scene):
         self.editor_menu_button_2 = TextButton(self.game, "Новый тест", [130, 40])
         self.editor_menu_button_2.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.editor_menu_button_2.anchor = Anchor.MidBottom
-        self.editor_menu_button_2.text_align = TextAlign.Center
-        self.editor_menu_button_2.text_wraplength = self.editor_menu_button_2.image.get_width() - 10
+        self.editor_menu_button_2.font_align = Align.Center
         self.editor_menu_button_2.button_color = [0, 0, 0, 0]
         self.editor_menu_button_2.button_hover_color = "#64646E"
         self.editor_menu_button_2.button_press_color = "#000000"
@@ -101,8 +104,7 @@ class Menu(Scene):
         self.editor_menu_button_3 = TextButton(self.game, "Импортировать тест", [130, 40])
         self.editor_menu_button_3.position = [self.game.surface.get_width() / 2 + 65, self.game.surface.get_height() - 5]
         self.editor_menu_button_3.anchor = Anchor.BottomLeft
-        self.editor_menu_button_3.text_align = TextAlign.Center
-        self.editor_menu_button_3.text_wraplength = self.editor_menu_button_3.image.get_width() - 20
+        self.editor_menu_button_3.font_align = Align.Center
         self.editor_menu_button_3.button_color = [0, 0, 0, 0]
         self.editor_menu_button_3.button_hover_color = "#64646E"
         self.editor_menu_button_3.button_press_color = "#000000"
@@ -119,8 +121,7 @@ class Menu(Scene):
         self.settings_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.settings_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.settings_menu_button_1.anchor = Anchor.MidBottom
-        self.settings_menu_button_1.text_align = TextAlign.Center
-        self.settings_menu_button_1.text_wraplength = self.settings_menu_button_1.image.get_width() - 10
+        self.settings_menu_button_1.font_align = Align.Center
         self.settings_menu_button_1.button_color = [0, 0, 0, 0]
         self.settings_menu_button_1.button_hover_color = "#64646E"
         self.settings_menu_button_1.button_press_color = "#000000"
@@ -136,8 +137,7 @@ class Menu(Scene):
         self.about_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.about_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.about_menu_button_1.anchor = Anchor.MidBottom
-        self.about_menu_button_1.text_align = TextAlign.Center
-        self.about_menu_button_1.text_wraplength = self.about_menu_button_1.image.get_width() - 10
+        self.about_menu_button_1.font_align = Align.Center
         self.about_menu_button_1.button_color = [0, 0, 0, 0]
         self.about_menu_button_1.button_hover_color = "#64646E"
         self.about_menu_button_1.button_press_color = "#000000"
@@ -153,8 +153,7 @@ class Menu(Scene):
         self.select_test_menu_button_1 = TextButton(self.game, "Назад", [130, 40])
         self.select_test_menu_button_1.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
         self.select_test_menu_button_1.anchor = Anchor.MidBottom
-        self.select_test_menu_button_1.text_align = TextAlign.Center
-        self.select_test_menu_button_1.text_wraplength = self.select_test_menu_button_1.image.get_width() - 10
+        self.select_test_menu_button_1.font_align = Align.Center
         self.select_test_menu_button_1.button_color = [0, 0, 0, 0]
         self.select_test_menu_button_1.button_hover_color = "#64646E"
         self.select_test_menu_button_1.button_press_color = "#000000"
@@ -163,7 +162,7 @@ class Menu(Scene):
 
     def _update_main_menu(self, delta: float) -> None:
         self.main_menu.update(delta)
-        
+
         if self.buttons[0].pressed:
             self.start_menu.enabled = not self.start_menu.enabled
             if self.start_menu.enabled:
@@ -256,3 +255,5 @@ class Menu(Scene):
         self.select_test_menu.draw(surface)
         self.navigation.draw(surface)
         self.debug_frame.draw(surface)
+
+__all__ = ["Menu"]
