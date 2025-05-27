@@ -51,7 +51,6 @@ class Menu(Scene):
             button.button_press_color = "#000000"
             button.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
             button.font_size = 16
-            button.font_align = Align.Center
             button.button_icon = load_asset(SPRITES, icons[i])
             self.buttons.append(button)
         #
@@ -73,7 +72,6 @@ class Menu(Scene):
         self.start_menu_button_1.button_icon = load_asset(SPRITES, "tutorial.png")
         self.start_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.start_menu_button_1.font_size = 16
-        self.start_menu_button_1.font_align = Align.Center
         # 2
         self.start_menu_button_2 = TextButton(self.game, "Выбрать тест", [self.start_menu_frame.image.get_width(), 40], [144 + 32, 90])
         self.start_menu_button_2.button_color = [0, 0, 0, 0]
@@ -82,7 +80,6 @@ class Menu(Scene):
         self.start_menu_button_2.button_icon = load_asset(SPRITES, "select.png")
         self.start_menu_button_2.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.start_menu_button_2.font_size = 16
-        self.start_menu_button_2.font_align = Align.Center
         #
         self.start_menu.add(self.start_menu_frame, self.start_menu_button_1, self.start_menu_button_2)
 
@@ -101,7 +98,6 @@ class Menu(Scene):
         self.editor_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
         self.editor_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.editor_menu_button_1.font_size = 16
-        self.editor_menu_button_1.font_align = Align.Center
         # 2
         self.editor_menu_button_2 = TextButton(self.game, "Новый тест", [130, 40])
         self.editor_menu_button_2.position = [self.game.surface.get_width() / 2, self.game.surface.get_height() - 5]
@@ -112,7 +108,6 @@ class Menu(Scene):
         self.editor_menu_button_2.button_icon = load_asset(SPRITES, "add.png")
         self.editor_menu_button_2.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.editor_menu_button_2.font_size = 16
-        self.editor_menu_button_2.font_align = Align.Center
         # 3
         self.editor_menu_button_3 = TextButton(self.game, "Импортировать тест", [130, 40])
         self.editor_menu_button_3.position = [self.game.surface.get_width() / 2 + 65, self.game.surface.get_height() - 5]
@@ -123,7 +118,6 @@ class Menu(Scene):
         self.editor_menu_button_3.button_icon = load_asset(SPRITES, "import.png")
         self.editor_menu_button_3.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.editor_menu_button_3.font_size = 16
-        self.editor_menu_button_3.font_align = Align.Center
         #
         self.editor_menu.add(MenuPage(self.game, "Редактор").children)
         self.editor_menu.add(self.editor_menu_button_1, self.editor_menu_button_2, self.editor_menu_button_3)
@@ -143,7 +137,6 @@ class Menu(Scene):
         self.settings_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
         self.settings_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.settings_menu_button_1.font_size = 16
-        self.settings_menu_button_1.font_align = Align.Center
         #
         self.settings_menu.add(MenuPage(self.game, "Настройки").children, self.settings_menu_button_1)
 
@@ -162,7 +155,6 @@ class Menu(Scene):
         self.about_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
         self.about_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.about_menu_button_1.font_size = 16
-        self.about_menu_button_1.font_align = Align.Center
         #
         self.about_menu.add(MenuPage(self.game, "О программе").children, self.about_menu_button_1)
 
@@ -181,7 +173,6 @@ class Menu(Scene):
         self.select_test_menu_button_1.button_icon = load_asset(SPRITES, "back.png")
         self.select_test_menu_button_1.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
         self.select_test_menu_button_1.font_size = 16
-        self.select_test_menu_button_1.font_align = Align.Center
         #
         self.select_test_menu.add(MenuPage(self.game, "Выбрать тест").children, self.select_test_menu_button_1)        
 
