@@ -1,114 +1,108 @@
+import os
 import pygame
 from typing import Tuple, Optional
 from src.enums import Align
 from src.core.game import Game
-from src.core.utility import path
 from src.ui.base.ui_object import UIObject
 
 class TextLabel(UIObject):
-    def __init__(self, 
-                 game: Game, 
-                 text: str = "TextLabel", 
-                 position: Tuple[int, int] = (0, 0)
-                 ):
+    def __init__(
+        self, 
+        game: Game, 
+        text: str = "TextLabel", 
+        position: Tuple[int, int] = (0, 0)
+    ) -> None:
         super().__init__(game, (0, 0), position)
         self._text = text
-        self._text_align = Align.Center
         self._text_wraplength = 200
         self._text_color = "White"
-        self._text_antialias = True
-        self._text_fontpath = None
-        self._text_fontsize = 20
         self._text_background_color = None
         self._text_background_padding = 5
-        self._font = pygame.Font(self._text_fontpath, self._text_fontsize)
-
-        self.text = text
+        self._font = pygame.Font()
+        self._font_path = None
+        self._font.align = Align.Center
+        self._update_image()
     
     @property
     def text(self) -> str:
         return self._text
-
-    @property
-    def text_align(self) -> Align:
-        return self._text_align
-
-    @property
-    def text_wraplength(self) -> int:
-        return self._text_wraplength
-
-    @property
-    def text_color(self) -> pygame.Color:
-        return self._text_color
-
-    @property
-    def text_antialias(self) -> bool:
-        return self._text_antialias
-
-    @property
-    def text_fontpath(self) -> str:
-        return self._text_fontpath
-    
-    @property
-    def text_fontsize(self) -> int:
-        return self._text_fontsize
-
-    @property
-    def font(self) -> pygame.Font:
-        return self._font
-
-    @property
-    def text_background_color(self) -> Optional[pygame.Color]:
-        return self._text_background_color
-
-    @property
-    def text_background_padding(self) -> int:
-        return self._text_background_padding
 
     @text.setter
     def text(self, value: str) -> None:
         self._text = value
         self._update_image()
 
-    @text_align.setter
-    def text_align(self, value: Align) -> None:
-        self._text_align = value
-        self._font.align = value
-        self._update_image()
-
-    @text_wraplength.setter
-    def text_wraplength(self, value: int) -> None:
-        if value >= 0:
-            self._text_wraplength = value
-            self._update_image()
+    @property
+    def text_color(self) -> pygame.Color:
+        return self._text_color
 
     @text_color.setter
     def text_color(self, value: pygame.Color) -> None:
         self._text_color = value
         self._update_image()
 
-    @text_antialias.setter
-    def text_antialias(self, value: bool) -> None:
-        self._text_antialias = value
-        self._update_image()
+    @property
+    def text_wraplength(self) -> int:
+        return self._text_wraplength
 
-    @text_fontpath.setter
-    def text_fontpath(self, value: Optional[str]) -> None:
-        self._text_fontpath = value
-        self._font = pygame.Font(value, self._text_fontsize)
-        self._update_image()
-
-    @text_fontsize.setter
-    def text_fontsize(self, value: int) -> None:
+    @text_wraplength.setter
+    def text_wraplength(self, value: int) -> None:
         if value >= 0:
-            self._text_fontsize = value
-            self._font = pygame.Font(self._text_fontpath, value)
+            self._text_wraplength = value
             self._update_image()
+    
+    @property
+    def font(self) -> pygame.Font:
+        return self._font
+
+    @property
+    def font_size(self) -> int:
+        return self._font.get_point_size()
+
+    @font_size.setter
+    def font_size(self, value: int):
+        if value >= 0:
+            align = self._font.align
+            self._font = pygame.Font(self._font_path, value)
+            self._font.align = align
+            self._update_image()
+
+    @property
+    def font_path(self) -> Optional[str]:
+        return self._font_path
+
+    @font_path.setter
+    def font_path(self, value: Optional[str]) -> None:
+        if value != None and not os.path.exists(value):
+            value = None
+        size = self._font.get_point_size()
+        align = self._font.align
+        self._font_path = value
+        self._font = pygame.Font(value, size)
+        self._font.align = align
+        self._update_image()
+
+    @property
+    def font_align(self) -> Align:
+        return self._font.align
+
+    @font_align.setter
+    def font_align(self, value: Align) -> None:
+        self._font.align = value
+        self._update_image()
+
+    @property
+    def text_background_color(self) -> Optional[pygame.Color]:
+        return self._text_background_color
 
     @text_background_color.setter
     def text_background_color(self, value: Optional[pygame.Color]) -> None:
         self._text_background_color = value
         self._update_image()
+
+    @property
+    def text_background_padding(self) -> int:
+        return self._text_background_padding
     
     @text_background_padding.setter
     def text_background_padding(self, value: int) -> None:
@@ -117,7 +111,7 @@ class TextLabel(UIObject):
             self._update_image()
 
     def _update_image(self) -> None:
-        text_surface = self._font.render(self._text, self._text_antialias, self._text_color, None, self._text_wraplength)
+        text_surface = self._font.render(self._text, True, self._text_color, None, self._text_wraplength)
         self.image = self._create_background_surface(text_surface.get_size())
         self.image.blit(text_surface, [self._text_background_padding, self._text_background_padding])
         self._update_rect()       
