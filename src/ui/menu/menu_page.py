@@ -1,6 +1,8 @@
 from typing import Tuple
-from src.enums import Anchor, Align
+from src.enums import Anchor
+from src.settings import FONTS
 from src.core.game import Game
+from src.core.utility import asset_path
 from src.ui.text_label import TextLabel
 from src.ui.frame import Frame
 
@@ -21,9 +23,10 @@ class MenuPage:
         self.frame.transparency = 225
         # Заголовок
         self.title = TextLabel(self.game, title, [self.game.surface.get_width() / 2, 0])
-        self.title.align = Align.Center
         self.title.anchor = Anchor.MidTop
-        self.title.color = ATBLUE
+        self.title.text_color = ATBLUE
+        self.title.font_path = asset_path(FONTS, "Ramona-Bold.ttf")
+        self.title.font_size = 16
         # Линия под заголовком
         self.line = Frame(self.game, [self.game.surface.get_width() - 10, 2])
         self.line.color = ATBLUE
