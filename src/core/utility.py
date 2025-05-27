@@ -1,7 +1,7 @@
 import os
 import sys
 import pygame
-from typing import Any, Optional
+from typing import Any, Optional, Tuple, List
 
 PNG = ".png"
 TTF = ".ttf"
@@ -51,3 +51,61 @@ def load_asset(path: str, *paths: str, **attributes) -> Optional[Any]:
         return _load_image(path_to)
     elif extension == TTF:
         return _load_font(path_to, attributes.get("size"))
+
+def _wrap_text(
+    text: str,  
+    font: pygame.Font, 
+    max_width: int
+) -> List[str]:
+    """Разбивает текст на строки, не превышающие максимальный предел по ширине
+
+    Args:
+        text (str): Текст
+        font (pygame.Font): Шрифт
+        max_width (int): Максимальный предел по ширине    
+
+    Returns:
+        List (List[str]): Строки
+    """
+    lines = []
+    line = []
+    for word in text.split():
+        if font.size(" ".join(line + [word]))[0] <= max_width:
+            line.append(word)
+        else:
+            if line:
+                lines.append(" ".join(line))
+            line = [word]
+    if line:
+        lines.append(" ".join(line))
+    return lines 
+
+def wrap_text(
+    text: str, 
+    font_path: Optional[str], 
+    max_width: int, 
+    max_height: int, 
+    init_size: int
+) -> Tuple[int, List[str]]:
+    """Разбивает текст на строки, находит допустимый размер шрифта для их рендеринга
+
+    Args:
+        text (str): Текст
+        fontpath (Optional[str]): Путь к шрифту
+        max_width (int): Максимальный предел по ширине
+        max_height (int): Максимальный предел по высоте
+        init_size (int): Изначальный размер шрифта
+
+    Returns:
+        Tuple (Tuple[int, List[str]]): Размер шрифта и строки
+    """
+    font_size = init_size
+    while font_size >= 1:
+        font = pygame.Font(font_path, font_size)
+        lines = _wrap_text(text, font, max_width)
+        fits_width = all(font.size(line)[0] <= max_width for line in lines)
+        fits_height = len(lines) * font.get_linesize() <= max_height
+        if fits_width and fits_height:
+            break
+        font_size -= 1
+    return font_size, lines
