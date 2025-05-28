@@ -21,7 +21,6 @@ class UIObject(pygame.sprite.Sprite):
         self._position = position
         self._anchor = Anchor.TopLeft
         self._mouse_entered = False
-        self._mouse_previous_position = [0, 0]
         self._update_rect()
 
     @property
