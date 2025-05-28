@@ -7,8 +7,8 @@ from src.ui.base.ui_object import UIObject
 class Frame(UIObject):
     def __init__(self, 
                  game: Game, 
-                 size: Tuple[int, int] = [100, 100], 
-                 position: Tuple[int, int] = [0, 0]
+                 size: Tuple[int, int] = (100, 100), 
+                 position: Tuple[int, int] = (0, 0)
                  ):
         super().__init__(game, size, position)
 

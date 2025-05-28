@@ -7,8 +7,8 @@ from src.core.game import Game
 class UIObject(pygame.sprite.Sprite):
     def __init__(self, 
                  game: Game, 
-                 size: Tuple[int, int] = [100, 100], 
-                 position: Tuple[int, int] = [0, 0]
+                 size: Tuple[int, int] = (100, 100), 
+                 position: Tuple[int, int] = (0, 0)
                  ):
         super().__init__()
         self.game = game
