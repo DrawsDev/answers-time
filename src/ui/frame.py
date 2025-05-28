@@ -12,7 +12,6 @@ class Frame(UIObject):
                  ):
         super().__init__(game, size, position)
 
-        self._size = size
         self._alpha = 255
         self._color = "BLACK"
         self._update_image()
@@ -24,10 +23,6 @@ class Frame(UIObject):
     @property
     def transparency(self) -> Optional[int]:
         return self._alpha
-    
-    @property
-    def size(self) -> Tuple[int, int]:
-        return self._size
 
     @color.setter
     def color(self, value: Color) -> None:
@@ -37,11 +32,6 @@ class Frame(UIObject):
     @transparency.setter
     def transparency(self, value: int) -> None:
         self._alpha = clamp(value, 0, 255)
-        self._update_image()
-
-    @size.setter
-    def size(self, value: Tuple[int, int]) -> None:
-        self._size = value
         self._update_image()
 
     def _update_image(self) -> None:
