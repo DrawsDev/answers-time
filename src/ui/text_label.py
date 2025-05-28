@@ -17,7 +17,7 @@ class TextLabel(UIObject):
         self._text_wraplength = 200
         self._text_color = "White"
         self._text_background_color = None
-        self._text_background_padding = 5
+        self._text_background_padding = 0
         self._font = pygame.Font()
         self._font_path = None
         self._font.align = Align.Center
@@ -114,6 +114,7 @@ class TextLabel(UIObject):
         text_surface = self._font.render(self._text, True, self._text_color, None, self._text_wraplength)
         self.image = self._create_background_surface(text_surface.get_size())
         self.image.blit(text_surface, [self._text_background_padding, self._text_background_padding])
+        self._size = self.image.get_size()
         self._update_rect()       
 
     def _create_background_surface(self, text_surface_size: Tuple[int, int]) -> pygame.Surface:
