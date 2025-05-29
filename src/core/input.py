@@ -1,5 +1,6 @@
 import pygame
 from typing import Tuple
+from src.settings import SURFACE_SIZE
 
 MOUSE_KEY_ALIASES = ("m_none", "m_left", "m_middle", "m_right", "m_wheel_up", "m_wheel_down", "m_extra_1", "m_extra_2")
 
@@ -15,7 +16,16 @@ class Input:
     
     @property
     def mouse_position(self) -> Tuple[int, int]:
-        return self._mouse_position
+        window_size = pygame.display.get_window_size()
+        ratio = (
+            window_size[0] / SURFACE_SIZE[0], 
+            window_size[1] / SURFACE_SIZE[1]
+        )
+        ratio_mouse_position = (
+            self._mouse_position[0] / ratio[0], 
+            self._mouse_position[1] / ratio[1]
+        )
+        return ratio_mouse_position
 
     def is_mouse_activity(self) -> bool:
         return self._mouse_activity
