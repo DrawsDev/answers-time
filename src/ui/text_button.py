@@ -1,7 +1,7 @@
 import os
 import pygame
 from typing import Tuple, Optional
-from src.enums import Align
+from src.enums import Align, Anchor
 from src.core.game import Game
 from src.core.utility import wrap_text
 from src.ui.base.ui_button import UIButton
@@ -12,15 +12,24 @@ class TextButton(UIButton):
         game: Game, 
         text: str = "TextButton",
         size: Tuple[int, int] = (100, 50),
-        position: Tuple[int, int] = (0, 0)
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft,
+        font_path: Optional[str] = None,
+        font_size: int = 20,
+        font_align: Align = Align.Center,
+        text_color: pygame.Color = "white",
+        button_color: pygame.Color = "azure2",
+        button_hover_color: pygame.Color = "azure3",
+        button_press_color: pygame.Color = "azure4",
+        button_icon: Optional[pygame.Surface] = None
     ) -> None:
-        self._button_icon = None
+        self._button_icon = button_icon
         self._text = text
-        self._text_color = "White"
-        self._font = pygame.Font()
-        self._font_path = None
-        self._font.align = Align.Center
-        super().__init__(game, size, position)
+        self._text_color = text_color
+        self._font = pygame.Font(font_path, font_size)
+        self._font_path = font_path
+        self._font.align = font_align
+        super().__init__(game, size, position, anchor, button_color, button_hover_color, button_press_color)
 
     @property
     def button_icon(self) -> pygame.Surface:
@@ -99,7 +108,7 @@ class TextButton(UIButton):
             self.image.blit(self._button_icon, icon_rect)
 
         # Автоматический подбор размера шрифта, разбиение текста по линиям и отрисовка
-        if self._font.size(self._text)[0] > self._size[0]:
+        if self._font.size(self._text)[0] > self._size[0] - offset:
             font_size, lines = wrap_text(self._text, self._font_path, self._size[0] - offset, self._size[1], self._font.get_point_size())
             font = pygame.Font(self._font_path, font_size)
             font.align = self._font.align
@@ -123,7 +132,7 @@ class TextButton(UIButton):
                 y_offset += line_height
         # Стандартная отрисовка одной линии
         else:
-            text_surface = self._font.render(self._text, True, self._text_color, None, self._size[0] - offset)
+            text_surface = self._font.render(self._text, True, self._text_color, None) #self._size[0] - offset
             text_x = offset if self._font.align == Align.Left else (self._size[0] - text_surface.get_width() + offset) / 2
             text_y = self._size[1] / 2
             text_rect = text_surface.get_rect(midleft=(text_x, text_y))
