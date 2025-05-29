@@ -5,11 +5,13 @@ from src.settings import *
 from src.core.game import Game
 
 class UIObject(pygame.sprite.Sprite):
-    def __init__(self, 
-                 game: Game, 
-                 size: Tuple[int, int] = (100, 100), 
-                 position: Tuple[int, int] = (0, 0)
-                 ):
+    def __init__(
+        self, 
+        game: Game, 
+        size: Tuple[int, int] = (100, 100), 
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft
+    ) -> None:
         super().__init__()
         self.game = game
         self.image = pygame.Surface(size, pygame.SRCALPHA)
@@ -19,7 +21,7 @@ class UIObject(pygame.sprite.Sprite):
         self._active = True
         self._size = size
         self._position = position
-        self._anchor = Anchor.TopLeft
+        self._anchor = anchor
         self._mouse_entered = False
         self._update_rect()
 
@@ -96,11 +98,9 @@ class UIObject(pygame.sprite.Sprite):
             self.on_mouse_moved()
     
     def _mouse_handler(self, delta: float) -> None:
-        mouse_position = pygame.mouse.get_pos()
-        window_size = pygame.display.get_window_size()
-        ratio = [window_size[0] / SURFACE_SIZE[0], window_size[1] / SURFACE_SIZE[1]]
+        mouse_position = self.game.input.mouse_position
 
-        if self.rect.collidepoint(mouse_position[0] / ratio[0], mouse_position[1] / ratio[1]) or self._selected:
+        if self.rect.collidepoint(mouse_position[0], mouse_position[1]) or self._selected:
             self._mouse_enter_handler()
             self._mouse_moved_handler()
         else:
