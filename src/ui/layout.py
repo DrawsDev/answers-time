@@ -2,22 +2,22 @@ import pygame
 from typing import Union, Iterable, List
 
 class Layout:
-    def __init__(self):
+    def __init__(self, enabled: bool = True):
         self._group = pygame.sprite.Group()
-        self._enabled = True
+        self._enabled = enabled
 
     @property
     def enabled(self) -> bool:
         return self._enabled
 
-    @property
-    def children(self) -> List[pygame.sprite.Sprite]:
-        return self._group.sprites()
-
     @enabled.setter
     def enabled(self, value: bool) -> None:
         self._enabled = value
         self._show() if value else self._hide()
+
+    @property
+    def children(self) -> List[pygame.sprite.Sprite]:
+        return self._group.sprites()
 
     def add(self, *ui_objects: Union[pygame.sprite.Sprite, Iterable[pygame.sprite.Sprite]]) -> None:
         self._group.add(*ui_objects)
