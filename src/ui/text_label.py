@@ -1,7 +1,7 @@
 import os
 import pygame
 from typing import Tuple, Optional
-from src.enums import Align
+from src.enums import Align, Anchor
 from src.core.game import Game
 from src.ui.base.ui_object import UIObject
 
@@ -10,17 +10,26 @@ class TextLabel(UIObject):
         self, 
         game: Game, 
         text: str = "TextLabel", 
-        position: Tuple[int, int] = (0, 0)
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft,
+        font_path: Optional[str] = None,
+        font_size: int = 20,
+        font_align: Align = Align.Center,
+        text_color: pygame.Color = "white",
+        text_wraplength: int = 200,
+        text_background_color: Optional[pygame.Color] = None,
+        text_background_padding: int = 0
+
     ) -> None:
-        super().__init__(game, (0, 0), position)
+        super().__init__(game, (0, 0), position, anchor)
         self._text = text
-        self._text_wraplength = 200
-        self._text_color = "White"
-        self._text_background_color = None
-        self._text_background_padding = 0
-        self._font = pygame.Font()
-        self._font_path = None
-        self._font.align = Align.Center
+        self._text_wraplength = text_wraplength
+        self._text_color = text_color
+        self._text_background_color = text_background_color
+        self._text_background_padding = text_background_padding
+        self._font = pygame.Font(font_path, font_size)
+        self._font_path = font_path
+        self._font.align = font_align
         self._update_image()
     
     @property
