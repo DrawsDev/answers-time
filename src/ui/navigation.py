@@ -107,6 +107,8 @@ class UINavigation:
                 self._uiobjects[self._prev_index].selected = False        
 
     def _create_cursor_surface(self) -> None:
+        if len(self._uiobjects) <= 0:
+            return
         uiobject = self._uiobjects[self._index]
         w, h = uiobject.image.get_size()
         self._cursor_surface = pygame.Surface((w, h), pygame.SRCALPHA)
