@@ -1,5 +1,5 @@
 import pygame.scrap
-from typing import Tuple
+from typing import Tuple, Optional
 from src.core.game import Game
 
 class InputBox:
@@ -60,13 +60,24 @@ class InputBox:
             self._changed = True
 
     @property
-    def cursor(self) -> int:
+    def cursor_position(self) -> int:
         return self._cursor
     
-    @cursor.setter
-    def cursor(self, value: int) -> None:
+    @cursor_position.setter
+    def cursor_position(self, value: int) -> None:
         if self._cursor != value and 0 <= value <= len(self._text):
             self._cursor = value
+            self._changed = True
+
+    @property
+    def selection_start_position(self) -> Optional[int]:
+        return self._selection_start
+
+    @selection_start_position.setter
+    def selection_start_position(self, value: Optional[int]) -> None:
+        if self._selection_start != value and 0 <= value <= len(self._text):
+            self._selection_start = value
+            self._changed = True
 
     @property
     def changed(self) -> bool:
