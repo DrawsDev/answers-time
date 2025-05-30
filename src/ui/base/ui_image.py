@@ -1,16 +1,18 @@
 import pygame
 from typing import Tuple
+from src.enums import Anchor
 from src.core.game import Game
 from src.ui.base.ui_object import UIObject
 
 class UIImage(UIObject):
-    def __init__(self, 
-                 game: Game,
-                 path: str,
-                 position: Tuple[int, int] = (0, 0)
-                 ):
-        super().__init__(game, position=position)
-
+    def __init__(
+        self, 
+        game: Game,
+        path: pygame.Surface,
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft
+    ) -> None:
+        super().__init__(game, (0, 0), position, anchor)
         self._image_path = path
         self._load_image()
 
@@ -25,7 +27,7 @@ class UIImage(UIObject):
 
     def _load_image(self) -> None:
         self.image = pygame.image.load(self._image_path)
-        self.image.set_colorkey("Black")
+        self.image.set_colorkey("black")
         self._update_rect()
 
 __all__ = ["UIImage"]
