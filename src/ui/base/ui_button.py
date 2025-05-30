@@ -1,22 +1,28 @@
 import pygame
-from typing import Tuple
-from src.enums import ButtonState
+from typing import Tuple, Optional, Callable
+from src.enums import ButtonState, Anchor
 from src.core.game import Game
 from src.ui.base.ui_object import UIObject
 
 class UIButton(UIObject):
-    def __init__(self, 
-                 game: Game, 
-                 size: Tuple[int, int] = [100, 100], 
-                 position: Tuple[int, int] = [0, 0]
-                 ):
-        super().__init__(game, size, position)
+    def __init__(
+        self, 
+        game: Game, 
+        size: Tuple[int, int] = (100, 100), 
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft,
+        button_color = "azure2",
+        button_hover_color = "azure3",
+        button_press_color = "azure4"
+    ) -> None:
+        super().__init__(game, size, position, anchor)
         self._selectable = True
         self._down = False
         self._pressed = False
-        self._button_color = "lavenderblush1"
-        self._button_hover_color = "lavenderblush2"
-        self._button_press_color = "lavenderblush3"
+        self._button_color = button_color
+        self._button_hover_color = button_hover_color
+        self._button_press_color = button_press_color
+        self._button_press_callback = None
         self._set_state(ButtonState.Idle)
 
     @property
@@ -42,6 +48,14 @@ class UIButton(UIObject):
     def button_state(self) -> ButtonState:
         return self._state
 
+    @property
+    def button_press_callback(self) -> Optional[Callable]:
+        return self._button_press_callback
+
+    @button_press_callback.setter
+    def button_press_callback(self, value: Optional[Callable]) -> None:
+        self._button_press_callback = value
+
     @button_color.setter
     def button_color(self, value: pygame.Color) -> None:
         self._button_color = value
@@ -65,6 +79,8 @@ class UIButton(UIObject):
         self._set_state(ButtonState.Hover if self._mouse_entered else ButtonState.Idle)
         if self._down:
             self._pressed = True
+            if self._button_press_callback:
+                self._button_press_callback()
         self._down = False
 
     def on_mouse_enter(self) -> None:
@@ -93,7 +109,7 @@ class UIButton(UIObject):
         super()._update_image()
         if self._state == ButtonState.Idle:
             self.image.fill(self._button_color)
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+            # pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
         elif self._state == ButtonState.Hover:
             self.image.fill(self._button_hover_color)
         elif self._state == ButtonState.Press:
@@ -103,6 +119,6 @@ class UIButton(UIObject):
         super().update(delta)
         
         if self._active and self._state in (ButtonState.Hover, ButtonState.Press):
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+            pass # pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
 
 __all__ = ["UIButton"]
