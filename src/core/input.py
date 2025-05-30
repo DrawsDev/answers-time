@@ -16,6 +16,9 @@ class Input:
     
     @property
     def mouse_position(self) -> Tuple[int, int]:
+        return self.get_mouse_position()
+
+    def get_mouse_position(self) -> Tuple[int, int]:
         window_size = pygame.display.get_window_size()
         ratio = (
             window_size[0] / SURFACE_SIZE[0], 
