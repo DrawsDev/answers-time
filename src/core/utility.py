@@ -10,7 +10,13 @@ def clamp(v: float, min_v: float, max_v: float) -> float:
     return max(min(v, max_v), min_v)
 
 def lerp(a: float, b: float, t: float) -> float:
-    return a + (b - a) * t
+    epsilon = 1e-9
+    result = a + (b - a) * t
+    if -epsilon < result < epsilon: 
+        return 0
+    if abs(abs(b) - abs(result)) <= epsilon:
+        return b
+    return result
 
 def path(relative_path: str) -> str:
     """Получение абсолютного пути до файла."""
