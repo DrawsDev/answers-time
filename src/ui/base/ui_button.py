@@ -1,8 +1,15 @@
 import pygame
-from typing import Tuple, Optional, Callable
+from typing import Tuple, Optional, Callable, Dict, Union, Any
 from src.enums import ButtonState, Anchor
 from src.core.game import Game
 from src.ui.base.ui_object import UIObject
+
+PressedCallbackType = Optional[
+    Union[
+        Tuple[Callable, Tuple[Any, ...]],
+        Callable
+    ]
+]
 
 class UIButton(UIObject):
     def __init__(
@@ -22,7 +29,7 @@ class UIButton(UIObject):
         self._button_color = button_color
         self._button_hover_color = button_hover_color
         self._button_press_color = button_press_color
-        self._button_press_callback = None
+        self._pressed_callback = None
         self._set_state(ButtonState.Idle)
 
     @property
@@ -48,14 +55,6 @@ class UIButton(UIObject):
     def button_state(self) -> ButtonState:
         return self._state
 
-    @property
-    def button_press_callback(self) -> Optional[Callable]:
-        return self._button_press_callback
-
-    @button_press_callback.setter
-    def button_press_callback(self, value: Optional[Callable]) -> None:
-        self._button_press_callback = value
-
     @button_color.setter
     def button_color(self, value: pygame.Color) -> None:
         self._button_color = value
@@ -71,6 +70,15 @@ class UIButton(UIObject):
         self._button_press_color = value
         self._set_state(self._state)
 
+    @property
+    def pressed_callback(self) -> PressedCallbackType:
+        return self._pressed_callback
+
+    @pressed_callback.setter
+    def pressed_callback(self, value: PressedCallbackType):
+        if self._pressed_callback != value:
+            self._pressed_callback = value
+
     def on_mouse_pressed(self) -> None:
         self._set_state(ButtonState.Press)
         self._down = True
@@ -79,8 +87,12 @@ class UIButton(UIObject):
         self._set_state(ButtonState.Hover if self._mouse_entered else ButtonState.Idle)
         if self._down:
             self._pressed = True
-            if self._button_press_callback:
-                self._button_press_callback()
+            if self._pressed_callback is not None:
+                if isinstance(self._pressed_callback, tuple):
+                    func, args = self._pressed_callback
+                    func(*args)
+                else:
+                    self._pressed_callback()
         self._down = False
 
     def on_mouse_enter(self) -> None:
