@@ -32,6 +32,8 @@ class Layout:
     def draw(self, surface: pygame.Surface) -> None:
         if self._enabled:
             self._group.draw(surface)
+            for child in self._group:
+                child.draw(surface)
 
     def _show(self) -> None:
         for ui_object in self._group.sprites():
