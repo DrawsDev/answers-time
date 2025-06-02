@@ -1,9 +1,10 @@
 import pygame
 from typing import Union, Iterable, List
+from src.ui.base.ui_object import UIObject
 
 class Layout:
     def __init__(self, enabled: bool = True):
-        self._group = pygame.sprite.Group()
+        self._children = pygame.sprite.Group()
         self._enabled = enabled
 
     @property
@@ -12,37 +13,33 @@ class Layout:
 
     @enabled.setter
     def enabled(self, value: bool) -> None:
-        self._enabled = value
-        self._show() if value else self._hide()
+        if self._enabled != value:
+            self._enabled = value
+            self._change_children_activity(value)
 
     @property
     def children(self) -> List[pygame.sprite.Sprite]:
-        return self._group.sprites()
+        return self._children.sprites()
 
-    def add(self, *ui_objects: Union[pygame.sprite.Sprite, Iterable[pygame.sprite.Sprite]]) -> None:
-        self._group.add(*ui_objects)
-        self.enabled = self.enabled
+    def insert_child(self, *child: Union[UIObject, Iterable[UIObject]]) -> None:
+        self._children.add(*child)
+        self._change_children_activity(self._enabled)
 
-    def remove(self, *ui_objects: Union[pygame.sprite.Sprite, Iterable[pygame.sprite.Sprite]]) -> None:
-        self._group.remove(*ui_objects)
+    def remove_child(self, *child: Union[UIObject, Iterable[UIObject]]) -> None:
+        self._children.remove(*child)
+    
+    def _change_children_activity(self, value: bool) -> None:
+        for child in self._children:
+            if hasattr(child, "active"):
+                child.active = value
 
     def update(self, delta: float) -> None:
-        self._group.update(delta)
+        self._children.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         if self._enabled:
-            self._group.draw(surface)
-            for child in self._group:
+            self._children.draw(surface)
+            for child in self._children:
                 child.draw(surface)
-
-    def _show(self) -> None:
-        for ui_object in self._group.sprites():
-            if hasattr(ui_object, "active"):
-                if not ui_object.active: ui_object.active = True
-
-    def _hide(self) -> None:
-        for ui_object in self._group.sprites():
-            if hasattr(ui_object, "active"):
-                if ui_object.active: ui_object.active = False
 
 __all__ = ["Layout"]
