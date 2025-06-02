@@ -115,3 +115,19 @@ def wrap_text(
             break
         font_size -= 1
     return font_size, lines
+
+def open_url(url: str) -> None:
+    """
+    Открывает ссылку в браузере
+    
+    https://stackoverflow.com/a/4217323
+    """
+    if sys.platform == "win32":
+        os.startfile(url)
+    elif sys.platform == "darwin":
+        subprocess.Popen(["open", url])
+    else:
+        try:
+            subprocess.Popen(["xdg-open", url])
+        except OSError:
+            print("Please open a browser on:", url)
