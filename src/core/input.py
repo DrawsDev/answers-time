@@ -36,8 +36,14 @@ class Input:
     def is_mouse_moved(self) -> bool:
         return self._mouse_moved
 
+    def is_mouse_wheel(self) -> bool:
+        return self._mouse_wheel is not None
+
     def get_unicode(self) -> str:
         return self._unicode
+
+    def get_mouse_wheel(self) -> pygame.Event:
+        return self._mouse_wheel
 
     def get_axis(self, positive_key: str, negative_key: str) -> int:
         key1 = int(self.is_key_down(positive_key))
@@ -62,6 +68,7 @@ class Input:
         self._unicode = ""
         self._mouse_moved = False
         self._mouse_activity = False
+        self._mouse_wheel = None
 
     def handle_event(self, event: pygame.Event) -> None:
         if event.type == pygame.KEYUP:
@@ -88,6 +95,7 @@ class Input:
 
         if event.type == pygame.MOUSEWHEEL:
             self._mouse_activity = True
+            self._mouse_wheel = event
 
         if event.type == pygame.MOUSEMOTION:
             self._mouse_moved = True
