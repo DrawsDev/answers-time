@@ -40,6 +40,16 @@ class ScrollFrame(UIObject):
             self._enabled = value
 
     @property
+    def active(self) -> bool:
+        return self._active
+
+    @active.setter
+    def active(self, value: bool) -> None:
+        if self._active != value:
+            self._active = value
+            self._change_children_activity(value)
+
+    @property
     def backcolor(self) -> pygame.Color:
         return self._backcolor
 
@@ -108,6 +118,7 @@ class ScrollFrame(UIObject):
 
     def insert_child(self, *child: Union[UIObject, Iterable[UIObject]]) -> None:
         self._children.add(*child)
+        self._change_children_activity(self._enabled)
         self._update_scroll_size()
 
     def remove_child(self, *child: Union[UIObject, Iterable[UIObject]]) -> None:
@@ -125,6 +136,11 @@ class ScrollFrame(UIObject):
         self._update_scroll_position(delta)
         self._clamp_scroll_position()
         self._update_children(delta)
+
+    def _change_children_activity(self, value: bool) -> None:
+        for child in self._children.sprites():
+            if hasattr(child, "active"):
+                child.active = value
 
     def _update_children(self, delta: float) -> None:
         for child in self._children:
