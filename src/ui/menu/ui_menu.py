@@ -42,7 +42,8 @@ class UIMenu:
             color=(0, 0, 0, 175),
             size=(144, self.game.surface.get_height()),
             position=(32, 0),
-            anchor=Anchor.TopLeft
+            anchor=Anchor.TopLeft,
+            z_index=-1
         )
 
     def _create_start_button(self) -> None:

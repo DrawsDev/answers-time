@@ -23,7 +23,8 @@ class UIQuizSelectMenu:
             color="#4E4E56",
             size=(420, 260),
             position=(self.game.surface.get_width() / 2, self.game.surface.get_height() / 2),
-            anchor=Anchor.Center
+            anchor=Anchor.Center,
+            z_index=-1
         )
 
     def _create_back_button(self) -> None:

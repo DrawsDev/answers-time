@@ -150,6 +150,7 @@ class UIAboutMenu:
             size=(130, 40),
             position=(self.game.surface.get_width() / 2, self.game.surface.get_height() - 5),
             anchor=Anchor.MidBottom,
+            z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,

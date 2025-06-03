@@ -22,7 +22,8 @@ class UIStartMenu:
             color=(0, 0, 0, 175),
             size=(144, self.game.surface.get_height()),
             position=(176, 0),
-            anchor=Anchor.TopLeft
+            anchor=Anchor.TopLeft,
+            z_index=-1
         )
 
     def _create_tutorial_button(self) -> None:
