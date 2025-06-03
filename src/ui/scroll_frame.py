@@ -125,6 +125,10 @@ class ScrollFrame(UIObject):
         self._children.remove(*child)
         self._update_scroll_size()
 
+    def reset_scrolling(self) -> None:
+        self._scroll_position = (0, 0)
+        self._scroll_next_position = (0, 0)
+
     def draw(self, surface: pygame.Surface) -> None:
         self.image = pygame.Surface(self._size, pygame.SRCALPHA)
         self.image.fill(self._backcolor)
@@ -148,6 +152,16 @@ class ScrollFrame(UIObject):
                 child.position[0] - self._scroll_position[0],
                 child.position[1] - self._scroll_position[1]
             )})
+            
+            child_rect = child.image.get_rect(**{child.anchor: (
+                child.position[0] - self.rect.x - self._scroll_position[0],
+                child.position[1] - self.rect.y - self._scroll_position[1]
+            )})
+
+            if not child_rect.colliderect(pygame.Rect(0, 0, *self._size)):
+                child.active = False
+            elif self._active:
+                child.active = True
         self._children.update(delta)
 
     def _update_scroll_size(self) -> None:
