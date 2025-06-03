@@ -14,6 +14,7 @@ class TextButton(UIButton):
         size: Tuple[int, int] = (100, 50),
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         font_path: Optional[str] = None,
         font_size: int = 20,
         font_align: Align = Align.Center,
@@ -29,7 +30,7 @@ class TextButton(UIButton):
         self._font = pygame.Font(font_path, font_size)
         self._font_path = font_path
         self._font.align = font_align
-        super().__init__(game, size, position, anchor, button_color, button_hover_color, button_press_color)
+        super().__init__(game, size, position, anchor, z_index, button_color, button_hover_color, button_press_color)
 
     @property
     def button_icon(self) -> pygame.Surface:

@@ -18,11 +18,12 @@ class UIButton(UIObject):
         size: Tuple[int, int] = (100, 100), 
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         button_color = "azure2",
         button_hover_color = "azure3",
         button_press_color = "azure4"
     ) -> None:
-        super().__init__(game, size, position, anchor)
+        super().__init__(game, size, position, anchor, z_index)
         self._selectable = True
         self._down = False
         self._pressed = False

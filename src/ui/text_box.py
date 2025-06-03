@@ -22,12 +22,13 @@ class TextBox(UIObject):
         size: Tuple[int, int] = (200, 40), 
         position: Tuple[int, int] = (0, 0), 
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         font_path: Optional[str] = None,
         font_size: int = 20,
         font_align: Align = Align.Left,
         text_color: pygame.Color = "white"
     ) -> None:
-        super().__init__(game, size, position, anchor)
+        super().__init__(game, size, position, anchor, z_index)
         self._selectable = True
         self._dragging = False
         self._focus = False

@@ -10,8 +10,9 @@ class ImageLabel(UIImage):
         path: str, 
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         scale_factor: float = 1.0
     ) -> None:
-        super().__init__(game, path, position, anchor, scale_factor)
+        super().__init__(game, path, position, anchor, z_index, scale_factor)
 
 __all__ = ["ImageLabel"]

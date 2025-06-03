@@ -12,6 +12,7 @@ class TextLabel(UIObject):
         text: str = "TextLabel", 
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         font_path: Optional[str] = None,
         font_size: int = 20,
         font_align: Align = Align.Center,
@@ -21,7 +22,7 @@ class TextLabel(UIObject):
         text_background_padding: int = 0
 
     ) -> None:
-        super().__init__(game, (0, 0), position, anchor)
+        super().__init__(game, (0, 0), position, anchor, z_index)
         self._text = text
         self._text_wraplength = text_wraplength
         self._text_color = text_color

@@ -11,9 +11,10 @@ class Frame(UIObject):
         color: pygame.Color = "black",
         size: Tuple[int, int] = (100, 100), 
         position: Tuple[int, int] = (0, 0),
-        anchor: Anchor = Anchor.TopLeft
+        anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0
     ) -> None:
-        super().__init__(game, size, position, anchor)
+        super().__init__(game, size, position, anchor, z_index)
         self._color = color
         self._update_image()
 

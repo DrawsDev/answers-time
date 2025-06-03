@@ -11,9 +11,10 @@ class UIImage(UIObject):
         path: pygame.Surface,
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
         scale_factor: float = 1.0
     ) -> None:
-        super().__init__(game, (0, 0), position, anchor)
+        super().__init__(game, (0, 0), position, anchor, z_index)
         self._image_copy = None
         self._image_path = path
         self._image_scale_factor = scale_factor
