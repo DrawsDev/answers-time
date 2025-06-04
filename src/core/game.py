@@ -2,6 +2,7 @@ import sys
 import pygame
 from src.settings import *
 from src.core.input import Input
+from src.core.audio import Audio
 from src.components.scene import Scene
 
 class Game:
@@ -12,6 +13,7 @@ class Game:
         self.surface = pygame.Surface(SURFACE_SIZE)
         self.clock = pygame.Clock()
         self.input = Input()
+        self.audio = Audio()
         self._init_scenes()
 
     def _init_scenes(self) -> None:
