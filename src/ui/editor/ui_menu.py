@@ -7,6 +7,8 @@ from src.ui.text_button import TextButton
 from src.ui.text_label import TextLabel
 from src.ui.layout import Layout
 
+GAP = 4
+
 class UIMenu():
     def __init__(self, game: Game) -> None:
         self.game = game
@@ -18,14 +20,21 @@ class UIMenu():
         self._create_import_button()
         self._create_export_button()
         self._create_exit_button()
-        self.layout.insert_child(self.back, self.save, self.info, self.imp, self.exp, self.exit)
+        self.layout.insert_child(
+            self.back, 
+            self.save, 
+            self.info, 
+            self.imp, 
+            self.exp, 
+            self.exit
+        )
 
     def _create_back_button(self) -> None:
         self.back = TextButton(
             game=self.game,
             text="Назад",
             size=(130, 40),
-            position=(self.game.surface.get_width() / 2, self.game.surface.get_height()),
+            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
