@@ -137,9 +137,10 @@ class ScrollFrame(UIObject):
 
     def update(self, delta: float) -> None:
         super().update(delta)
-        self._update_scroll_position(delta)
-        self._clamp_scroll_position()
-        self._update_children(delta)
+        if self._enabled:
+            self._update_scroll_position(delta)
+            self._clamp_scroll_position()
+            self._update_children(delta)
 
     def _change_children_activity(self, value: bool) -> None:
         for child in self._children.sprites():
