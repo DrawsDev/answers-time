@@ -97,7 +97,7 @@ class UIObject(pygame.sprite.Sprite):
     def on_mouse_leave(self) -> None: ...
 
     def on_mouse_moved(self) -> None: ...
-
+    
     def _mouse_enter_handler(self) -> None:
         if not self._mouse_entered:
             self._mouse_entered = True
