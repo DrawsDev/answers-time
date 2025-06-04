@@ -9,12 +9,6 @@ from src.core.utility import open_url
 from src.components.scene import Scene
 from src.ui.debug_frame import DebugFrame
 from src.ui.navigation import UINavigation
-from src.ui.layout import Layout
-from src.ui.frame import Frame
-from src.ui.text_label import TextLabel
-from src.ui.image_label import ImageLabel
-from src.ui.text_button import TextButton
-from src.ui.menu.menu_page import MenuPage
 from src.ui.menu.ui_menu import UIMenu
 from src.ui.menu.ui_start_menu import UIStartMenu
 from src.ui.menu.ui_quiz_select_menu import UIQuizSelectMenu
@@ -60,6 +54,7 @@ class Menu(Scene):
             self.ui_new_quiz_menu.layout.enabled = False
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = False
+            self.ui_about_menu.scroll_frame.enabled = False
         def open_start_menu() -> None:
             self.ui_menu.layout.enabled = True
             self.ui_start_menu.layout.enabled = not self.ui_start_menu.layout.enabled
@@ -102,6 +97,8 @@ class Menu(Scene):
             self.ui_new_quiz_menu.layout.enabled = False
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = True
+            self.ui_about_menu.scroll_frame.reset_scrolling()
+            self.ui_about_menu.scroll_frame.enabled = True
         def open_new_quiz_menu() -> None:
             self.ui_menu.layout.enabled = False
             self.ui_start_menu.layout.enabled = False
@@ -110,6 +107,8 @@ class Menu(Scene):
             self.ui_new_quiz_menu.layout.enabled = True
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = False
+        def open_import() -> None:
+            self.ui_editor_menu.explorer.enabled = True
         # Меню
         self.ui_menu.start.pressed_callback = open_start_menu
         self.ui_menu.editor.pressed_callback = open_editor_menu
@@ -124,6 +123,8 @@ class Menu(Scene):
         # Меню редактора
         self.ui_editor_menu.back.pressed_callback = open_menu
         self.ui_editor_menu.new.pressed_callback = open_new_quiz_menu
+        self.ui_editor_menu.imp.pressed_callback = open_import
+        self.ui_editor_menu.explorer.close_callback.set((self.ui_editor_menu.create_buttons, (go_to_editor_with_exists_quiz,)))
         # Меню создания нового теста
         self.ui_new_quiz_menu.create.pressed_callback = go_to_editor_with_new_quiz
         self.ui_new_quiz_menu.back.pressed_callback = open_editor_menu

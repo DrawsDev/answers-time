@@ -8,6 +8,8 @@ from src.ui.text_label import TextLabel
 from src.ui.frame import Frame
 from src.ui.layout import Layout
 
+GAP = 4
+
 class UIQuizSelectMenu:
     def __init__(self, game: Game) -> None:
         self.game = game
@@ -16,23 +18,13 @@ class UIQuizSelectMenu:
         self._create_back_button()
         self._create_frame()
         self.layout.insert_child(self.back, self.frame)
-    
-    def _create_frame(self) -> None:
-        self.frame = Frame(
-            game=self.game,
-            color="#4E4E56",
-            size=(420, 260),
-            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() / 2),
-            anchor=Anchor.Center,
-            z_index=-1
-        )
 
     def _create_back_button(self) -> None:
         self.back = TextButton(
             game=self.game,
             text="Назад",
             size=(130, 40),
-            position=(self.game.surface.get_width() / 2, self.game.surface.get_height()),
+            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
@@ -44,16 +36,32 @@ class UIQuizSelectMenu:
             button_icon=load_asset(SPRITES, "back.png")
         )
 
+    def _create_frame(self) -> None:
+        self.frame = Frame(
+            game=self.game,
+            color="#4E4E56",
+            size=(420, 260),
+            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() / 2),
+            anchor=Anchor.Center,
+            z_index=-1
+        )
+
     def create_buttons(self, callback: Callable) -> None:
         self.layout.remove_child(self.buttons)
         self.buttons.clear()
         files = [file for file in os.listdir(asset_path(QUIZZES)) if file.endswith(".json")]
+        x = -130 - GAP
+        y = 0
         for i in range(len(files)):
+            x += 130 + GAP
+            if x >= self.frame.rect.width:
+                x = 0
+                y += 40 + GAP
             button = TextButton(
                 game=self.game,
                 text=files[i],
-                size=(40, 40),
-                position=(self.game.surface.get_width() / 2 - self.frame.size[0] / 2 + 40 * i, self.game.surface.get_height() / 2 - self.frame.size[1] / 2),
+                size=(130, 40),
+                position=(self.frame.rect.left + x, self.frame.rect.top + y),
                 anchor=Anchor.TopLeft,
                 font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
                 font_size=16,
