@@ -96,11 +96,11 @@ class Quiz:
         wrong = 0
         question = self._questions[self._question_index]
 
-        if question.type == 0:
+        if question.type == 0 and len(self._answers_recived) > 0:
             recived_answer = self._answers_recived[0]
             if recived_answer in question.answers:
                 self._number_of_correct_answers += 1
-        elif question.type == 1:
+        elif question.type == 1 and len(self._answers_recived) > 0:
             for answer in self._answers_recived:
                 if answer in question.answers:
                     correct += 1
@@ -108,7 +108,7 @@ class Quiz:
                     wrong += 1
             if correct == len(question.answers) and wrong == 0:
                 self._number_of_correct_answers += 1
-        elif question.type == 2:
+        elif question.type == 2 and len(self._answers_recived) > 0:
             recived_answer = str(self._answers_recived[0])
             recived_answer = recived_answer.lower().replace(" ", "").replace("\n", "")
             options = [i.lower().replace(" ", "").replace("\n", "") for i in question.options]
@@ -118,6 +118,8 @@ class Quiz:
             pass
         elif question.type == 4:
             pass
+        else:
+            return
             
         self._answered_questions.append(self._question_index)
         self._answers_recived.clear()
