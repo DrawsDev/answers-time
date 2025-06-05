@@ -101,7 +101,7 @@ class UIQuiz:
                 button_hover_color="#64646E",
                 button_press_color="#000000"
             )
-            button.pressed_callback.set((callback, (index + 1,)))
+            button.pressed_callback.set((callback, (index,)))
             self._answers.append(button)
 
     def _create_input_answer(self, callback: CallbackType) -> None:
