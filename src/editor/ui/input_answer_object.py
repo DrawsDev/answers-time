@@ -12,7 +12,7 @@ from src.ui.layout import Layout
 
 GAP = 4
 
-class AnswerObject(UIObject):
+class InputAnswerObject(UIObject):
     def __init__(        
         self, 
         game: Game,
@@ -20,15 +20,12 @@ class AnswerObject(UIObject):
         anchor: Anchor = Anchor.TopLeft,
     ) -> None:
         super().__init__(game, (200, 90), position, anchor, 1)
-        self._is_correct = False
         self._create_delete_button()
         self._create_edit_button()
-        self._create_move_button()
-        self._create_is_right_button()
         self._create_text_label()
         self._create_icon_label()
         self._layout: Layout = Layout(False)
-        self._layout.insert_child(self.delete, self.edit, self.move, self.is_right)
+        self._layout.insert_child(self.delete, self.edit)
         self._update_image()
 
     def update(self, delta: float) -> None:
@@ -49,19 +46,12 @@ class AnswerObject(UIObject):
             surface.blit(self.icon.image, self.icon.rect)
             surface.blit(self.text.image, self.text.rect)
 
+
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True
 
     def on_mouse_leave(self) -> None:
         self._layout.enabled = False
-
-    def change_correct_state(self, value: bool = False) -> None:
-        if self._is_correct != value:
-            self._is_correct = value
-            if value:
-                self.icon.image_path = asset_path(SPRITES, "editor_correct_2.png")
-            else:
-                self.icon.image_path = None
 
     def _update_image(self):
         super()._update_image()
@@ -72,7 +62,7 @@ class AnswerObject(UIObject):
             game=self.game,
             text="",
             size=(34, 34),
-            position=(self.rect.centerx - 34 - GAP - GAP / 2, self.rect.centery),
+            position=(self.rect.centerx - GAP / 2, self.rect.centery),
             anchor=Anchor.MidRight,
             z_index=3,
             button_color="#4E4E56",
@@ -86,41 +76,13 @@ class AnswerObject(UIObject):
             game=self.game,
             text="",
             size=(34, 34),
-            position=(self.rect.centerx - GAP / 2, self.rect.centery),
-            anchor=Anchor.MidRight,
-            z_index=3,
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#282835",
-            button_icon=load_asset(SPRITES, "settings.png")
-        )
-
-    def _create_move_button(self) -> None:
-        self.move = TextButton(
-            game=self.game,
-            text="",
-            size=(34, 34),
             position=(self.rect.centerx + GAP / 2, self.rect.centery),
             anchor=Anchor.MidLeft,
             z_index=3,
             button_color="#4E4E56",
             button_hover_color="#64646E",
             button_press_color="#282835",
-            button_icon=load_asset(SPRITES, "editor_prev.png")
-        )
-
-    def _create_is_right_button(self) -> None:
-        self.is_right = TextButton(
-            game=self.game,
-            text="",
-            size=(34, 34),
-            position=(self.rect.centerx + 34 + GAP + GAP / 2, self.rect.centery),
-            anchor=Anchor.MidLeft,
-            z_index=3,
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#282835",
-            button_icon=load_asset(SPRITES, "editor_correct.png")
+            button_icon=load_asset(SPRITES, "settings.png")
         )
 
     def _create_text_label(self) -> None:
@@ -139,10 +101,10 @@ class AnswerObject(UIObject):
     def _create_icon_label(self) -> None:
         self.icon = ImageLabel(
             game=self.game,
-            path=None,
+            path=asset_path(SPRITES, "editor_correct_2.png"),
             position=self.rect.topright,
             anchor=Anchor.TopRight,
             z_index=1
         )
 
-__all__ = ["AnswerObject"]
+__all__ = ["InputAnswerObject"]

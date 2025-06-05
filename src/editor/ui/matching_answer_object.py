@@ -12,23 +12,23 @@ from src.ui.layout import Layout
 
 GAP = 4
 
-class AnswerObject(UIObject):
+class MatchingAnswerObject(UIObject):
     def __init__(        
         self, 
         game: Game,
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
     ) -> None:
-        super().__init__(game, (200, 90), position, anchor, 1)
-        self._is_correct = False
+        super().__init__(game, (150, 185), position, anchor, 1)
         self._create_delete_button()
         self._create_edit_button()
         self._create_move_button()
-        self._create_is_right_button()
-        self._create_text_label()
-        self._create_icon_label()
+        self._create_text_1_label()
+        self._create_text_2_label()
+        self._create_icon_1_label()
+        self._create_icon_2_label()
         self._layout: Layout = Layout(False)
-        self._layout.insert_child(self.delete, self.edit, self.move, self.is_right)
+        self._layout.insert_child(self.delete, self.edit, self.move)
         self._update_image()
 
     def update(self, delta: float) -> None:
@@ -36,18 +36,24 @@ class AnswerObject(UIObject):
         if self._layout.enabled:
             self._layout.update(delta)
         else:
-            self.text.update(delta)
-            self.icon.update(delta)
+            self.text_1.update(delta)
+            self.text_2.update(delta)
+            self.icon_1.update(delta)
+            self.icon_2.update(delta)
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
         if self._layout.enabled:
             self._layout.draw(surface)
         else:
-            self.text.draw(surface)
-            self.icon.draw(surface)
-            surface.blit(self.icon.image, self.icon.rect)
-            surface.blit(self.text.image, self.text.rect)
+            self.text_1.draw(surface)
+            self.text_2.draw(surface)
+            self.icon_1.draw(surface)
+            self.icon_2.draw(surface)
+            surface.blit(self.icon_1.image, self.icon_1.rect)
+            surface.blit(self.icon_2.image, self.icon_2.rect)
+            surface.blit(self.text_1.image, self.text_1.rect)
+            surface.blit(self.text_2.image, self.text_2.rect)
 
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True
@@ -55,24 +61,26 @@ class AnswerObject(UIObject):
     def on_mouse_leave(self) -> None:
         self._layout.enabled = False
 
-    def change_correct_state(self, value: bool = False) -> None:
-        if self._is_correct != value:
-            self._is_correct = value
-            if value:
-                self.icon.image_path = asset_path(SPRITES, "editor_correct_2.png")
-            else:
-                self.icon.image_path = None
+    def change_number(self, value: int = 1, index: int = 0) -> None:
+        nums = ("editor_one.png", "editor_two.png", "editor_three.png")
+        if 0 < value < 4:
+            if index == 0:
+                self.icon_1.image_path = asset_path(SPRITES, nums[value - 1])
+            if index == 1:
+                self.icon_2.image_path = asset_path(SPRITES, nums[value - 1])
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#747484")
+        self.image.fill("#8F8F9E")
+        self.image.fill("#747484", (0, 0, self.rect.width, 80))
+        pygame.draw.polygon(self.image, "#747484", [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
     
     def _create_delete_button(self) -> None:
         self.delete = TextButton(
             game=self.game,
             text="",
             size=(34, 34),
-            position=(self.rect.centerx - 34 - GAP - GAP / 2, self.rect.centery),
+            position=(self.rect.centerx - 17 - GAP, self.rect.centery),
             anchor=Anchor.MidRight,
             z_index=3,
             button_color="#4E4E56",
@@ -86,8 +94,8 @@ class AnswerObject(UIObject):
             game=self.game,
             text="",
             size=(34, 34),
-            position=(self.rect.centerx - GAP / 2, self.rect.centery),
-            anchor=Anchor.MidRight,
+            position=(self.rect.centerx, self.rect.centery),
+            anchor=Anchor.Center,
             z_index=3,
             button_color="#4E4E56",
             button_hover_color="#64646E",
@@ -100,7 +108,7 @@ class AnswerObject(UIObject):
             game=self.game,
             text="",
             size=(34, 34),
-            position=(self.rect.centerx + GAP / 2, self.rect.centery),
+            position=(self.rect.centerx + 17 + GAP, self.rect.centery),
             anchor=Anchor.MidLeft,
             z_index=3,
             button_color="#4E4E56",
@@ -109,25 +117,11 @@ class AnswerObject(UIObject):
             button_icon=load_asset(SPRITES, "editor_prev.png")
         )
 
-    def _create_is_right_button(self) -> None:
-        self.is_right = TextButton(
-            game=self.game,
-            text="",
-            size=(34, 34),
-            position=(self.rect.centerx + 34 + GAP + GAP / 2, self.rect.centery),
-            anchor=Anchor.MidLeft,
-            z_index=3,
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#282835",
-            button_icon=load_asset(SPRITES, "editor_correct.png")
-        )
-
-    def _create_text_label(self) -> None:
-        self.text = TextLabel(
+    def _create_text_1_label(self) -> None:
+        self.text_1 = TextLabel(
             game=self.game,
             text="test",
-            position=self.rect.center,
+            position=(self.rect.centerx, self.rect.centery - self.rect.height / 4),
             anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
@@ -136,8 +130,21 @@ class AnswerObject(UIObject):
             text_wraplength=self.rect.width
         )
 
-    def _create_icon_label(self) -> None:
-        self.icon = ImageLabel(
+    def _create_text_2_label(self) -> None:
+        self.text_2 = TextLabel(
+            game=self.game,
+            text="test",
+            position=(self.rect.centerx, self.rect.centery + self.rect.height / 4),
+            anchor=Anchor.Center,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color="white",
+            text_wraplength=self.rect.width
+        )
+
+    def _create_icon_1_label(self) -> None:
+        self.icon_1 = ImageLabel(
             game=self.game,
             path=None,
             position=self.rect.topright,
@@ -145,4 +152,13 @@ class AnswerObject(UIObject):
             z_index=1
         )
 
-__all__ = ["AnswerObject"]
+    def _create_icon_2_label(self) -> None:
+        self.icon_2 = ImageLabel(
+            game=self.game,
+            path=None,
+            position=(self.rect.right, self.rect.centery),
+            anchor=Anchor.TopRight,
+            z_index=1
+        )
+
+__all__ = ["MatchingAnswerObject"]
