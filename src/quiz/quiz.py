@@ -96,37 +96,53 @@ class Quiz:
         wrong = 0
         question = self._questions[self._question_index]
 
-        for answer in self._answers_recived:
-            if type(answer) == int:
+        if question.type == 0:
+            recived_answer = self._answers_recived[0]
+            if recived_answer in question.answers:
+                self._number_of_correct_answers += 1
+        elif question.type == 1:
+            for answer in self._answers_recived:
                 if answer in question.answers:
                     correct += 1
                 else:
                     wrong += 1
-            elif type(answer) == str:
-                if answer.lower().replace(" ", "").replace("\n", "") in [i.lower().replace(" ", "").replace("\n", "") for i in question.options]:
-                    correct += 1
-                else:
-                    wrong += 1
-        
-        if type(answer) == int:
             if correct == len(question.answers) and wrong == 0:
                 self._number_of_correct_answers += 1
-        elif type(answer) == str:
-            if correct > 0 and wrong == 0:
+        elif question.type == 2:
+            recived_answer = str(self._answers_recived[0])
+            recived_answer = recived_answer.lower().replace(" ", "").replace("\n", "")
+            options = [i.lower().replace(" ", "").replace("\n", "") for i in question.options]
+            if recived_answer in options:
                 self._number_of_correct_answers += 1
-        
+        elif question.type == 3:
+            pass
+        elif question.type == 4:
+            pass
+            
         self._answered_questions.append(self._question_index)
         self._answers_recived.clear()
 
     def answer(self, answer: Union[int, str]) -> None:
-        if type(answer) == int:
+        question = self._questions[self._question_index]
+        if question.type == 0:
+            if answer in self._answers_recived:
+                self._answers_recived.remove(answer)
+            else:
+                self._answers_recived.clear()
+                self._answers_recived.append(answer)
+        elif question.type == 1:
             if answer in self._answers_recived:
                 self._answers_recived.remove(answer)
             else:
                 self._answers_recived.append(answer)
-        elif type(answer) == str:
-            self._answers_recived.clear()
-            self._answers_recived.append(answer)
+        elif question.type == 2:
+            if not answer in self._answers_recived:
+                self._answers_recived.clear()
+                self._answers_recived.append(answer)
+        elif question.type == 3:
+            pass
+        elif question.type == 4:
+            pass
 
     def next_question(self) -> None:
         if self._ended:
