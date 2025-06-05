@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 from src.enums import Anchor
 from src.core.game import Game
 from src.ui.base.ui_image import UIImage
@@ -7,7 +7,7 @@ class ImageLabel(UIImage):
     def __init__(
         self, 
         game: Game, 
-        path: str, 
+        path: Optional[str] = None, 
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
         z_index: int = 0,
