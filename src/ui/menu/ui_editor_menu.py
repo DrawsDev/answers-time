@@ -110,7 +110,7 @@ class UIEditorMenu:
                 button_hover_color="#64646E",
                 button_press_color="#000000"
             )
-            button.pressed_callback = (callback, (files[i],))
+            button.pressed_callback.set((callback, (files[i],)))
             self.buttons.append(button)
         self.layout.insert_child(self.buttons)
 
