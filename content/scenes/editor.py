@@ -17,6 +17,7 @@ from src.ui.editor.ui_select_quiz_to_import import UISelectQuizToImport
 from src.ui.editor.ui_answer_edit_menu import UIAnswerEditMenu
 from src.editor.ui.pages.ui_quiz_info_editor import UIQuizInfoEditor
 from src.editor.ui.pages.ui_quiz_rules_editor import UIQuizRulesEditor
+from src.editor.ui.pages.ui_question_settings import UIQuestionSettings
 from src.quiz.quiz import *
 from src.quiz.utility import *
 
@@ -40,6 +41,7 @@ class Editor(Scene):
         self.ui_menu = UIMenu(game)
         self.ui_quiz_info_editor = UIQuizInfoEditor(game)
         self.ui_quiz_rules_editor = UIQuizRulesEditor(game)
+        self.ui_question_settings = UIQuestionSettings(game)
         
     def on_enter(self, **kwargs) -> None:
         title = kwargs.get("title")
@@ -61,6 +63,7 @@ class Editor(Scene):
 
         # Кнопки и поля в редакторе
         self.ui_editor.menu.pressed_callback.set(self._open_menu)
+        self.ui_editor.settings.pressed_callback.set(self._open_question_settings)
         self.ui_editor.new.pressed_callback.set(self._open_new_question)
         self.ui_editor.delete.pressed_callback.set(self._try_remove_current_question)
         self.ui_quiz_editor.prev.pressed_callback.set((self._move_to_next_question, (-1,)))
@@ -92,6 +95,8 @@ class Editor(Scene):
         self.ui_quiz_info_editor.back.pressed_callback.set(self._open_menu)
         # Настройка правил теста
         self.ui_quiz_rules_editor.back.pressed_callback.set(self._open_quiz_info)
+        # Настройка вопроса
+        self.ui_question_settings.back.pressed_callback.set(self._open_quiz_editor)
 
     def update(self, delta: float) -> None:
         self.debug_frame.update(delta)
@@ -106,6 +111,7 @@ class Editor(Scene):
         self.ui_answer_edit_menu.update(delta)
         self.ui_quiz_info_editor.update(delta)
         self.ui_quiz_rules_editor.update(delta)
+        self.ui_question_settings.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill("gray")
@@ -120,6 +126,7 @@ class Editor(Scene):
         self.ui_answer_edit_menu.draw(surface)
         self.ui_quiz_info_editor.draw(surface)
         self.ui_quiz_rules_editor.draw(surface)
+        self.ui_question_settings.draw(surface)
         self.debug_frame.draw(surface)
 
     def _update_quiz_editor_ui(self) -> None:
@@ -379,6 +386,7 @@ class Editor(Scene):
         self.ui_menu.enabled = False
         self.ui_answer_edit_menu.enabled = False
         self.ui_select_quiz_to_import.enabled = False
+        self.ui_question_settings.enabled = False
         self.explorer.enabled = False
         self.warn.enabled = False
 
@@ -444,5 +452,10 @@ class Editor(Scene):
     def _open_quiz_rules_editor(self) -> None:
         self.ui_quiz_info_editor.enabled = False
         self.ui_quiz_rules_editor.enabled = True
+
+    def _open_question_settings(self) -> None:
+        self.ui_editor.enabled = False
+        self.ui_quiz_editor.enabled = False
+        self.ui_question_settings.enabled = True
 
 __all__ = ["Editor"]
