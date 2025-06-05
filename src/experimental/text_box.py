@@ -57,7 +57,17 @@ class TextBox(UIObject):
         if self._input_box.text != value:
             self._input_box.text = value
             self._update_image()
+
+    @property
+    def placeholder(self) -> str:
+        return self._input_box.placeholder
     
+    @placeholder.setter
+    def placeholder(self, value: str) -> None:
+        if self._input_box.placeholder != value:
+            self._input_box.placeholder = value
+            self._update_image()    
+
     @property
     def text_color(self) -> pygame.Color:
         return self._text_color
