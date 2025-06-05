@@ -21,13 +21,13 @@ class UIAnswerEditMenu:
         self._create_title_label()
         self._create_title_line()
         self._create_back_button()
-        self._create_text_textbox()
-        self._create_objective_button()
+        self._create_text_1_textbox()
+        self._create_text_2_textbox()
         self._layout.insert_child(
             self.title,
             self.title_line,
             self.back,
-            self.text
+            self.text_1
         )
 
     @property
@@ -46,6 +46,18 @@ class UIAnswerEditMenu:
     def draw(self, surface: pygame.Surface) -> None:
         if self._enabled:
             self._layout.draw(surface)
+
+    def change_state(self, index: int = 0) -> None:
+        if index == 0:
+            self._layout.remove_child(self.text_2)
+            self.text_1.placeholder = "Введите текст ответа"
+            self.text_1.position = (self.game.surface.get_width() / 2, self.game.surface.get_height() / 2)
+            self.text_1.anchor = Anchor.Center
+        elif index == 1:
+            self._layout.insert_child(self.text_2)
+            self.text_1.placeholder = "Введите текста верхнего варианта"
+            self.text_1.position = (self.game.surface.get_width() / 2, self.game.surface.get_height() / 2 - GAP / 2)
+            self.text_1.anchor = Anchor.MidBottom
 
     def _create_title_label(self) -> None:
         self.title = TextLabel(
@@ -86,8 +98,8 @@ class UIAnswerEditMenu:
             button_icon=load_asset(SPRITES, "back.png")
         )
 
-    def _create_text_textbox(self) -> None:
-        self.text = TextBox(
+    def _create_text_1_textbox(self) -> None:
+        self.text_1 = TextBox(
             game=self.game,
             text="",
             placeholder="Введите текст ответа",
@@ -101,21 +113,19 @@ class UIAnswerEditMenu:
             text_color="white"
         )
 
-    def _create_objective_button(self) -> None:
-        self.objective = TextButton(
+    def _create_text_2_textbox(self) -> None:
+        self.text_2 = TextBox(
             game=self.game,
-            text="Выбор одного правильного ответа",
-            size=(260, 40),
-            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() / 2 - 120),
+            text="",
+            placeholder="Введите текст нижнего варианта",
+            size=(300, 80),
+            position=(self.game.surface.get_width() / 2, self.game.surface.get_height() / 2 + GAP / 2),
             anchor=Anchor.MidTop,
+            z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "editor_objective.png")
+            font_align=Align.Left,
+            text_color="white"
         )
 
 __all__ = ["UIAnswerEditMenu"]

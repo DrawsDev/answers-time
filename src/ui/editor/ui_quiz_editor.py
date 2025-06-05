@@ -15,6 +15,9 @@ from src.experimental.text_box import TextBox
 from src.quiz.question import Question
 from src.editor.ui.new_answer_button import NewAnswerButton
 from src.editor.ui.answer_object import AnswerObject
+from src.editor.ui.input_answer_object import InputAnswerObject
+from src.editor.ui.sequence_answer_object import SequenceAnswerObject
+from src.editor.ui.matching_answer_object import MatchingAnswerObject
 
 GAP = 4
 
@@ -54,7 +57,7 @@ class UIQuizEditor:
         if self._enabled:
             self._layout.draw(surface)
 
-    def create_answers(self, question: Question, edit_callback: CallbackType, delete_callback: CallbackType, new_callback: CallbackType) -> None:
+    def create_answers(self, question: Question, edit_callback: CallbackType, delete_callback: CallbackType, move_callback: CallbackType, change_correct_callback: CallbackType, new_callback: CallbackType) -> None:
         x = self.question_title.rect.centerx
         y = self.question_title.rect.bottom + GAP
         a = (Anchor.TopRight, Anchor.TopLeft, Anchor.TopRight, Anchor.TopLeft)
@@ -63,21 +66,79 @@ class UIQuizEditor:
         self._layout.remove_child(self._answers)
         self._answers.clear()
 
-        for index, option in enumerate(question.options):
-            if index > 3:
-                continue
-            button = AnswerObject(self.game, p[index], a[index])
-            button.text.text = option
-            button.edit.pressed_callback.set((edit_callback, (index,)))
-            button.delete.pressed_callback.set((delete_callback, (index,)))
-            self._answers.append(button)
-
-        if len(question.options) < 4:
-            for i in range(len(question.options), 4):
-                button = NewAnswerButton(self.game, p[i], a[i])
-                button.pressed_callback.set(new_callback)
+        if question.type in (0, 1):
+            for index, option in enumerate(question.options):
+                if index > 3:
+                    continue
+                button = AnswerObject(self.game, p[index], a[index])
+                button.text.text = option
+                button.edit.pressed_callback.set((edit_callback, (index,)))
+                button.delete.pressed_callback.set((delete_callback, (index,)))
+                button.move.pressed_callback.set((move_callback, (index,)))
+                button.is_right.pressed_callback.set((change_correct_callback, (index,)))
+                button.change_correct_state(index in question.answers)
                 self._answers.append(button)
-        
+
+            if len(question.options) < 4:
+                for i in range(len(question.options), 4):
+                    button = NewAnswerButton(self.game, (200, 90), p[i], a[i])
+                    button.pressed_callback.set(new_callback)
+                    self._answers.append(button)
+        elif question.type == 2:
+            for index, option in enumerate(question.options):
+                if index > 3:
+                    continue
+                button = InputAnswerObject(self.game, p[index], a[index])
+                button.text.text = option
+                button.edit.pressed_callback.set((edit_callback, (index,)))
+                button.delete.pressed_callback.set((delete_callback, (index,)))
+                self._answers.append(button)
+
+            if len(question.options) < 4:
+                for i in range(len(question.options), 4):
+                    button = NewAnswerButton(self.game, (200, 90), p[i], a[i])
+                    button.pressed_callback.set(new_callback)
+                    self._answers.append(button)
+        elif question.type == 3:
+            for index, option in enumerate(question.options):
+                if index > 3:
+                    continue
+                button = SequenceAnswerObject(self.game, p[index], a[index])
+                button.text.text = option
+                button.change_number(index + 1)
+                button.delete.pressed_callback.set((delete_callback, (index,)))
+                button.edit.pressed_callback.set((edit_callback, (index,)))
+                button.move.pressed_callback.set((move_callback, (index,)))
+                self._answers.append(button)
+
+            if len(question.options) < 4:
+                for i in range(len(question.options), 4):
+                    button = NewAnswerButton(self.game, (200, 90), p[i], a[i])
+                    button.pressed_callback.set(new_callback)
+                    self._answers.append(button)
+        elif question.type == 4:
+            pos = ((x - 75 - GAP, y), (x, y), (x + 75 + GAP, y))
+            anc = (Anchor.TopRight, Anchor.MidTop, Anchor.TopLeft)
+
+            for index, option in enumerate(question.options):
+                if index > 2:
+                    continue
+                button = MatchingAnswerObject(self.game, pos[index], anc[index])
+                button.text_1.text = option
+                button.text_2.text = question.answers[index]
+                button.change_number(index + 1, 0)
+                button.change_number(index + 1, 1)
+                button.delete.pressed_callback.set((delete_callback, (index,)))
+                button.edit.pressed_callback.set((edit_callback, (index,)))
+                button.move.pressed_callback.set((move_callback, (index,)))
+                self._answers.append(button)
+
+            if len(question.options) < 3:
+                for i in range(len(question.options), 3):
+                    button = NewAnswerButton(self.game, (150, 185), pos[i], anc[i])
+                    button.pressed_callback.set(new_callback)
+                    self._answers.append(button)            
+
         self._layout.insert_child(self._answers)
 
     def _create_prev_button(self) -> TextLabel:

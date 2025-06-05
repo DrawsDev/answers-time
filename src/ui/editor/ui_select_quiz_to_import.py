@@ -94,7 +94,7 @@ class UISelectQuizToImport:
                 button_hover_color="#64646E",
                 button_press_color="#000000"
             )
-            button.pressed_callback.set((callback, (asset_path(QUIZZES, files[i]), True)))
+            button.pressed_callback.set((callback, (asset_path(QUIZZES, files[i]),)))
             self._buttons.append(button)
         self._layout.insert_child(self._buttons)
 
