@@ -4,10 +4,10 @@ from typing import Dict, List, Any
 class Question:
     def __init__(
         self,
-        title: str = "Question text",
+        title: str = "Текст вопроса",
         type: int = 0,
-        options: List[str] = ["Answer"],
-        answers: List[int] = [1]
+        options: List[str] = ["Текст ответа"],
+        answers: List[int] = []
     ) -> None:
         self._title = title
         self._type = type
@@ -24,11 +24,11 @@ class Question:
             self._title = value
 
     @property
-    def type(self) -> str:
+    def type(self) -> int:
         return self._type
 
     @type.setter
-    def type(self, value: str) -> None:
+    def type(self, value: int) -> None:
         if self._type != value:
             self._type = value
 
