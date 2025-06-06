@@ -86,6 +86,7 @@ class ExplorerFrame(UIObject):
                 self._warn.warn1 = f"«{filename}» уже существует."
                 self._warn.confirm_callback.set((self._copy_and_close, (os.path.join(path, filename), asset_path(QUIZZES))))
                 self._warn.deny_callback.set(self._return)
+                return
             self._copy_and_close(os.path.join(path, filename), asset_path(QUIZZES))
         elif self._behavior == 1:
             self._path = os.path.join(path, filename)
