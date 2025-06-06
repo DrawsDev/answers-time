@@ -243,7 +243,7 @@ class ScrollFrame(UIObject):
                 surface.blit(child.image, child_rect)
 
     def _draw_vertical_scrollbar(self, surface: pygame.Surface) -> None:
-        if self._scroll_size[0] <= self.rect.height:
+        if self._scroll_size[1] <= self.rect.height:
             return
         
         x = self.rect.width - self._scrollbar_width
