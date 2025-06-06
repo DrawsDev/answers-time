@@ -8,7 +8,6 @@ from src.ui.image_label import ImageLabel
 from src.ui.layout import Layout
 from src.ui.scroll_frame import ScrollFrame
 from src.ui.frame import Frame
-from src.ui.text_box import TextBox
 
 class UIAboutMenu:
     def __init__(self, game: Game) -> None:
@@ -48,7 +47,7 @@ class UIAboutMenu:
     def _create_version_label(self) -> None:
         self.version = TextLabel(
             game=self.game,
-            text="Версия 1.0 сборка 0",
+            text=f"Версия {VERSION_MAJOR}.{VERSION_MINOR} сборка {BUILD}",
             position=(self.pos[0], self.logo.rect.bottom),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
