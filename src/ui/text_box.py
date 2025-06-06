@@ -26,14 +26,15 @@ class TextBox(UIObject):
         font_path: Optional[str] = None,
         font_size: int = 20,
         font_align: Align = Align.Left,
-        text_color: pygame.Color = "white"
+        text_color: pygame.Color = "white",
+        maxlength: int = 64
     ) -> None:
         super().__init__(game, size, position, anchor, z_index)
         self._selectable = True
         self._dragging = False
         self._focus = False
         self._focus_lost_callback = None
-        self._input_box = InputBox(game, text, placeholder)
+        self._input_box = InputBox(game, text, placeholder, maxlength)
         self._input_box.enabled = True
         self._font = pygame.Font(font_path, font_size)
         self._font_path = font_path
