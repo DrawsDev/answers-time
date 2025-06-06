@@ -355,7 +355,7 @@ class TextBox(UIObject):
             self._input_box.update()
         if self._input_box.changed:
             self._reset_cursor_visibility()
-            self._update_image()        
+            self._update_image()
     
     def update(self, delta):
         super().update(delta)
