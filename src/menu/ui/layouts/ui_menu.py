@@ -7,6 +7,9 @@ from src.ui.image_label import ImageLabel
 from src.ui.frame import Frame
 from src.ui.layout import Layout
 
+from src.ui.text_box import TextBox
+from src.experimental.text_box import TextBox as TextBox2
+
 class UIMenu:
     def __init__(self, game: Game) -> None:
         self.game = game

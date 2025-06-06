@@ -1,7 +1,4 @@
-import os
-import random
 import pygame
-from typing import Dict
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
@@ -9,14 +6,14 @@ from src.core.utility import open_url
 from src.components.scene import Scene
 from src.ui.debug_frame import DebugFrame
 from src.ui.navigation import UINavigation
-from src.ui.menu.ui_menu import UIMenu
-from src.ui.menu.ui_start_menu import UIStartMenu
-from src.ui.menu.ui_quiz_select_menu import UIQuizSelectMenu
-from src.ui.menu.ui_editor_menu import UIEditorMenu
-from src.ui.menu.ui_new_quiz_menu import UINewQuizMenu
-from src.ui.menu.ui_settings_menu import UISettingsMenu
-from src.ui.menu.ui_about_menu import UIAboutMenu
-from src.ui.menu.ui_editor_quiz_info_menu import UIEditorQuizInfoMenu
+from src.menu.ui.layouts.ui_menu import UIMenu
+from src.menu.ui.layouts.ui_start_menu import UIStartMenu
+from src.menu.ui.layouts.ui_quiz_select_menu import UIQuizSelectMenu
+from src.menu.ui.layouts.ui_editor_menu import UIEditorMenu
+from src.menu.ui.layouts.ui_new_quiz_menu import UINewQuizMenu
+from src.menu.ui.layouts.ui_settings_menu import UISettingsMenu
+from src.menu.ui.layouts.ui_about_menu import UIAboutMenu
+from src.menu.ui.layouts.ui_editor_quiz_info_menu import UIEditorQuizInfoMenu
 
 class Menu(Scene):
     def __init__(self, game: Game):
