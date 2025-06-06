@@ -3,7 +3,7 @@ import pygame
 from typing import Tuple, Union, Optional, Callable, Any
 from src.enums import Anchor, Align
 from src.core.game import Game
-from src.core.input_box import InputBox
+from src.core.inputbox import InputBox
 from src.ui.base.ui_object import UIObject
 
 FocusLostCallbackType = Optional[
