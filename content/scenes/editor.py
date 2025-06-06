@@ -6,18 +6,17 @@ from src.core.game import Game
 from src.core.utility import asset_path
 from src.components.scene import Scene
 from src.ui.debug_frame import DebugFrame
-from src.ui.editor.ui_menu import UIMenu
-from src.ui.editor.ui_editor import UIEditor
 from src.ui.explorer_frame import ExplorerFrame
 from src.ui.warn_frame import WarnFrame
-from src.ui.editor.ui_select_import_type import UISelectImportType
-from src.ui.editor.ui_quiz_editor import UIQuizEditor
-from src.ui.editor.ui_new_question import UINewQuestion
-from src.ui.editor.ui_select_quiz_to_import import UISelectQuizToImport
-from src.ui.editor.ui_answer_edit_menu import UIAnswerEditMenu
-from src.editor.ui.pages.ui_quiz_info_editor import UIQuizInfoEditor
-from src.editor.ui.pages.ui_quiz_rules_editor import UIQuizRulesEditor
-from src.editor.ui.pages.ui_question_settings import UIQuestionSettings
+from src.editor.ui.layouts.ui_menu import UIMenu
+from src.editor.ui.layouts.ui_quiz_editor import UIQuizEditor
+from src.editor.ui.layouts.ui_quiz_info_editor import UIQuizInfoEditor
+from src.editor.ui.layouts.ui_quiz_rules_editor import UIQuizRulesEditor
+from src.editor.ui.layouts.ui_new_question import UINewQuestion
+from src.editor.ui.layouts.ui_question_settings import UIQuestionSettings
+from src.editor.ui.layouts.ui_answer_edit_menu import UIAnswerEditMenu
+from src.editor.ui.layouts.ui_select_import_type import UISelectImportType
+from src.editor.ui.layouts.ui_select_quiz_to_import import UISelectQuizToImport
 from src.quiz.quiz import *
 from src.quiz.utility import *
 
@@ -31,17 +30,16 @@ class Editor(Scene):
         self.quiz = Quiz()
         self.debug_frame = DebugFrame(game)
         self.explorer = ExplorerFrame(game, 1)
-        self.warn = WarnFrame(game, "Вы уверены, что хотите выйти?", "Все несохранённые изменения будут потеряны.")
-        self.ui_editor = UIEditor(game)
-        self.ui_new_question = UINewQuestion(game)
-        self.ui_select_import_type = UISelectImportType(game)
-        self.ui_quiz_editor = UIQuizEditor(game)
-        self.ui_select_quiz_to_import = UISelectQuizToImport(game)
-        self.ui_answer_edit_menu = UIAnswerEditMenu(game)
+        self.warn = WarnFrame(game)
         self.ui_menu = UIMenu(game)
+        self.ui_quiz_editor = UIQuizEditor(game)
         self.ui_quiz_info_editor = UIQuizInfoEditor(game)
         self.ui_quiz_rules_editor = UIQuizRulesEditor(game)
-        self.ui_question_settings = UIQuestionSettings(game)
+        self.ui_new_question = UINewQuestion(game)        
+        self.ui_question_settings = UIQuestionSettings(game)        
+        self.ui_answer_edit_menu = UIAnswerEditMenu(game)
+        self.ui_select_import_type = UISelectImportType(game)
+        self.ui_select_quiz_to_import = UISelectQuizToImport(game)
         
     def on_enter(self, **kwargs) -> None:
         title = kwargs.get("title")
@@ -55,38 +53,23 @@ class Editor(Scene):
         else:
             self._create_quiz_with_title("Новый тест")
 
+        # Проводник для импорта из файла системы
+        self.explorer.close_callback.set((self._create_quiz_from_file, ("explorer",)))
+        self.explorer._cancel.pressed_callback.set(self._open_import_select_menu)
+        # Меню
         self.ui_menu.back.pressed_callback.set(self._open_quiz_editor)
         self.ui_menu.save.pressed_callback.set((self._save_quiz, (filename,)))
         self.ui_menu.info.pressed_callback.set(self._open_quiz_info)
         self.ui_menu.exit.pressed_callback.set(self._try_to_exit_editor)
         self.ui_menu.imp.pressed_callback.set(self._open_import_select_menu)
-
         # Кнопки и поля в редакторе
-        self.ui_editor.menu.pressed_callback.set(self._open_menu)
-        self.ui_editor.settings.pressed_callback.set(self._open_question_settings)
-        self.ui_editor.new.pressed_callback.set(self._open_new_question)
-        self.ui_editor.delete.pressed_callback.set(self._try_remove_current_question)
+        self.ui_quiz_editor.menu.pressed_callback.set(self._open_menu)
+        self.ui_quiz_editor.settings.pressed_callback.set(self._open_question_settings)
+        self.ui_quiz_editor.new.pressed_callback.set(self._open_new_question)
+        self.ui_quiz_editor.delete.pressed_callback.set(self._try_remove_current_question)
         self.ui_quiz_editor.prev.pressed_callback.set((self._move_to_next_question, (-1,)))
         self.ui_quiz_editor.next.pressed_callback.set((self._move_to_next_question, (1,)))
         self.ui_quiz_editor.question_title.focus_lost_callback.set(self._update_question_info)
-        # Выбор типа нового вопроса
-        self.ui_new_question.back.pressed_callback.set(self._open_quiz_editor)
-        self.ui_new_question.objective.pressed_callback.set((self._create_new_question, (0,)))
-        self.ui_new_question.subjective.pressed_callback.set((self._create_new_question, (1,)))
-        self.ui_new_question.input.pressed_callback.set((self._create_new_question, (2,)))
-        self.ui_new_question.sequence.pressed_callback.set((self._create_new_question, (3,)))
-        self.ui_new_question.matching.pressed_callback.set((self._create_new_question, (4,)))
-        # Выбор типа импорта
-        self.ui_select_import_type.back.pressed_callback.set(self._open_menu)
-        self.ui_select_import_type.from_file.pressed_callback.set(self._open_import_explorer)
-        self.ui_select_import_type.from_exists_quiz.pressed_callback.set(self._open_select_quiz_menu)
-        # Импорт из существующего теста
-        self.ui_select_quiz_to_import.back.pressed_callback.set(self._open_import_select_menu)
-        # Проводник для импорта из файла системы
-        self.explorer.close_callback.set((self._create_quiz_from_file, ("explorer",)))
-        self.explorer._cancel.pressed_callback.set(self._open_import_select_menu)
-        # Настройка ответа
-        self.ui_answer_edit_menu.back.pressed_callback.set(self._open_quiz_editor)
         # Настройка информации о тесте
         self.ui_quiz_info_editor.title_input.focus_lost_callback.set(self._update_quiz_info)
         self.ui_quiz_info_editor.description_input.focus_lost_callback.set(self._update_quiz_info)
@@ -95,44 +78,57 @@ class Editor(Scene):
         self.ui_quiz_info_editor.back.pressed_callback.set(self._open_menu)
         # Настройка правил теста
         self.ui_quiz_rules_editor.back.pressed_callback.set(self._open_quiz_info)
+        # Выбор типа нового вопроса
+        self.ui_new_question.back.pressed_callback.set(self._open_quiz_editor)
+        self.ui_new_question.objective.pressed_callback.set((self._create_new_question, (0,)))
+        self.ui_new_question.subjective.pressed_callback.set((self._create_new_question, (1,)))
+        self.ui_new_question.input.pressed_callback.set((self._create_new_question, (2,)))
+        self.ui_new_question.sequence.pressed_callback.set((self._create_new_question, (3,)))
+        self.ui_new_question.matching.pressed_callback.set((self._create_new_question, (4,)))
         # Настройка вопроса
         self.ui_question_settings.back.pressed_callback.set(self._open_quiz_editor)
+        # Настройка ответа
+        self.ui_answer_edit_menu.back.pressed_callback.set(self._open_quiz_editor)
+        # Выбор типа импорта
+        self.ui_select_import_type.back.pressed_callback.set(self._open_menu)
+        self.ui_select_import_type.from_file.pressed_callback.set(self._open_import_explorer)
+        self.ui_select_import_type.from_exists_quiz.pressed_callback.set(self._open_select_quiz_menu)
+        # Импорт из существующего теста
+        self.ui_select_quiz_to_import.back.pressed_callback.set(self._open_import_select_menu)
 
     def update(self, delta: float) -> None:
         self.debug_frame.update(delta)
-        self.ui_menu.update(delta)
-        self.warn.update(delta)
         self.explorer.update(delta)
-        self.ui_editor.update(delta)
-        self.ui_select_import_type.update(delta)
+        self.warn.update(delta)
+        self.ui_menu.update(delta)
         self.ui_quiz_editor.update(delta)
-        self.ui_new_question.update(delta)
-        self.ui_select_quiz_to_import.update(delta)
-        self.ui_answer_edit_menu.update(delta)
         self.ui_quiz_info_editor.update(delta)
         self.ui_quiz_rules_editor.update(delta)
+        self.ui_new_question.update(delta)
         self.ui_question_settings.update(delta)
+        self.ui_answer_edit_menu.update(delta)
+        self.ui_select_import_type.update(delta)
+        self.ui_select_quiz_to_import.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill("gray")
+        self.ui_select_quiz_to_import.draw(surface)
+        self.ui_select_import_type.draw(surface)
+        self.ui_answer_edit_menu.draw(surface)
+        self.ui_question_settings.draw(surface)
+        self.ui_new_question.draw(surface)
+        self.ui_quiz_rules_editor.draw(surface)
+        self.ui_quiz_info_editor.draw(surface)
+        self.ui_quiz_editor.draw(surface)
         self.ui_menu.draw(surface)
         self.warn.draw(surface)
         self.explorer.draw(surface)
-        self.ui_editor.draw(surface)
-        self.ui_select_import_type.draw(surface)
-        self.ui_quiz_editor.draw(surface)
-        self.ui_new_question.draw(surface)
-        self.ui_select_quiz_to_import.draw(surface)
-        self.ui_answer_edit_menu.draw(surface)
-        self.ui_quiz_info_editor.draw(surface)
-        self.ui_quiz_rules_editor.draw(surface)
-        self.ui_question_settings.draw(surface)
         self.debug_frame.draw(surface)
 
     def _update_quiz_editor_ui(self) -> None:
         index = self.current_question
         question = self.quiz.questions[index]
-        question_types = ("Один ответ", "Несколько ответов", "Свободный ответ", "Последовательность", "Соответствие")
+        question_types = ("Один ответ", "Несколько ответов", "Текстовый ответ", "Последовательность", "Соответствие")
         
         self.ui_quiz_editor.question_number.text = f"Вопрос {index + 1}"
         self.ui_quiz_editor.question_type.text = question_types[question.type]
@@ -184,11 +180,10 @@ class Editor(Scene):
 
     def _try_remove_current_question(self) -> None:
         if len(self.quiz.questions) > 1:
-            self.ui_editor.enabled = False
             self.ui_quiz_editor.enabled = False
             self.warn.enabled = True
             self.warn.warn1 = "Вы уверены, что хотите удалить вопрос?"
-            self.warn.warn2 = "Данное действие будет невозможно отменить."
+            self.warn.warn2 = "Данное действие невозможно будет отменить."
             self.warn.confirm_callback.set(self._remove_current_question)
             self.warn.deny_callback.set(self._open_quiz_editor)
 
@@ -235,11 +230,10 @@ class Editor(Scene):
         or (question.type == 2 and number_of_options > 1) \
         or (question.type == 3 and number_of_options > 2) \
         or (question.type == 4 and number_of_options > 2):
-            self.ui_editor.enabled = False
             self.ui_quiz_editor.enabled = False
             self.warn.enabled = True
             self.warn.warn1 = "Вы уверены, что хотите удалить ответ?"
-            self.warn.warn2 = "Данное действие будет невозможно отменить."
+            self.warn.warn2 = "Данное действие невозможно будет отменить."
             self.warn.confirm_callback.set((self._remove_answer, (answer_index,)))
             self.warn.deny_callback.set(self._open_quiz_editor)
 
@@ -367,7 +361,6 @@ class Editor(Scene):
             json.dump(self.quiz.dump(), file, ensure_ascii=False)
 
     def _try_to_exit_editor(self) -> None:
-        self.ui_editor.enabled = False
         self.ui_menu.enabled = False
         self.ui_quiz_info_editor.enabled = False
         self.warn.enabled = True
@@ -380,7 +373,6 @@ class Editor(Scene):
         self.game.change_scene("Menu")
     
     def _open_quiz_editor(self) -> None:
-        self.ui_editor.enabled = True
         self.ui_quiz_editor.enabled = True
         self.ui_new_question.enabled = False
         self.ui_menu.enabled = False
@@ -392,22 +384,19 @@ class Editor(Scene):
 
     def _open_menu(self) -> None:
         self.ui_menu.enabled = True
-        self.ui_editor.enabled = False
+        self.ui_quiz_editor.enabled = False
         self.ui_quiz_info_editor.enabled = False
         self.warn.enabled = False
         self.explorer.enabled = False
         self.ui_select_import_type.enabled = False
         self.ui_select_quiz_to_import.enabled = False
-        self.ui_quiz_editor.enabled = False
         self.ui_quiz_rules_editor.enabled = False
 
     def _open_new_question(self) -> None:
-        self.ui_editor.enabled = False
         self.ui_quiz_editor.enabled = False
         self.ui_new_question.enabled = True
 
     def _open_quiz_info(self) -> None:
-        self.ui_editor.enabled = False
         self.ui_menu.enabled = False
         self.ui_quiz_info_editor.enabled = True
         self.ui_quiz_rules_editor.enabled = False
@@ -432,7 +421,6 @@ class Editor(Scene):
         self.explorer.enabled = True
 
     def _open_answer_edit_menu(self, answer_index: int) -> None:
-        self.ui_editor.enabled = False
         self.ui_quiz_editor.enabled = False
         self.ui_answer_edit_menu.enabled = True
 
@@ -454,7 +442,6 @@ class Editor(Scene):
         self.ui_quiz_rules_editor.enabled = True
 
     def _open_question_settings(self) -> None:
-        self.ui_editor.enabled = False
         self.ui_quiz_editor.enabled = False
         self.ui_question_settings.enabled = True
 

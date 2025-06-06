@@ -1,5 +1,4 @@
 import pygame
-from typing import List
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
@@ -7,17 +6,14 @@ from src.core.callback import CallbackType
 from src.core.utility import load_asset, asset_path
 from src.ui.text_button import TextButton
 from src.ui.text_label import TextLabel
-from src.ui.image_label import ImageLabel
 from src.ui.layout import Layout
-from src.ui.scroll_frame import ScrollFrame
-from src.ui.frame import Frame
 from src.experimental.text_box import TextBox
-from src.quiz.question import Question
 from src.editor.ui.new_answer_button import NewAnswerButton
 from src.editor.ui.answer_object import AnswerObject
 from src.editor.ui.input_answer_object import InputAnswerObject
 from src.editor.ui.sequence_answer_object import SequenceAnswerObject
 from src.editor.ui.matching_answer_object import MatchingAnswerObject
+from src.quiz.question import Question
 
 GAP = 4
 
@@ -27,12 +23,20 @@ class UIQuizEditor:
         self._enabled = True
         self._layout = Layout(False)
         self._answers = []
+        self._create_menu_button()
+        self._create_question_settings_button()
+        self._create_new_question_button()
+        self._create_delete_question_button()
         self._create_question_number_label()
         self._create_question_type_label()
         self._create_prev_button()
         self._create_next_button()
         self._create_question_title_input_box()
         self._layout.insert_child(
+            self.menu,
+            self.settings,
+            self.new,
+            self.delete,
             self.question_number,
             self.question_type,
             self.prev,
@@ -140,6 +144,58 @@ class UIQuizEditor:
                     self._answers.append(button)            
 
         self._layout.insert_child(self._answers)
+
+    def _create_menu_button(self) -> None:
+        self.menu = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(GAP, GAP),
+            anchor=Anchor.TopLeft,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#000000",
+            button_icon=load_asset(SPRITES, "menu.png")
+        )
+    
+    def _create_question_settings_button(self) -> None:
+        self.settings = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(GAP, self.menu.rect.bottom + GAP),
+            anchor=Anchor.TopLeft,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#000000",
+            button_icon=load_asset(SPRITES, "settings.png")
+        )    
+    
+    def _create_new_question_button(self) -> None:
+        self.new = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(GAP, self.settings.rect.bottom + GAP),
+            anchor=Anchor.TopLeft,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#000000",
+            button_icon=load_asset(SPRITES, "add.png")
+        )
+    
+    def _create_delete_question_button(self) -> None:
+        self.delete = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(GAP, self.new.rect.bottom + GAP),
+            anchor=Anchor.TopLeft,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#000000",
+            button_icon=load_asset(SPRITES, "delete.png")
+        )
 
     def _create_prev_button(self) -> TextLabel:
         self.prev = TextButton(

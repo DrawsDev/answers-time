@@ -130,7 +130,7 @@ class UINewQuestion:
     def _create_input_button(self) -> None:
         self.input = TextButton(
             game=self.game,
-            text="Свободный ответ",
+            text="Ввод правильного ответа с помощью клавиатуры",
             size=(260, 40),
             position=(self.subjective.rect.centerx, self.subjective.rect.bottom + GAP),
             anchor=Anchor.MidTop,
@@ -164,7 +164,7 @@ class UINewQuestion:
     def _create_matching_button(self) -> None:
         self.matching = TextButton(
             game=self.game,
-            text="Установление соответствия",
+            text="Определение соответствия между вариантами",
             size=(260, 40),
             position=(self.sequence.rect.centerx, self.sequence.rect.bottom + GAP),
             anchor=Anchor.MidTop,
