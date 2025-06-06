@@ -6,8 +6,8 @@ from src.core.game import Game
 from src.core.utility import asset_path
 from src.components.scene import Scene
 from src.quiz.utility import *
-from src.quiz.ui.ui_quiz import UIQuiz
-from src.quiz.ui.ui_result import UIResult
+from src.quiz.ui.layouts.ui_quiz import UIQuiz
+from src.quiz.ui.layouts.ui_result import UIResult
 from src.ui.warn_frame import WarnFrame
 
 class Quiz(Scene):
@@ -16,7 +16,7 @@ class Quiz(Scene):
         self.quiz = None
         self.ui_quiz = UIQuiz(game)
         self.ui_result = UIResult(game)
-        self.warn = WarnFrame(game, "Вы хотите прервать тестирование?", "")
+        self.warn = WarnFrame(game, "Вы уверены, что хотите прервать тестирование?", "")
 
     def on_enter(self, **kwargs):
         filename = kwargs.get("filename")
