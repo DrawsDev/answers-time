@@ -1,17 +1,11 @@
 import time
 import pygame
-from typing import Tuple, Union, Optional, Callable, Any
+from typing import Tuple, Optional
 from src.enums import Anchor, Align
 from src.core.game import Game
+from src.core.callback import *
 from src.core.inputbox import InputBox
 from src.ui.base.ui_object import UIObject
-
-FocusLostCallbackType = Optional[
-    Union[
-        Tuple[Callable, Tuple[Any, ...]],
-        Callable
-    ]
-]
 
 class TextBox(UIObject):
     def __init__(
@@ -33,7 +27,7 @@ class TextBox(UIObject):
         self._selectable = True
         self._dragging = False
         self._focus = False
-        self._focus_lost_callback = None
+        self._focus_lost_callback = Callback()
         self._input_box = InputBox(game, text, placeholder, maxlength)
         self._input_box.enabled = True
         self._font = pygame.Font(font_path, font_size)
@@ -72,13 +66,8 @@ class TextBox(UIObject):
             self._update_image()
 
     @property
-    def focus_lost_callback(self) -> FocusLostCallbackType:
+    def focus_lost_callback(self) -> Callback:
         return self._focus_lost_callback
-
-    @focus_lost_callback.setter
-    def focus_lost_callback(self, value: FocusLostCallbackType) -> None:
-        if self._focus_lost_callback != value:
-            self._focus_lost_callback = value
 
     def _get_cursor_position_from_mouse(self) -> int:
         mouse_position = self.game.input.get_mouse_position()
@@ -162,12 +151,7 @@ class TextBox(UIObject):
             if self.game.input.is_key_pressed("m_left") or self._selected and self.game.input.is_key_pressed("return"):
                 if self._focus:
                     self._focus = False
-                    if self._focus_lost_callback is not None:
-                        if isinstance(self._focus_lost_callback, tuple):
-                            func, args = self._focus_lost_callback
-                            func(*args)
-                        else:
-                            self._focus_lost_callback()
+                    self._focus_lost_callback(self._input_box.text)
                     self._update_image()
 
     def _draw_selection_range(self) -> None:
