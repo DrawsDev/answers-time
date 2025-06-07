@@ -19,7 +19,7 @@ class Quiz:
         self._question_index = 0
         self._number_of_correct_answers = 0
         self._start_time = 0
-        self._duration = 60
+        self._duration = 600
         self._ended = False
         self._answers_recived = []
         self._grade_type = 0
@@ -65,8 +65,16 @@ class Quiz:
         return self._question_index
     
     @property
+    def options(self) -> List[str]:
+        return [v.shuffle_options[i] for i, v in enumerate(self.questions)]
+
+    @property
     def answered_questions(self) -> List[int]:
         return self._answered_questions
+
+    @property
+    def answers_recived(self) -> List[Union[int, str]]:
+        return self._answers_recived
 
     @property
     def number_of_correct_answers(self) -> int:
@@ -84,7 +92,7 @@ class Quiz:
     @property
     def time_left(self) -> float:
         end = self._start_time + self._duration
-        left = time.time() - end
+        left = end - time.time()
         return left if left >= 0 else 0
 
     @property
@@ -98,11 +106,17 @@ class Quiz:
 
         if question.type == 0 and len(self._answers_recived) > 0:
             recived_answer = self._answers_recived[0]
-            if recived_answer in question.answers:
+            recived_option = question.shuffle_options[recived_answer]
+            index = question.options.index(recived_option)
+            
+            if index in question.answers:
                 self._number_of_correct_answers += 1
         elif question.type == 1 and len(self._answers_recived) > 0:
-            for answer in self._answers_recived:
-                if answer in question.answers:
+            for recived_answer in self._answers_recived:
+                recived_option = question.shuffle_options[recived_answer]
+                index = question.options.index(recived_option)
+                
+                if index in question.answers:
                     correct += 1
                 else:
                     wrong += 1
@@ -115,16 +129,33 @@ class Quiz:
             if recived_answer in options:
                 self._number_of_correct_answers += 1
         elif question.type == 3:
-            pass
+            for i, v in enumerate(question.shuffle_options):
+                if question.options[i] == question.shuffle_options[i]:
+                    correct += 1
+                else:
+                    wrong += 1
+            if correct == len(question.options) and wrong == 0:
+                self._number_of_correct_answers += 1
         elif question.type == 4:
-            pass
+            shuffle_options = question.shuffle_options
+            shuffle_answers = question.shuffle_answers
+
+            for i, v in enumerate(question.options):
+                i_option = shuffle_options.index(v)
+
+                if shuffle_answers[i_option] == question.answers[i]:
+                    correct += 1
+                else:
+                    wrong += 1
+            if correct == len(question.options) and wrong == 0:
+                self._number_of_correct_answers += 1
         else:
             return
             
         self._answered_questions.append(self._question_index)
         self._answers_recived.clear()
 
-    def answer(self, answer: Union[int, str]) -> None:
+    def answer(self, answer: Union[int, str], a = None) -> None:
         question = self._questions[self._question_index]
         if question.type == 0:
             if answer in self._answers_recived:
@@ -142,9 +173,27 @@ class Quiz:
                 self._answers_recived.clear()
                 self._answers_recived.append(answer)
         elif question.type == 3:
-            pass
+            if answer == 0:
+                new_options = question.shuffle_options[1:] + [question.shuffle_options[0]]
+            else:
+                new_options = question.shuffle_options.copy()
+                new_options[answer], new_options[answer - 1] = new_options[answer - 1], new_options[answer]
+            question.shuffle_options = new_options
         elif question.type == 4:
-            pass
+            if a == 0:
+                if answer == 0:
+                    new_options = question.shuffle_options[1:] + [question.shuffle_options[0]]
+                else:
+                    new_options = question.shuffle_options.copy()
+                    new_options[answer], new_options[answer - 1] = new_options[answer - 1], new_options[answer]
+                question.shuffle_options = new_options
+            elif a == 1:
+                if answer == 0:
+                    new_options = question.shuffle_answers[1:] + [question.shuffle_answers[0]]
+                else:
+                    new_options = question.shuffle_answers.copy()
+                    new_options[answer], new_options[answer - 1] = new_options[answer - 1], new_options[answer]
+                question.shuffle_answers = new_options
 
     def next_question(self) -> None:
         if self._ended:
@@ -160,6 +209,12 @@ class Quiz:
         percent = (self._number_of_correct_answers / len(self._questions)) * 100
         if self._grade_type == 0:
             return round(percent)
+
+    def start(self) -> None:
+        self._start_time = time.time()
+
+    def stop(self) -> None:
+        self._ended = True
 
     def dump(self) -> Dict[str, Any]:
         return {
