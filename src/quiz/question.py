@@ -1,3 +1,4 @@
+import random
 from copy import deepcopy
 from typing import Dict, List, Any
 
@@ -13,6 +14,21 @@ class Question:
         self._type = type
         self._options = deepcopy(options)
         self._answers = deepcopy(answers)
+        self._shuffle()
+
+    def _shuffle(self) -> None:
+        if self._type == 2:
+            return
+        while True:
+            self._shuffle_options = random.sample(self._options, len(self._options))
+            self._shuffle_answers = random.sample(self._answers, len(self._answers))
+            if len(self._options) <= 1:
+                break
+            elif self._type == 4:
+                if self._shuffle_options != self._options and self._shuffle_answers != self._answers:
+                    break
+            elif self._shuffle_options != self._options:
+                break
 
     @property
     def title(self) -> str:
@@ -40,6 +56,24 @@ class Question:
     def options(self, value: List[str]) -> None:
         if self._options != value:
             self._options = value
+
+    @property
+    def shuffle_options(self) -> List[str]:
+        return self._shuffle_options
+
+    @shuffle_options.setter
+    def shuffle_options(self, value: List[str]) -> None:
+        if self._shuffle_options != value:
+            self._shuffle_options = value    
+
+    @property
+    def shuffle_answers(self) -> List[str]:
+        return self._shuffle_answers
+
+    @shuffle_answers.setter
+    def shuffle_answers(self, value: List[str]) -> None:
+        if self._shuffle_answers != value:
+            self._shuffle_answers = value   
 
     @property
     def answers(self) -> List[int]:
