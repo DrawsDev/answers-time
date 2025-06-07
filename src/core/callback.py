@@ -1,10 +1,9 @@
 from typing import Optional, Union, Tuple, Callable, Any
 
-CallbackType = Optional[
-    Union[
-        Tuple[Callable, Tuple[Any, ...]],
-        Callable
-    ]
+CallbackType = Union[
+    Tuple[Callable, Tuple[Any, ...]],
+    Callable,
+    None
 ]
 
 class Callback:
@@ -18,13 +17,13 @@ class Callback:
             return self._callback == other
         return False
 
-    def __call__(self, *a, **kw) -> None:
+    def __call__(self, *args, **kwargs) -> None:
         if self._callback is not None:
             if isinstance(self._callback, tuple):
-                func, args = self._callback
-                func(*args)
+                func, given_args = self._callback
+                func(*given_args, *args, **kwargs)
             else:
-                self._callback()
+                self._callback(*args, **kwargs)
 
     def set(self, callback: CallbackType) -> None:
         self._callback = callback
