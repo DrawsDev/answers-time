@@ -1,0 +1,149 @@
+import pygame
+from typing import Tuple
+from src.enums import *
+from src.settings import *
+from src.core.game import Game
+from src.core.utility import load_asset, asset_path
+from src.ui.base.ui_button import UIObject
+from src.ui.text_button import TextButton
+from src.ui.text_label import TextLabel
+from src.ui.image_label import ImageLabel
+from src.ui.layout import Layout
+
+GAP = 4
+
+class MatchingAnswer(UIObject):
+    def __init__(        
+        self, 
+        game: Game,
+        position: Tuple[int, int] = (0, 0),
+        anchor: Anchor = Anchor.TopLeft,
+    ) -> None:
+        super().__init__(game, (150, 185), position, anchor, 1)
+        self._create_move_1_button()
+        self._create_move_2_button()
+        self._create_text_1_label()
+        self._create_text_2_label()
+        self._create_icon_1_label()
+        self._create_icon_2_label()
+        self._layout: Layout = Layout(False)
+        self._layout.insert_child(self.move_1, self.move_2)
+        self._update_image()
+
+    def update(self, delta: float) -> None:
+        super().update(delta)
+        if self._layout.enabled:
+            self._layout.update(delta)
+        else:
+            self.text_1.update(delta)
+            self.text_2.update(delta)
+            self.icon_1.update(delta)
+            self.icon_2.update(delta)
+    
+    def draw(self, surface: pygame.Surface) -> None:
+        super().draw(surface)
+        if self._layout.enabled:
+            self._layout.draw(surface)
+        else:
+            self.text_1.draw(surface)
+            self.text_2.draw(surface)
+            self.icon_1.draw(surface)
+            self.icon_2.draw(surface)
+            # surface.blit(self.icon_1.image, self.icon_1.rect)
+            # surface.blit(self.icon_2.image, self.icon_2.rect)
+            surface.blit(self.text_1.image, self.text_1.rect)
+            surface.blit(self.text_2.image, self.text_2.rect)
+
+    def on_mouse_enter(self) -> None:
+        self._layout.enabled = True
+
+    def on_mouse_leave(self) -> None:
+        self._layout.enabled = False
+
+    def change_number(self, value: int = 1, index: int = 0) -> None:
+        nums = ("editor_one.png", "editor_two.png", "editor_three.png")
+        if 0 < value < 4:
+            if index == 0:
+                self.icon_1.image_path = asset_path(SPRITES, nums[value - 1])
+            if index == 1:
+                self.icon_2.image_path = asset_path(SPRITES, nums[value - 1])
+
+    def _update_image(self):
+        super()._update_image()
+        self.image.fill("#8F8F9E")
+        self.image.fill("#747484", (0, 0, self.rect.width, 80))
+        pygame.draw.polygon(self.image, "#747484", [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
+    
+    def _create_move_1_button(self) -> None:
+        self.move_1 = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(self.rect.centerx, self.rect.centery - self.rect.height / 4),
+            anchor=Anchor.Center,
+            z_index=3,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#282835",
+            button_icon=load_asset(SPRITES, "editor_prev.png")
+        )
+
+    def _create_move_2_button(self) -> None:
+        self.move_2 = TextButton(
+            game=self.game,
+            text="",
+            size=(34, 34),
+            position=(self.rect.centerx, self.rect.centery + self.rect.height / 4),
+            anchor=Anchor.Center,
+            z_index=3,
+            button_color="#4E4E56",
+            button_hover_color="#64646E",
+            button_press_color="#282835",
+            button_icon=load_asset(SPRITES, "editor_prev.png")
+        )
+
+    def _create_text_1_label(self) -> None:
+        self.text_1 = TextLabel(
+            game=self.game,
+            text="test",
+            position=(self.rect.centerx, self.rect.centery - self.rect.height / 4),
+            anchor=Anchor.Center,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color="white",
+            text_wraplength=self.rect.width
+        )
+
+    def _create_text_2_label(self) -> None:
+        self.text_2 = TextLabel(
+            game=self.game,
+            text="test",
+            position=(self.rect.centerx, self.rect.centery + self.rect.height / 4),
+            anchor=Anchor.Center,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color="white",
+            text_wraplength=self.rect.width
+        )
+
+    def _create_icon_1_label(self) -> None:
+        self.icon_1 = ImageLabel(
+            game=self.game,
+            path=None,
+            position=self.rect.topright,
+            anchor=Anchor.TopRight,
+            z_index=1
+        )
+
+    def _create_icon_2_label(self) -> None:
+        self.icon_2 = ImageLabel(
+            game=self.game,
+            path=None,
+            position=(self.rect.right, self.rect.centery),
+            anchor=Anchor.TopRight,
+            z_index=1
+        )
+
+__all__ = ["MatchingAnswer"]

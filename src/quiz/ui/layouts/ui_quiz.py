@@ -7,10 +7,13 @@ from src.core.callback import CallbackType
 from src.core.utility import load_asset, asset_path
 from src.ui.text_button import TextButton
 from src.ui.text_label import TextLabel
-from src.ui.frame import Frame
 from src.ui.layout import Layout
-from src.quiz.question import Question
 from src.experimental.text_box import TextBox
+from src.quiz.ui.xbjective_answer import XobjectiveAnswer
+from src.quiz.ui.input_answer import InputAnswer
+from src.quiz.ui.sequence_answer import SequenceAnswer
+from src.quiz.ui.matching_answer import MatchingAnswer
+from src.quiz.quiz import Quiz
 
 GAP = 4
 
@@ -52,57 +55,68 @@ class UIQuiz:
         if self._enabled:
             self._layout.draw(surface)
 
-    def create_answers(self, question: Question, callback: CallbackType) -> None:
+    def create_answers(self, quiz: Quiz, change_correct_callback: CallbackType) -> None:
+        question = quiz.questions[quiz.question_index]
+        recived = quiz.answers_recived
+        
+        x = self.question_title.rect.centerx
+        y = self.question_title.rect.bottom + GAP
+        if len(question.options) == 1:
+            a = (Anchor.MidTop,)
+            p = ((x, y),)
+        elif len(question.options) == 2:
+            a = (Anchor.TopRight, Anchor.TopLeft)
+            p = ((x - GAP / 2, y), (x + GAP / 2, y))
+        elif len(question.options) == 3:
+            a = (Anchor.TopRight, Anchor.TopLeft, Anchor.MidTop)
+            p = ((x - GAP / 2, y), (x + GAP / 2, y), (x, y + 90 + GAP))
+        elif len(question.options) == 4:
+            a = (Anchor.TopRight, Anchor.TopLeft, Anchor.TopRight, Anchor.TopLeft)
+            p = ((x - GAP / 2, y), (x + GAP / 2, y), (x - GAP / 2, y + 90 + GAP), (x + GAP / 2, y + 90 + GAP))
+        
         self._layout.remove_child(self._answers)
         self._answers.clear()
 
-        if question.type == 0:
-            self._create_objective_answers(question.options, callback)
-        elif question.type == 1:
-            self._create_objective_answers(question.options, callback)
+        if question.type == 0 or question.type == 1:
+            for index, option in enumerate(question.shuffle_options):
+                if index > 3:
+                    continue
+                button = XobjectiveAnswer(self.game, p[index], a[index])
+                button.text.text = option
+                button.is_right.pressed_callback.set((change_correct_callback, (index,)))
+                button.change_correct_state(index in recived)
+                self._answers.append(button)
         elif question.type == 2:
-            self._create_input_answer(callback)
-        else:
-            self._create_objective_answers(question.options, callback)
+            button = InputAnswer(self.game, p[0], a[0])
+            button.textbox.text = "" if len(recived) < 1 else str(recived[0])
+            button.textbox.focus_lost_callback.set(change_correct_callback)
+            self._answers.append(button)
+        elif question.type == 3:
+            for index, option in enumerate(question.shuffle_options):
+                if index > 3:
+                    continue
+                button = SequenceAnswer(self.game, p[index], a[index])
+                button.text.text = option
+                button.move.pressed_callback.set((change_correct_callback, (index,)))
+                button.change_number(index + 1)
+                self._answers.append(button)
+        elif question.type == 4:
+            pos = ((x - 75 - GAP, y), (x, y), (x + 75 + GAP, y))
+            anc = (Anchor.TopRight, Anchor.MidTop, Anchor.TopLeft)
+
+            for index, option in enumerate(question.shuffle_options):
+                if index > 2:
+                    continue
+                button = MatchingAnswer(self.game, pos[index], anc[index])
+                button.text_1.text = option
+                button.text_2.text = question.shuffle_answers[index]
+                button.change_number(index + 1, 0)
+                button.change_number(index + 1, 1)
+                button.move_1.pressed_callback.set((change_correct_callback, (index, 0)))
+                button.move_2.pressed_callback.set((change_correct_callback, (index, 1)))
+                self._answers.append(button)
         
         self._layout.insert_child(self._answers)
-
-    def _create_objective_answers(self, options: List[str], callback: CallbackType) -> None:
-        x = self.question_title.rect.centerx
-        y = self.question_title.rect.bottom + 20 + GAP
-        
-        if len(options) == 1:
-            a = (Anchor.MidTop,)
-            p = ((x, y),)
-        elif len(options) == 2:
-            a = (Anchor.TopRight, Anchor.TopLeft)
-            p = ((x - GAP / 2, y), (x + GAP / 2, y))
-        elif len(options) == 3:
-            a = (Anchor.TopRight, Anchor.TopLeft, Anchor.MidTop)
-            p = ((x - GAP / 2, y), (x + GAP / 2, y), (x, y * 2 - GAP))
-        elif len(options) == 4:
-            a = (Anchor.TopRight, Anchor.TopLeft, Anchor.TopRight, Anchor.TopLeft)
-            p = ((x - GAP / 2, y), (x + GAP / 2, y), (x - GAP / 2, y * 2 - GAP), (x + GAP / 2, y * 2 - GAP))
-        
-        for index, option in enumerate(options):
-            if index > 3:
-                continue
-            button = TextButton(
-                game=self.game,
-                text=option,
-                size=(200, 80),
-                position=p[index],
-                anchor=a[index],
-                font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
-                font_size=16,
-                font_align=Align.Center,
-                text_color="white",
-                button_color="#4E4E56",
-                button_hover_color="#64646E",
-                button_press_color="#000000"
-            )
-            button.pressed_callback.set((callback, (index,)))
-            self._answers.append(button)
 
     def _create_input_answer(self, callback: CallbackType) -> None:
         x = self.question_title.rect.centerx

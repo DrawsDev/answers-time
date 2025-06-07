@@ -1,3 +1,4 @@
+import time
 import copy
 import pygame
 from typing import Union
@@ -5,17 +6,22 @@ from src.settings import *
 from src.core.game import Game
 from src.core.utility import asset_path
 from src.components.scene import Scene
-from src.quiz.utility import *
+from src.ui.warn_frame import WarnFrame
 from src.quiz.ui.layouts.ui_quiz import UIQuiz
 from src.quiz.ui.layouts.ui_result import UIResult
-from src.ui.warn_frame import WarnFrame
+from src.quiz.ui.layouts.ui_timer import UITimer
+from src.quiz.ui.layouts.ui_tip import UITip
+from src.quiz.quiz import Quiz as QuizObject
+from src.quiz.utility import *
 
 class Quiz(Scene):
     def __init__(self, game: Game) -> None:
         self.game = game
-        self.quiz = None
+        self.quiz: QuizObject = None
         self.ui_quiz = UIQuiz(game)
         self.ui_result = UIResult(game)
+        self.ui_timer = UITimer(game)
+        self.ui_tip = UITip(game)
         self.warn = WarnFrame(game, "Вы уверены, что хотите прервать тестирование?", "")
 
     def on_enter(self, **kwargs):
@@ -29,28 +35,42 @@ class Quiz(Scene):
         
         self._start_quiz(quiz)
         self.ui_quiz.complete.pressed_callback.set(self._complete_quiz)
+        self.ui_quiz.tip.pressed_callback.set(self._open_tip)
         self.ui_quiz.answer.pressed_callback.set(self._next_question)
         self.ui_result.back.pressed_callback.set(self._quit_quiz)
         self.warn.confirm_callback.set(self._show_result)
         self.warn.deny_callback.set(self._back_to_quiz)
+        self.ui_tip.back.pressed_callback.set(self._back_to_quiz)
 
     def update(self, delta: float) -> None:
         self.ui_quiz.update(delta)
         self.ui_result.update(delta)
+        self.ui_tip.update(delta)
+        self.ui_timer.update(delta)
         self.warn.update(delta)
+        if self.quiz:
+            t = time.strftime("%H:%M:%S", time.gmtime(self.quiz.time_left))
+            self.ui_timer.timer.text = f"Оставшееся время: {t}"
+            if self.quiz.time_left <= 0:
+                self.quiz.stop()
+                self._show_result()
     
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill("gray")
         self.ui_quiz.draw(surface)
         self.ui_result.draw(surface)
+        self.ui_tip.draw(surface)
         self.warn.draw(surface)
+        self.ui_timer.draw(surface)
 
     def _show_result(self) -> None:
         self.warn.enabled = False
         self.ui_quiz.enabled = False
+        self.ui_tip.enabled = False
         self.ui_result.enabled = True
         self.ui_result.rating.text = f"{self.quiz.get_grade()}%"
         self.ui_result.info.text = f"Правильных ответов: {self.quiz.number_of_correct_answers} из {len(self.quiz.questions)}"        
+        self.ui_timer.enabled = False
 
     def _update_ui_question_info(self) -> None:
         question = self.quiz.questions[self.quiz.question_index]
@@ -62,12 +82,23 @@ class Quiz(Scene):
         else:
             self.ui_quiz.answer.text = "Ответить"
         
-        self.ui_quiz.create_answers(question, self._answer)
+        self.ui_quiz.create_answers(self.quiz, self._answer)
 
-    def _answer(self, answer: Union[int, str]) -> None:
-        if type(answer) == str:
-            answer = self.ui_quiz._answers[0].text
-        self.quiz.answer(answer)
+    def _answer(self, answer: Union[int, str], a = None) -> None:
+        question = self.quiz.questions[self.quiz.question_index]
+        
+        if question.type == 0:
+            self.quiz.answer(answer)
+        elif question.type == 1:
+            self.quiz.answer(answer)
+        elif question.type == 2:
+            self.quiz.answer(answer)
+        elif question.type == 3:
+            self.quiz.answer(answer)
+        elif question.type == 4:
+            self.quiz.answer(answer, a)
+        
+        self._update_ui_question_info()
 
     def _next_question(self) -> None:
         self.quiz.next_question()
@@ -76,8 +107,13 @@ class Quiz(Scene):
         else:
             self._show_result()
 
+    def _open_tip(self) -> None:
+        self.ui_quiz.enabled = False
+        self.ui_tip.enabled = True
+
     def _back_to_quiz(self) -> None:
         self.ui_quiz.enabled = True
+        self.ui_tip.enabled = False
         self.warn.enabled = False
 
     def _complete_quiz(self) -> None:
@@ -87,6 +123,7 @@ class Quiz(Scene):
 
     def _start_quiz(self, quiz: Quiz) -> None:
         self.quiz = copy.deepcopy(quiz)
+        self.quiz.start()
         self.ui_quiz.enabled = True
         self._update_ui_question_info()
 
