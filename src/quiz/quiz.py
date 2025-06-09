@@ -223,6 +223,7 @@ class Quiz:
         question = self._questions[self._question_index]
         index = self._questions.index(question)
         self._questions = self._questions[:index] + self._questions[index+1:] + [self._questions[index]]
+        self._answers_recived.clear()
 
     def next_question(self) -> None:
         if self._ended:
