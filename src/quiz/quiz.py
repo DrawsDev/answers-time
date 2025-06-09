@@ -15,6 +15,7 @@ class Quiz:
         self._description = description
         self._author = author
         self._questions = copy.deepcopy(questions)
+        self._shuffle_questions = copy.deepcopy(questions)
         self._answered_questions = []
         self._question_index = 0
         self._number_of_correct_answers = 0
@@ -58,7 +59,16 @@ class Quiz:
     @questions.setter
     def questions(self, value: List[Question]):
         if self._questions != value:
-            self._questions = value
+            self._questions = copy.deepcopy(value)
+
+    @property
+    def shuffle_questions(self) -> List[Question]:
+        return self._shuffle_questions
+    
+    @shuffle_questions.setter
+    def shuffle_questions(self, value: List[Question]):
+        if self._shuffle_questions != value:
+            self._shuffle_questions = copy.deepcopy(value)
 
     @property
     def question_index(self) -> int:
@@ -155,6 +165,14 @@ class Quiz:
         self._answered_questions.append(self._question_index)
         self._answers_recived.clear()
 
+    def is_answered(self) -> bool:
+        question = self._questions[self._question_index]
+        if question.type in (0, 1, 2) and len(self._answers_recived) > 0:
+            return True
+        elif question.type in (3, 4):
+            return True
+        return False
+
     def answer(self, answer: Union[int, str], a = None) -> None:
         question = self._questions[self._question_index]
         if question.type == 0:
@@ -195,6 +213,17 @@ class Quiz:
                     new_options[answer], new_options[answer - 1] = new_options[answer - 1], new_options[answer]
                 question.shuffle_answers = new_options
 
+    def skip_question(self) -> None:
+        if self._ended:
+            return
+        
+        if len(self._answered_questions) >= len(self._questions) - 1:
+            return
+        
+        question = self._questions[self._question_index]
+        index = self._questions.index(question)
+        self._questions = self._questions[:index] + self._questions[index+1:] + [self._questions[index]]
+
     def next_question(self) -> None:
         if self._ended:
             return
@@ -204,6 +233,14 @@ class Quiz:
 
         self._check_answer()
         self._question_index += 1
+
+    def get_question_number(self) -> int:
+        current_index = self._question_index
+        current_question = self._questions[current_index]
+        for i, q in enumerate(self._shuffle_questions):
+            if q.title == current_question.title:
+                return i + 1
+        return 1
 
     def get_grade(self) -> float:
         percent = (self._number_of_correct_answers / len(self._questions)) * 100
