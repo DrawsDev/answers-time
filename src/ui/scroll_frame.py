@@ -11,20 +11,28 @@ class ScrollFrame(UIObject):
         game: Game,
         size: Tuple[int, int] = (100, 100),
         position: Tuple[int, int] = (0, 0),
-        anchor: Anchor = Anchor.TopLeft
+        anchor: Anchor = Anchor.TopLeft,
+        z_index: int = 0,
+        backcolor: pygame.Color = "#000000",
+        horizontal_scrolling: bool = False,
+        vertical_scrolling: bool = True,
+        strength: float = 20.0,
+        scrollbar_width: int = 10,
+        scrollbar_color1: pygame.Color = "#FFFFFF",
+        scrollbar_color2: pygame.Color = "#4E4E56"
     ) -> None:
-        super().__init__(game, size, position, anchor)
+        super().__init__(game, size, position, anchor, z_index)
         self._enabled = False
-        self._backcolor = "#000000"
+        self._backcolor = backcolor
         self._scroll_position = (0, 0)
         self._scroll_next_position = (0, 0)
         self._scroll_size = (0, 0)
-        self._scroll_strength = 20.0
-        self._scroll_horizontal_enabled = False
-        self._scroll_vertical_enabled = True
-        self._scrollbar_width = 10
-        self._scrollbar_color1 = "#FFFFFF"
-        self._scrollbar_color2 = "#4E4E56"
+        self._scroll_strength = strength
+        self._scroll_horizontal_enabled = horizontal_scrolling
+        self._scroll_vertical_enabled = vertical_scrolling
+        self._scrollbar_width = scrollbar_width
+        self._scrollbar_color1 = scrollbar_color1
+        self._scrollbar_color2 = scrollbar_color2
         self._dragging = False
         self._dragging_mouse_pos = None
         self._dragging_scroll_pos = None
@@ -223,10 +231,10 @@ class ScrollFrame(UIObject):
         if self.game.input.is_key_released("m_left"):
             self._stop_dragging()
         
-        if self._mouse_entered and self.game.input.is_key_pressed("m_left"):
+        if self._mouse_entered and self.game.input.is_key_pressed("m_left") and self._scroll_size[1] > self.rect.height:
             self._dragging = True 
         
-        if self._mouse_entered and self.game.input.is_mouse_wheel():
+        if self._mouse_entered and self.game.input.is_mouse_wheel() and self._scroll_size[1] > self.rect.height:
             self._mouse_wheel_handler(delta)
         
         if self._dragging:
@@ -241,6 +249,7 @@ class ScrollFrame(UIObject):
 
             if child_rect.colliderect(pygame.Rect(0, 0, *self._size)):
                 surface.blit(child.image, child_rect)
+                child.draw(surface)
 
     def _draw_vertical_scrollbar(self, surface: pygame.Surface) -> None:
         if self._scroll_size[1] <= self.rect.height:
