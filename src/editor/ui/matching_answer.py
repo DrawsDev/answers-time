@@ -12,7 +12,7 @@ from src.ui.layout import Layout
 
 GAP = 4
 
-class MatchingAnswerObject(UIObject):
+class MatchingAnswer(UIObject):
     def __init__(        
         self, 
         game: Game,
@@ -43,15 +43,15 @@ class MatchingAnswerObject(UIObject):
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
+        self.icon_1.draw(surface)
+        self.icon_2.draw(surface)
+        surface.blit(self.icon_1.image, self.icon_1.rect)
+        surface.blit(self.icon_2.image, self.icon_2.rect)
         if self._layout.enabled:
             self._layout.draw(surface)
         else:
             self.text_1.draw(surface)
             self.text_2.draw(surface)
-            self.icon_1.draw(surface)
-            self.icon_2.draw(surface)
-            surface.blit(self.icon_1.image, self.icon_1.rect)
-            surface.blit(self.icon_2.image, self.icon_2.rect)
             surface.blit(self.text_1.image, self.text_1.rect)
             surface.blit(self.text_2.image, self.text_2.rect)
 
@@ -161,4 +161,4 @@ class MatchingAnswerObject(UIObject):
             z_index=1
         )
 
-__all__ = ["MatchingAnswerObject"]
+__all__ = ["MatchingAnswer"]

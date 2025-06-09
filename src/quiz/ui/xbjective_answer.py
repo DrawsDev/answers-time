@@ -34,7 +34,7 @@ class XobjectiveAnswer(UIObject):
             self._layout.update(delta)
         else:
             self.text.update(delta)
-            self.icon.update(delta)
+        self.icon.update(delta)
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
@@ -42,9 +42,9 @@ class XobjectiveAnswer(UIObject):
             self._layout.draw(surface)
         else:
             self.text.draw(surface)
-            self.icon.draw(surface)
-            surface.blit(self.icon.image, self.icon.rect)
             surface.blit(self.text.image, self.text.rect)
+        self.icon.draw(surface)
+        surface.blit(self.icon.image, self.icon.rect)
 
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True

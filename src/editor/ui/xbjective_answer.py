@@ -12,7 +12,7 @@ from src.ui.layout import Layout
 
 GAP = 4
 
-class AnswerObject(UIObject):
+class XbjectiveAnswer(UIObject):
     def __init__(        
         self, 
         game: Game,
@@ -41,12 +41,12 @@ class AnswerObject(UIObject):
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
+        self.icon.draw(surface)
+        surface.blit(self.icon.image, self.icon.rect)
         if self._layout.enabled:
             self._layout.draw(surface)
         else:
             self.text.draw(surface)
-            self.icon.draw(surface)
-            surface.blit(self.icon.image, self.icon.rect)
             surface.blit(self.text.image, self.text.rect)
 
     def on_mouse_enter(self) -> None:
@@ -145,4 +145,4 @@ class AnswerObject(UIObject):
             z_index=1
         )
 
-__all__ = ["AnswerObject"]
+__all__ = ["XbjectiveAnswer"]

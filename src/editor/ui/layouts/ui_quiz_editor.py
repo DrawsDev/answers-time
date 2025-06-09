@@ -9,10 +9,10 @@ from src.ui.text_label import TextLabel
 from src.ui.layout import Layout
 from src.experimental.text_box import TextBox
 from src.editor.ui.new_answer_button import NewAnswerButton
-from src.editor.ui.answer_object import AnswerObject
-from src.editor.ui.input_answer_object import InputAnswerObject
-from src.editor.ui.sequence_answer_object import SequenceAnswerObject
-from src.editor.ui.matching_answer_object import MatchingAnswerObject
+from src.editor.ui.xbjective_answer import XbjectiveAnswer
+from src.editor.ui.input_answer import InputAnswer
+from src.editor.ui.sequence_answer import SequenceAnswer
+from src.editor.ui.matching_answer import MatchingAnswer
 from src.quiz.question import Question
 
 GAP = 4
@@ -74,7 +74,7 @@ class UIQuizEditor:
             for index, option in enumerate(question.options):
                 if index > 3:
                     continue
-                button = AnswerObject(self.game, p[index], a[index])
+                button = XbjectiveAnswer(self.game, p[index], a[index])
                 button.text.text = option
                 button.edit.pressed_callback.set((edit_callback, (index,)))
                 button.delete.pressed_callback.set((delete_callback, (index,)))
@@ -92,7 +92,7 @@ class UIQuizEditor:
             for index, option in enumerate(question.options):
                 if index > 3:
                     continue
-                button = InputAnswerObject(self.game, p[index], a[index])
+                button = InputAnswer(self.game, p[index], a[index])
                 button.text.text = option
                 button.edit.pressed_callback.set((edit_callback, (index,)))
                 button.delete.pressed_callback.set((delete_callback, (index,)))
@@ -107,7 +107,7 @@ class UIQuizEditor:
             for index, option in enumerate(question.options):
                 if index > 3:
                     continue
-                button = SequenceAnswerObject(self.game, p[index], a[index])
+                button = SequenceAnswer(self.game, p[index], a[index])
                 button.text.text = option
                 button.change_number(index + 1)
                 button.delete.pressed_callback.set((delete_callback, (index,)))
@@ -127,7 +127,7 @@ class UIQuizEditor:
             for index, option in enumerate(question.options):
                 if index > 2:
                     continue
-                button = MatchingAnswerObject(self.game, pos[index], anc[index])
+                button = MatchingAnswer(self.game, pos[index], anc[index])
                 button.text_1.text = option
                 button.text_2.text = question.answers[index]
                 button.change_number(index + 1, 0)
