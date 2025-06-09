@@ -8,12 +8,14 @@ class Question:
         title: str = "Текст вопроса",
         type: int = 0,
         options: List[str] = ["Текст ответа"],
-        answers: List[int] = []
+        answers: List[int] = [],
+        tip: str = "Подсказка не указана."
     ) -> None:
         self._title = title
         self._type = type
         self._options = deepcopy(options)
         self._answers = deepcopy(answers)
+        self._tip = tip
         self._shuffle()
 
     def _shuffle(self) -> None:
@@ -84,12 +86,22 @@ class Question:
         if self._answers != value:
             self._answers = value
 
+    @property
+    def tip(self) -> str:
+        return self._tip
+
+    @tip.setter
+    def tip(self, value: str) -> None:
+        if self._tip != value:
+            self._tip = value
+
     def dump(self) -> Dict[str, Any]:
         return {
             "Title": self._title,
             "Type": self._type,
             "Options": self._options,
-            "Answers": self._answers
+            "Answers": self._answers,
+            "Tip": self._tip
         }
 
 __all__ = ["Question"]
