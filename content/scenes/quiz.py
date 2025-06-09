@@ -7,6 +7,7 @@ from src.core.game import Game
 from src.core.utility import asset_path
 from src.components.scene import Scene
 from src.ui.warn_frame import WarnFrame
+from src.ui.info_frame import InfoFrame
 from src.quiz.ui.layouts.ui_quiz import UIQuiz
 from src.quiz.ui.layouts.ui_result import UIResult
 from src.quiz.ui.layouts.ui_timer import UITimer
@@ -23,6 +24,7 @@ class Quiz(Scene):
         self.ui_timer = UITimer(game)
         self.ui_tip = UITip(game)
         self.warn = WarnFrame(game, "Вы уверены, что хотите прервать тестирование?", "")
+        self.info = InfoFrame(game, "Не указан вариант ответа.")
 
     def on_enter(self, **kwargs):
         filename = kwargs.get("filename")
@@ -36,6 +38,7 @@ class Quiz(Scene):
         self._start_quiz(quiz)
         self.ui_quiz.complete.pressed_callback.set(self._complete_quiz)
         self.ui_quiz.tip.pressed_callback.set(self._open_tip)
+        self.ui_quiz.skip.pressed_callback.set(self._skip_question)
         self.ui_quiz.answer.pressed_callback.set(self._next_question)
         self.ui_result.back.pressed_callback.set(self._quit_quiz)
         self.warn.confirm_callback.set(self._show_result)
@@ -48,6 +51,7 @@ class Quiz(Scene):
         self.ui_tip.update(delta)
         self.ui_timer.update(delta)
         self.warn.update(delta)
+        self.info.update(delta)
         if self.quiz:
             t = time.strftime("%H:%M:%S", time.gmtime(self.quiz.time_left))
             self.ui_timer.timer.text = f"Оставшееся время: {t}"
@@ -61,6 +65,7 @@ class Quiz(Scene):
         self.ui_result.draw(surface)
         self.ui_tip.draw(surface)
         self.warn.draw(surface)
+        self.info.draw(surface)
         self.ui_timer.draw(surface)
 
     def _show_result(self) -> None:
@@ -74,7 +79,7 @@ class Quiz(Scene):
 
     def _update_ui_question_info(self) -> None:
         question = self.quiz.questions[self.quiz.question_index]
-        self.ui_quiz.question_number.text = f"Вопрос {self.quiz.question_index + 1}"
+        self.ui_quiz.question_number.text = f"Вопрос {self.quiz.get_question_number()}"
         self.ui_quiz.question_title.text = question.title
 
         if self.quiz.question_index == len(self.quiz.questions) - 1:
@@ -85,36 +90,38 @@ class Quiz(Scene):
         self.ui_quiz.create_answers(self.quiz, self._answer)
 
     def _answer(self, answer: Union[int, str], a = None) -> None:
-        question = self.quiz.questions[self.quiz.question_index]
-        
-        if question.type == 0:
-            self.quiz.answer(answer)
-        elif question.type == 1:
-            self.quiz.answer(answer)
-        elif question.type == 2:
-            self.quiz.answer(answer)
-        elif question.type == 3:
-            self.quiz.answer(answer)
-        elif question.type == 4:
-            self.quiz.answer(answer, a)
-        
+        self.quiz.answer(answer, a)
         self._update_ui_question_info()
 
     def _next_question(self) -> None:
+        if not self.quiz.is_answered():
+            self._open_no_answered_info()
+            return
         self.quiz.next_question()
         if not self.quiz.ended:
             self._update_ui_question_info()
         else:
             self._show_result()
 
+    def _skip_question(self) -> None:
+        self.quiz.skip_question()
+        self._update_ui_question_info()
+
     def _open_tip(self) -> None:
         self.ui_quiz.enabled = False
         self.ui_tip.enabled = True
+        self.ui_tip.set_tip(self.quiz.questions[self.quiz.question_index].tip)
+
+    def _open_no_answered_info(self) -> None:
+        self.ui_quiz.enabled = False
+        self.info.enabled = True
+        self.info.confirm_callback.set(self._back_to_quiz)
 
     def _back_to_quiz(self) -> None:
         self.ui_quiz.enabled = True
         self.ui_tip.enabled = False
         self.warn.enabled = False
+        self.info.enabled = False
 
     def _complete_quiz(self) -> None:
         self.ui_quiz.enabled = False

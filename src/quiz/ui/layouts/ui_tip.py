@@ -43,6 +43,10 @@ class UITip:
         if self._enabled:
             self._layout.draw(surface)
 
+    def set_tip(self, text: str) -> None:
+        if self.text.text != text:
+            self.text.text = text
+
     def _create_title_label(self) -> TextLabel:
         self.title = TextLabel(
             game=self.game,

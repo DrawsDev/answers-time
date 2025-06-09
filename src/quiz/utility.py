@@ -34,7 +34,8 @@ def create_questions_from_dict(question_dict: Dict) -> List[Question]:
             question_data.get("Title"),
             question_data.get("Type"),
             question_data.get("Options"),
-            question_data.get("Answers")
+            question_data.get("Answers"),
+            question_data.get("Tip") or "Подсказка не указана."
         ))
     return questions
 

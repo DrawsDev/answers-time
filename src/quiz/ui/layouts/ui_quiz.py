@@ -1,5 +1,4 @@
 import pygame
-from typing import List
 from src.enums import *
 from src.settings import *
 from src.core.game import Game
@@ -8,7 +7,6 @@ from src.core.utility import load_asset, asset_path
 from src.ui.text_button import TextButton
 from src.ui.text_label import TextLabel
 from src.ui.layout import Layout
-from src.experimental.text_box import TextBox
 from src.quiz.ui.xbjective_answer import XobjectiveAnswer
 from src.quiz.ui.input_answer import InputAnswer
 from src.quiz.ui.sequence_answer import SequenceAnswer
@@ -117,24 +115,6 @@ class UIQuiz:
                 self._answers.append(button)
         
         self._layout.insert_child(self._answers)
-
-    def _create_input_answer(self, callback: CallbackType) -> None:
-        x = self.question_title.rect.centerx
-        y = self.question_title.rect.bottom + 40 + GAP
-        textbox = TextBox(
-            game=self.game,
-            text="",
-            placeholder="Введите ваш ответ",
-            size=(300, 80),
-            position=(x, y),
-            anchor=Anchor.MidTop,
-            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
-            font_size=16,
-            font_align=Align.Left,
-            text_color="white"
-        )
-        textbox.focus_lost_callback.set((callback, (textbox.text,)))
-        self._answers.append(textbox)
 
     def _create_complete_button(self) -> None:
         self.complete = TextButton(
