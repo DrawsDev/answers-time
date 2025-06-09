@@ -1,4 +1,5 @@
 from enum import Enum
+from pygame import Color
 
 class Anchor(str, Enum):
     TopLeft = "topleft"
@@ -26,4 +27,17 @@ class Align(int, Enum):
     Center = 1
     Right = 2
 
-__all__ = ["Anchor", "Align", "ButtonState"]
+class Pallete(Color, Enum):
+    Gray1 = "#64646E"
+    Gray2 = "#4E4E56"
+    Gray3 = "#282835"
+    LightGray1 = "#A9A9BA"
+    LightGray2 = "#8F8F9E"
+    LightGray3 = "#848491"
+    LightGray4 = "#747484"
+    White = "#FFFFFF"
+    Black = "#000000"
+    Empty = (0, 0, 0, 0)
+    ATBlue = "#3CA4FF"
+
+__all__ = ["Anchor", "Align", "ButtonState", "Pallete"]
