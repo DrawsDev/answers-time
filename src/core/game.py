@@ -9,7 +9,7 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
         pygame.display.set_caption(WINDOW_TITLE)
-        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF, vsync=1)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF | pygame.FULLSCREEN, vsync=1)
         self.surface = pygame.Surface(SURFACE_SIZE)
         self.clock = pygame.Clock()
         self.input = Input()
