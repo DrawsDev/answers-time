@@ -13,7 +13,6 @@ env.bak/
 venv.bak/
 
 # Project
-/src/test.py
 /Answers Time Editor
 /Answers Time Composed
 /autobackup/backups
