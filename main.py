@@ -1,19 +1,15 @@
 import os
 import sys
-from src.core.game import Game
-from content.scenes.menu import Menu
-from content.scenes.quiz import Quiz
-from content.scenes.editor import Editor
-from content.scenes.tutorial import Tutorial
+from src.framework.application import *
+from src.answerstime.scenes import *
 
 if __name__ == "__main__":
     if hasattr(sys, "_MEIPASS"):
         sys.stderr = open(os.path.join(os.getcwd(), "error.log"), "w")
-    
-    game = Game()
-    game.add_scene("Menu", Menu)
-    game.add_scene("Quiz", Quiz)
-    game.add_scene("Editor", Editor)
-    game.add_scene("Tutorial", Tutorial)
-    game.change_scene("Menu")
-    game.run()
+    app = Application()
+    app.insert_scene("Menu", Menu)
+    app.insert_scene("Quiz", Quiz)
+    app.insert_scene("Editor", Editor)
+    app.insert_scene("Tutorial", Tutorial)
+    app.change_scene("Menu")
+    app.run()
