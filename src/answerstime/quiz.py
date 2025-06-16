@@ -1,7 +1,7 @@
 import time
 import copy
 from typing import Union, List, Dict, Any
-from src.answerstime.quiz.question import Question
+from src.answerstime.question import Question
 
 class Quiz:
     def __init__(

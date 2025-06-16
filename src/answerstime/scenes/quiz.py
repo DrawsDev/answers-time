@@ -7,9 +7,9 @@ from src.framework.application import Application
 from src.framework.utility import *
 from src.framework.scene import Scene
 from src.framework.scene.ui import *
-from src.answerstime.quiz.ui.layouts import *
+from src.answerstime.ui.quiz.layouts import *
 from src.answerstime.quiz import Quiz as QuizObject
-from src.answerstime.quiz.utility import *
+from src.answerstime.utility import *
 
 class Quiz(Scene):
     def __init__(self, app: Application) -> None:

@@ -5,8 +5,8 @@ from src.framework.application import Application
 from src.framework.callback import CallbackType
 from src.framework.utility import *
 from src.framework.scene.ui import *
-from src.answerstime.editor.ui import *
-from src.answerstime.quiz import Question
+from src.answerstime.ui.editor import *
+from src.answerstime.question import Question
 
 GAP = 4
 
@@ -254,5 +254,6 @@ class UIQuizEditor:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Left,
-            text_color=Pallete.White
+            text_color=Pallete.White,
+            line_length=10
         )

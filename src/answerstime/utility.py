@@ -1,6 +1,7 @@
 import json
 from typing import Dict, List
-from src.answerstime.quiz.quiz import *
+from src.answerstime.quiz import Quiz
+from src.answerstime.question import Question
 
 def validate_quiz_from_file(filepath: str) -> bool:
     if not filepath.endswith(".json"):

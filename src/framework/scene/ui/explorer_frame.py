@@ -9,7 +9,7 @@ from src.framework.callback import Callback
 from src.framework.explorer import Explorer
 from src.framework.scene.ui import *
 # TODO: КОСТЫЛЬ \/\/\/
-from src.answerstime.quiz.utility import validate_quiz_from_file
+from src.answerstime.utility import validate_quiz_from_file
 
 class ExplorerFrame(Primitive):
     def __init__(self, app: Application, behavior: int = 0) -> None:

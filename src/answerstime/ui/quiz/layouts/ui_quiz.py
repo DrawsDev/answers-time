@@ -5,7 +5,7 @@ from src.framework.application import Application
 from src.framework.callback import CallbackType
 from src.framework.utility import *
 from src.framework.scene.ui import *
-from src.answerstime.quiz.ui import *
+from src.answerstime.ui.quiz import *
 from src.answerstime.quiz import Quiz
 
 GAP = 4

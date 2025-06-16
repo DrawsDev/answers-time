@@ -5,7 +5,7 @@ from src.framework.utility import *
 from src.framework.application import Application
 from src.framework.scene import Scene
 from src.framework.scene.ui import DebugFrame
-from src.answerstime.menu.ui.layouts import *
+from src.answerstime.ui.menu.layouts import *
 
 class Menu(Scene):
     def __init__(self, app: Application):

@@ -5,8 +5,8 @@ from src.framework.application import Application
 from src.framework.callback import Callback
 from src.framework.utility import *
 from src.framework.scene.ui import *
-from src.answerstime.menu.ui import QuizButton
-from src.answerstime.quiz import create_quiz_from_file
+from src.answerstime.ui.menu import QuizButton
+from src.answerstime.utility import create_quiz_from_file
 
 GAP = 4
 

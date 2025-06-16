@@ -6,8 +6,10 @@ from src.framework.utility import *
 from src.framework.application import Application
 from src.framework.scene import Scene
 from src.framework.scene.ui import *
-from src.answerstime.editor.ui.layouts import *
-from src.answerstime.quiz import *
+from src.answerstime.ui.editor.layouts import *
+from src.answerstime.quiz import Quiz
+from src.answerstime.question import Question
+from src.answerstime.utility import create_quiz_from_file
 
 QUESTION_TEXT = "Текст вопроса"
 ANSWER_TEXT = "Текст ответа"
