@@ -1,19 +1,22 @@
 import pygame.scrap
 from typing import Tuple, Optional, List
 from src.framework.application import Application
+from src.framework.utility import clamp
 
-class InputBox:
+class TextInput:
     def __init__(
         self,
         app: Application,
         text: str = "",
         placeholder: str = "Placeholder",
-        maxlength: int = 64
+        maxlength: int = 64,
+        line_length: int = 0
     ) -> None:
         self.app = app
         self._text = text
         self._placeholder = placeholder
         self._maxlength = maxlength
+        self._line_length = line_length
         self._cursor = 0
         self._selection_start = None
         self._enabled = False
@@ -48,6 +51,16 @@ class InputBox:
         if self._maxlength != value and value >= 0:
             self._maxlength = value
             self._changed = True
+
+    @property
+    def line_length(self) -> int:
+        return self._line_length
+    
+    @line_length.setter
+    def line_length(self, value: int) -> None:
+        if self._line_length != value and value >= 0:
+            self._line_length = value
+            self._changed = True    
 
     @property
     def enabled(self) -> bool:
@@ -145,7 +158,7 @@ class InputBox:
         self._changed = True
 
     def move_cursor(self, direction: int, shift: bool) -> None:
-        new_pos = max(0, min(len(self._text), self._cursor + direction))
+        new_pos = clamp(self._cursor + direction, 0, len(self._text))
         if shift:
             if self._selection_start is None:
                 self._selection_start = self._cursor
@@ -172,15 +185,15 @@ class InputBox:
             self.backspace()
         elif self.app.input.is_key_pressed("delete"):
             self.delete()
+        elif self.app.input.is_enter():
+            self._insert("\n")
         elif self.app.input.is_key_pressed("right") or self.app.input.is_key_pressed("left"):
             direction = self.app.input.get_axis("right", "left")
-            shift = self.app.input.is_key_down("left shift") or self.app.input.is_key_down("right shift")
-            self.move_cursor(direction, shift)
+            self.move_cursor(direction, self.app.input.is_shift())
         elif self.app.input.is_key_pressed("up") or self.app.input.is_key_pressed("down"):
             direction = self.app.input.get_axis("up", "down")
-            shift = self.app.input.is_key_down("left shift") or self.app.input.is_key_down("right shift")
-            self.move_cursor(direction, shift)
-        elif self.app.input.is_key_down("left ctrl") or self.app.input.is_key_down("right ctrl"):
+            self.move_cursor(direction, self.app.input.is_shift())
+        elif self.app.input.is_ctrl():
             if self.app.input.is_key_pressed("c"):
                 self.copy()
             if self.app.input.is_key_pressed("v"):
@@ -193,62 +206,18 @@ class InputBox:
             self.key()
 
     def _insert(self, char: str) -> None:
+        self._text = self._text.replace("\n", "")
         raw_text = self._text[:self._cursor] + char + self._text[self._cursor:]
         
         if len(raw_text) > self._maxlength:
             return
         
-        self._text = raw_text
-        self._cursor += len(char)
+        if self._line_length > 0:
+            self._text = "\n".join([raw_text[i:i+self._line_length] for i in range(0, len(raw_text), self._line_length)])
+            self._cursor += len(char) + len("\n")
+        else:
+            self._text = raw_text
+            self._cursor += len(char)
+
         self._selection_start = None
         self._changed = True
-
-    def _wrap_text(self, text: str) -> List[str]:
-        if not self._multiline:
-            return [text]
-        
-        lines: List[str] = []
-        current_line = ""
-        words = []
-        current_word = ""
-
-        for char in text:
-            if char in (" ", "\n"):
-                if current_word:
-                    words.append(current_word)
-                    current_word = ""
-                words.append(char)
-            else:
-                current_word += char
-        if current_word:
-            words.append(current_word)
-
-        for word in words:
-            if word == "\n":
-                lines.append(current_line)
-                current_line = ""
-            elif word == " ":
-                if len(current_line.rstrip()) > self._max_line_length:
-                    lines.append(current_line.rstrip())
-                    current_line = ""
-                else:
-                    current_line += " "
-            else:
-                if len(current_line + word) > self._max_line_length:
-                    if current_line:
-                        lines.append(current_line)
-                        current_line = word
-                    else:
-                        while len(word) > self._max_line_length:
-                            lines.append(word[:self._max_line_length])
-                            word = word[self._max_line_length:]
-                        current_line = word
-                else:
-                    current_line += word
-
-        if current_line:
-            lines.append(current_line)
-        
-        return lines
-
-__all__ = ["InputBox"]
