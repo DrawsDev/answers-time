@@ -13,9 +13,10 @@ class PrimitiveButton(Primitive):
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
         z_index: int = 0,
-        button_color = "azure2",
-        button_hover_color = "azure3",
-        button_press_color = "azure4"
+        button_color: pygame.Color = "azure2",
+        button_hover_color: pygame.Color = "azure3",
+        button_press_color: pygame.Color = "azure4",
+        button_border_radius: int = -1,
     ) -> None:
         super().__init__(app, size, position, anchor, z_index)
         self._selectable = True
@@ -24,6 +25,7 @@ class PrimitiveButton(Primitive):
         self._button_color = button_color
         self._button_hover_color = button_hover_color
         self._button_press_color = button_press_color
+        self._button_border_radius = button_border_radius
         self._pressed_callback: Callback = Callback()
         self._set_state(ButtonState.Idle)
 
@@ -74,6 +76,16 @@ class PrimitiveButton(Primitive):
         if self._pressed_callback != value:
             self._pressed_callback.set(value)
 
+    @property
+    def button_border_radius(self) -> int:
+        return self._button_border_radius
+    
+    @button_border_radius.setter
+    def button_border_radius(self, value: int) -> None:
+        if value >= -1:
+            self._button_border_radius = value
+            self._update_image()
+
     def on_mouse_pressed(self) -> None:
         self._set_state(ButtonState.Press)
         self._down = True
@@ -110,12 +122,12 @@ class PrimitiveButton(Primitive):
     def _update_image(self) -> None:
         super()._update_image()
         if self._state == ButtonState.Idle:
-            self.image.fill(self._button_color)
+            pygame.draw.rect(self.image, self._button_color, ((0, 0), self.rect.size), border_radius=self._button_border_radius)
             # pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
         elif self._state == ButtonState.Hover:
-            self.image.fill(self._button_hover_color)
+            pygame.draw.rect(self.image, self._button_hover_color, ((0, 0), self.rect.size), border_radius=self._button_border_radius)
         elif self._state == ButtonState.Press:
-            self.image.fill(self._button_press_color)
+            pygame.draw.rect(self.image, self._button_press_color, ((0, 0), self.rect.size), border_radius=self._button_border_radius)
 
     def update(self, delta):
         super().update(delta)

@@ -23,7 +23,8 @@ class TextButton(PrimitiveButton):
         button_color: pygame.Color = "azure2",
         button_hover_color: pygame.Color = "azure3",
         button_press_color: pygame.Color = "azure4",
-        button_icon: Optional[pygame.Surface] = None
+        button_icon: Optional[pygame.Surface] = None,
+        button_border_radius: int = -1
     ) -> None:
         self._button_icon = button_icon
         self._text = text
@@ -31,7 +32,7 @@ class TextButton(PrimitiveButton):
         self._font = pygame.Font(font_path, font_size)
         self._font_path = font_path
         self._font.align = font_align
-        super().__init__(app, size, position, anchor, z_index, button_color, button_hover_color, button_press_color)
+        super().__init__(app, size, position, anchor, z_index, button_color, button_hover_color, button_press_color, button_border_radius)
 
     @property
     def button_icon(self) -> pygame.Surface:
@@ -41,6 +42,16 @@ class TextButton(PrimitiveButton):
     def button_icon(self, value: pygame.Surface) -> None:
         self._button_icon = value
         self._update_image()
+
+    @property
+    def button_border_radius(self) -> int:
+        return self._button_border_radius
+    
+    @button_border_radius.setter
+    def button_border_radius(self, value: int) -> None:
+        if value >= 0:
+            self._button_border_radius = value
+            self._update_image()
 
     @property
     def text(self) -> str:
@@ -102,7 +113,7 @@ class TextButton(PrimitiveButton):
 
     def _update_image(self):
         super()._update_image()
-        
+
         offset = 0
         if self._button_icon:
             offset = 5 + self._button_icon.get_width() + 5
@@ -139,5 +150,3 @@ class TextButton(PrimitiveButton):
             text_y = self._size[1] / 2
             text_rect = text_surface.get_rect(midleft=(text_x, text_y))
             self.image.blit(text_surface, text_rect)
-
-__all__ = ["TextButton"]
