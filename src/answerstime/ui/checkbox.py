@@ -28,10 +28,6 @@ class Checkbox(PrimitiveButton):
         self._value = v
         self._update_image()
 
-    def on_mouse_pressed(self):
-        super().on_mouse_pressed()
-        self.value = not self.value
-
     def _update_image(self):
         self.image.fill((0, 0, 0, 0))
         pygame.draw.rect(self.image, Pallete.ATBlue3, ((0, 0), self.rect.size), 4, self.button_border_radius)

@@ -125,4 +125,5 @@ class UISettingsMenu:
         self.fullscreen_checkbox.pressed_callback.set(self._update_fullscreen_setting)
 
     def _update_fullscreen_setting(self) -> None:
+        self.fullscreen_checkbox.value = not self.fullscreen_checkbox.value
         self.app.update_setting("Fullscreen", self.fullscreen_checkbox.value)
