@@ -25,7 +25,7 @@ class Callback:
             else:
                 self._callback(*args, **kwargs)
 
-    def set(self, callback: CallbackType) -> None:
+    def set(self, callback: Optional[CallbackType] = None) -> None:
         self._callback = callback
 
 __all__ = ["Callback", "CallbackType"]
