@@ -44,16 +44,6 @@ class TextButton(PrimitiveButton):
         self._update_image()
 
     @property
-    def button_border_radius(self) -> int:
-        return self._button_border_radius
-    
-    @button_border_radius.setter
-    def button_border_radius(self, value: int) -> None:
-        if value >= 0:
-            self._button_border_radius = value
-            self._update_image()
-
-    @property
     def text(self) -> str:
         return self._text
 

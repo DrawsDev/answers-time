@@ -9,14 +9,18 @@ class Frame(Primitive):
     def __init__(
         self,
         app: Application,
-        color: pygame.Color = "black",
+        color: pygame.Color = "Black",
         size: Tuple[int, int] = (100, 100), 
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
-        z_index: int = 0
+        z_index: int = 0,
+        border_width: int = 0,
+        border_radius: int = -1
     ) -> None:
         super().__init__(app, size, position, anchor, z_index)
         self._color = color
+        self._border_width = border_width
+        self._border_radius = border_radius
         self._update_image()
 
     @property
@@ -29,8 +33,26 @@ class Frame(Primitive):
             self._color = value
             self._update_image()
 
+    @property
+    def border_width(self) -> int:
+        return self._border_width
+    
+    @border_width.setter
+    def border_width(self, value: int) -> None:
+        if value >= 0:
+            self._border_width = value
+            self._update_image()
+
+    @property
+    def border_radius(self) -> int:
+        return self._border_radius
+    
+    @border_radius.setter
+    def border_radius(self, value: int) -> None:
+        if value >= -1:
+            self._border_radius = value
+            self._update_image()
+
     def _update_image(self) -> None:
         super()._update_image()
-        self.image.fill(self._color)
-
-__all__ = ["Frame"]
+        pygame.draw.rect(self.image, self.color, ((0, 0), self.rect.size), self.border_width, self.border_radius)

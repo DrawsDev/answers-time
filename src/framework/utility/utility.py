@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import pygame
 from typing import Any, Optional, Tuple, List
 
@@ -131,3 +132,19 @@ def open_url(url: str) -> None:
             subprocess.Popen(["xdg-open", url])
         except OSError:
             print("Please open a browser on:", url)
+
+def load_settings() -> dict:
+    filepath = os.path.join(os.getcwd(), "settings.json")
+    if os.path.exists(filepath):
+        with open(filepath, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+def save_settings(settings: dict) -> None:
+    filepath = os.path.join(os.getcwd(), "settings.json")
+    with open(filepath, "w", encoding="utf-8") as file:
+        return json.dump(settings, file, ensure_ascii=False)
+
+def get_default_settings() -> dict:
+    return {
+        "Fullscreen": True
+    }
