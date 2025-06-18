@@ -4,6 +4,8 @@ from src.framework.application import Application
 from src.framework.utility import *
 from src.framework.scene.ui import *
 
+GAP = 4
+
 class UIAboutMenu:
     def __init__(self, app: Application) -> None:
         self.app = app
@@ -74,13 +76,13 @@ class UIAboutMenu:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="#3CA4FF",
+            text_color=Pallete.White,
             text_wraplength=self.app.surface.get_width()
         )
 
         self.menu_title_line = Frame(
             app=self.app,
-            color="#3CA4FF",
+            color=Pallete.White,
             size=(self.app.surface.get_width() - 10, 2),
             position=(self.app.surface.get_width() / 2, self.menu_title.rect.bottom),
             anchor=Anchor.MidTop
@@ -100,7 +102,8 @@ class UIAboutMenu:
             button_color="#4E4E56",
             button_hover_color="#64646E",
             button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "exit.png")
+            button_icon=load_asset(SPRITES, "export.png"),
+            button_border_radius=6
         )
 
     def _create_itch_button(self) -> None:
@@ -108,16 +111,17 @@ class UIAboutMenu:
             app=self.app,
             text="Itch.io. Страница программы на itch.io",
             size=(self.scroll_frame.rect.width / 2, 60),
-            position=(self.scroll_frame.rect.centerx, self.github.rect.bottom + 5),
+            position=(self.scroll_frame.rect.centerx, self.github.rect.bottom + GAP),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
             text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "exit.png")
+            button_color="#FF2449",
+            button_hover_color="#FF2E51",
+            button_press_color="#E1193B",
+            button_icon=load_asset(SPRITES, "export.png"),
+            button_border_radius=6
         )
 
     def _create_telegram_button(self) -> None:
@@ -125,7 +129,7 @@ class UIAboutMenu:
             app=self.app,
             text="Itch.io. Страница программы на itch.io",
             size=(self.scroll_frame.rect.width / 2, 40),
-            position=(self.scroll_frame.rect.centerx, self.copyright.rect.bottom + 20),
+            position=(self.scroll_frame.rect.centerx, self.copyright.rect.bottom + GAP),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
@@ -134,7 +138,8 @@ class UIAboutMenu:
             button_color="#4E4E56",
             button_hover_color="#64646E",
             button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "back.png")
+            button_icon=load_asset(SPRITES, "back.png"),
+            button_border_radius=6
         )
 
     def _create_back_button(self) -> None:
@@ -142,15 +147,16 @@ class UIAboutMenu:
             app=self.app,
             text="Назад",
             size=(130, 40),
-            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - 5),
+            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "back.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "back.png"),
+            button_border_radius=6
         )
