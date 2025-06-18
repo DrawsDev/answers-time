@@ -10,7 +10,7 @@ from src.answerstime.ui import Background
 class Tutorial(Scene):
     def __init__(self, app: Application):
         self.app = app
-        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 0, 10)
         self.ui_group = pygame.sprite.Group()
         self.label = TextLabel(app, "Нажми Q чтобы вернуться в меню")
         self.label.anchor = Anchor.Center

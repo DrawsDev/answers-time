@@ -17,7 +17,7 @@ class Quiz(Scene):
     def __init__(self, app: Application) -> None:
         self.app = app
         self.quiz: QuizObject = None
-        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 0, 10)
         self.ui_quiz = UIQuiz(app)
         self.ui_result = UIResult(app)
         self.ui_timer = UITimer(app)

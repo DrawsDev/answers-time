@@ -20,7 +20,7 @@ class Editor(Scene):
         self.app = app
         self.current_question = -1
         self.quiz = Quiz()
-        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 0, 10)
         self.debug_frame = DebugFrame(app)
         self.explorer = ExplorerFrame(app)
         self.warning = Warning(app)
