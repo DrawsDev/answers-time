@@ -10,7 +10,7 @@ from src.answerstime.ui.editor.layouts import *
 from src.answerstime.ui import Background
 from src.answerstime.quiz import Quiz
 from src.answerstime.question import Question
-from src.answerstime.utility import create_quiz_from_file
+from src.answerstime.utility import *
 
 QUESTION_TEXT = "Текст вопроса"
 ANSWER_TEXT = "Текст ответа"
@@ -91,6 +91,7 @@ class Editor(Scene):
 
         # Меню выбора типа экспорта
         self.ui_select_export_type.back.pressed_callback.set(self._open_menu)
+        self.ui_select_export_type.export_quiz_file.pressed_callback.set(self._open_export_explorer)
 
     def update(self, delta: float) -> None:
         self.debug_frame.update()
@@ -413,9 +414,9 @@ class Editor(Scene):
         self.ui_select_import_type.enabled = False
         self.ui_select_quiz_to_import.enabled = True
 
-    ################################################################
-    # Импорт содержимого из файла теста в системе из меню "Импорт" #
-    ################################################################
+    ###########################################
+    #               Меню Импорт               #
+    ###########################################
 
     def _create_quiz_from_selected_file(self, path: str, filename: str) -> None:
         self.quiz = create_quiz_from_file(os.path.join(path, filename))
@@ -429,7 +430,7 @@ class Editor(Scene):
         self.explorer.cancel_callback.set(self._open_import_select_menu)
         self.explorer.confirm_callback.set(self._create_quiz_from_selected_file)
 
-    ################################################################
+    ###########################################
 
     def _open_answer_edit_menu(self, answer_index: int) -> None:
         self.ui_quiz_editor.enabled = False
@@ -463,5 +464,27 @@ class Editor(Scene):
     def _open_select_export_type_menu(self) -> None:
         self.ui_menu.enabled = False
         self.ui_select_export_type.enabled = True
+        self.warning.enabled = False
+
+    def _open_export_explorer(self) -> None:
+        self.ui_select_export_type.enabled = False
+        self.explorer.open(1)
+        self.explorer.cancel_callback.set(self._open_select_export_type_menu)
+        self.explorer.confirm_callback.set(self._try_export_quiz_file)
+
+    def _try_export_quiz_file(self, destination_path: str) -> None:
+        filename = self.explorer.file_textbox.text + ".json"
+        if os.path.exists(os.path.join(destination_path, filename)):
+            self.warning.enabled = True
+            self.warning.warn1 = f"«{filename}» уже существует."
+            self.warning.warn2 = "Вы хотите заменить его?"
+            self.warning.deny_callback.set(self._open_select_export_type_menu)
+            self.warning.confirm_callback.set((self._export_quiz_file, (filename, destination_path)))
+        else:
+            self._export_quiz_file(filename, destination_path)
+
+    def _export_quiz_file(self, filename: str, destination_path: str) -> None:
+        save_quiz_to_file(self.quiz, os.path.join(destination_path, filename))
+        self._open_menu()
 
     ###########################################

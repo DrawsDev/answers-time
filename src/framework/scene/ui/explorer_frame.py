@@ -69,12 +69,14 @@ class ExplorerFrame(Primitive):
             self.confirm.text = "Выбрать"
             self.file_textbox.text = ""
             self.file_textbox.textinput_enabled = False
+            self.confirm.pressed_callback.set()
             self._behavior = behavior
             self.enabled = True
         elif behavior == 1: # Экспорт файла
             self.confirm.text = "Сохранить"
             self.file_textbox.text = ""
             self.file_textbox.textinput_enabled = True
+            self.confirm.pressed_callback.set(self._export_confirm)
             self._behavior = behavior
             self.enabled = True
 
@@ -126,6 +128,11 @@ class ExplorerFrame(Primitive):
         self._enabled = False
         self._confirm_callback(path, filename)
 
+    def _export_confirm(self) -> None:
+        if len(self.file_textbox.text) > 0:
+            self._enabled = False
+            self._confirm_callback(self._explorer.current_path)
+
     def _select_file(self, path: str, filename: str) -> None:
         if self._behavior == 0:
             filepath = os.path.join(path, filename)
@@ -136,7 +143,7 @@ class ExplorerFrame(Primitive):
         if self._behavior == 0:
             target = ".json"
         elif self._behavior == 1:
-            target = None
+            target = ".NOPE"
 
         for index, file in enumerate(self._explorer.list_content(target_extension=target)):
             button = TextButton(

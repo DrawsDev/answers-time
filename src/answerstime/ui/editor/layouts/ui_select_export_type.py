@@ -15,14 +15,14 @@ class UISelectExportType:
         self._create_title_label()
         self._create_title_line()
         self._create_back_button()
-        self._create_from_exists_quiz_button()
-        self._create_from_file_button()
+        self._create_export_quiz_file_button()
+        self._create_compose_button()
         self._layout.insert_child(
             self.title,
             self.title_line,
             self.back,
-            self.from_exists_quiz,
-            self.from_file
+            self.export_quiz_file,
+            self.compose
         )
 
     @property
@@ -83,8 +83,8 @@ class UISelectExportType:
             button_border_radius=6
         )
 
-    def _create_from_exists_quiz_button(self) -> None:
-        self.from_exists_quiz = TextButton(
+    def _create_export_quiz_file_button(self) -> None:
+        self.export_quiz_file = TextButton(
             app=self.app,
             text="Экспорт файла с тестом",
             size=(260, 40),
@@ -101,12 +101,12 @@ class UISelectExportType:
             button_border_radius=6
         )
 
-    def _create_from_file_button(self) -> None:
-        self.from_file = TextButton(
+    def _create_compose_button(self) -> None:
+        self.compose = TextButton(
             app=self.app,
             text="Скомпоновать в отдельный исполняемый файл",
             size=(260, 40),
-            position=(self.from_exists_quiz.rect.centerx, self.from_exists_quiz.rect.bottom + GAP),
+            position=(self.export_quiz_file.rect.centerx, self.export_quiz_file.rect.bottom + GAP),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
