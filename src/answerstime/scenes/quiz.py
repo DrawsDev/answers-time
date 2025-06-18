@@ -2,12 +2,14 @@ import time
 import copy
 import pygame
 from typing import Union
+from src.framework.enums import *
 from src.framework.settings import *
 from src.framework.application import Application
 from src.framework.utility import *
 from src.framework.scene import Scene
 from src.framework.scene.ui import *
 from src.answerstime.ui.quiz.layouts import *
+from src.answerstime.ui import Background
 from src.answerstime.quiz import Quiz as QuizObject
 from src.answerstime.utility import *
 
@@ -15,6 +17,7 @@ class Quiz(Scene):
     def __init__(self, app: Application) -> None:
         self.app = app
         self.quiz: QuizObject = None
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.ui_quiz = UIQuiz(app)
         self.ui_result = UIResult(app)
         self.ui_timer = UITimer(app)
@@ -42,6 +45,7 @@ class Quiz(Scene):
         self.ui_tip.back.pressed_callback.set(self._back_to_quiz)
 
     def update(self, delta: float) -> None:
+        self.background.update(delta)
         self.ui_quiz.update(delta)
         self.ui_result.update(delta)
         self.ui_tip.update(delta)
@@ -56,7 +60,8 @@ class Quiz(Scene):
                 self._show_result()
     
     def draw(self, surface: pygame.Surface) -> None:
-        surface.fill("gray")
+        surface.fill(Pallete.ATBlue5)
+        self.background.draw(surface)
         self.ui_quiz.draw(surface)
         self.ui_result.draw(surface)
         self.ui_tip.draw(surface)

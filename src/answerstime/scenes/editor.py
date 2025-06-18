@@ -7,6 +7,7 @@ from src.framework.application import Application
 from src.framework.scene import Scene
 from src.framework.scene.ui import *
 from src.answerstime.ui.editor.layouts import *
+from src.answerstime.ui import Background
 from src.answerstime.quiz import Quiz
 from src.answerstime.question import Question
 from src.answerstime.utility import create_quiz_from_file
@@ -19,6 +20,7 @@ class Editor(Scene):
         self.app = app
         self.current_question = -1
         self.quiz = Quiz()
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.debug_frame = DebugFrame(app)
         self.explorer = ExplorerFrame(app, 1)
         self.warn = WarnFrame(app)
@@ -89,6 +91,7 @@ class Editor(Scene):
 
     def update(self, delta: float) -> None:
         self.debug_frame.update()
+        self.background.update(delta)
         self.explorer.update(delta)
         self.warn.update(delta)
         self.ui_menu.update(delta)
@@ -102,7 +105,8 @@ class Editor(Scene):
         self.ui_select_quiz_to_import.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
-        surface.fill("gray")
+        surface.fill(Pallete.ATBlue5)
+        self.background.draw(surface)
         self.ui_select_quiz_to_import.draw(surface)
         self.ui_select_import_type.draw(surface)
         self.ui_answer_edit_menu.draw(surface)
