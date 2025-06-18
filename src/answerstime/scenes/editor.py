@@ -23,7 +23,7 @@ class Editor(Scene):
         self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.debug_frame = DebugFrame(app)
         self.explorer = ExplorerFrame(app, 1)
-        self.warn = WarnFrame(app)
+        self.warn = Warning(app)
         self.ui_menu = UIMenu(app)
         self.ui_quiz_editor = UIQuizEditor(app)
         self.ui_quiz_info_editor = UIQuizInfoEditor(app)

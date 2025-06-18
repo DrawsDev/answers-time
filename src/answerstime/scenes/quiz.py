@@ -22,8 +22,8 @@ class Quiz(Scene):
         self.ui_result = UIResult(app)
         self.ui_timer = UITimer(app)
         self.ui_tip = UITip(app)
-        self.warn = WarnFrame(app, "Вы уверены, что хотите прервать тестирование?", "")
-        self.info = InfoFrame(app, "Не указан вариант ответа.")
+        self.warn = Warning(app, "Вы уверены, что хотите прервать тестирование?", "")
+        self.info = Notification(app, "Не указан вариант ответа.")
 
     def on_enter(self, **kwargs):
         filename = kwargs.get("filename")

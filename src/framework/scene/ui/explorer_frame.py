@@ -16,7 +16,7 @@ class ExplorerFrame(Primitive):
         super().__init__(app, SURFACE_SIZE, (0, 0), "topleft", 10)
         self._enabled = False
         self._explorer = Explorer()
-        self._warn = WarnFrame(app, "«Файл» уже существует.", "Вы хотите заменить его?")
+        self._warn = Warning(app, "«Файл» уже существует.", "Вы хотите заменить его?")
         self._layout = Layout(True)
         self._title = self._create_title_label()
         self._line = self._create_title_line()

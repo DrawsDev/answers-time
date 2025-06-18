@@ -10,6 +10,6 @@ from .text_label import TextLabel
 from .image_label import ImageLabel
 from .text_button import TextButton
 from .scroll_frame import ScrollFrame
-from .warn_frame import WarnFrame
-from .info_frame import InfoFrame
+from .warning import Warning
+from .notification import Notification
 from .explorer_frame import ExplorerFrame

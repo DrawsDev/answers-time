@@ -6,7 +6,7 @@ from src.framework.application import Application
 from src.framework.callback import *
 from src.framework.scene.ui import *
 
-class InfoFrame(Primitive):
+class Notification(Primitive):
     def __init__(
         self, 
         app: Application, 
