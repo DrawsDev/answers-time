@@ -15,7 +15,6 @@ class UIEditorMenu:
         self.app = app
         self._enabled = False
         self._layout = Layout(False)
-        self.explorer = ExplorerFrame(app)
         self._create_title_label()
         self._create_title_line()
         self._create_back_button()
@@ -28,8 +27,7 @@ class UIEditorMenu:
             self.back, 
             self.new, 
             self.imp, 
-            self.scroll_frame, 
-            self.explorer
+            self.scroll_frame
         )
 
     @property

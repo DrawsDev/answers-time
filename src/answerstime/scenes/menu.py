@@ -5,12 +5,16 @@ from src.framework.utility import *
 from src.framework.application import Application
 from src.framework.scene import Scene
 from src.framework.scene.ui import DebugFrame
+from src.framework.scene.ui import ExplorerFrame
 from src.answerstime.ui.menu.layouts import *
+from src.answerstime.ui import Background
 
 class Menu(Scene):
     def __init__(self, app: Application):
         self.app = app
         self.debug_frame = DebugFrame(app)
+        self.explorer = ExplorerFrame(app)
+        self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.ui_menu = UIMenu(app)
         self.ui_start_menu = UIStartMenu(app)
         self.ui_quiz_select_menu = UIQuizSelectMenu(app)
@@ -68,6 +72,7 @@ class Menu(Scene):
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = False
             self.ui_editor_menu.create_buttons(go_to_editor_with_exists_quiz)
+            self.explorer.enabled = False
         def open_settings_menu() -> None:
             self.ui_menu.layout.enabled = False
             self.ui_start_menu.layout.enabled = False
@@ -94,8 +99,13 @@ class Menu(Scene):
             self.ui_new_quiz_menu.layout.enabled = True
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = False
-        def open_import() -> None:
-            self.ui_editor_menu.explorer.enabled = True
+        def open_editor_menu_import() -> None:
+            self.explorer.enabled = True
+            self.explorer.close_callback.set(close_editor_menu_import)
+            self.ui_editor_menu.enabled = False
+        def close_editor_menu_import() -> None:
+            self.ui_editor_menu.enabled = True
+            self.ui_editor_menu.create_buttons(go_to_editor_with_exists_quiz)
         # Меню
         self.ui_menu.start.pressed_callback = open_start_menu
         self.ui_menu.editor.pressed_callback = open_editor_menu
@@ -110,8 +120,7 @@ class Menu(Scene):
         # Меню редактора
         self.ui_editor_menu.back.pressed_callback = open_menu
         self.ui_editor_menu.new.pressed_callback = open_new_quiz_menu
-        self.ui_editor_menu.imp.pressed_callback = open_import
-        self.ui_editor_menu.explorer.close_callback.set((self.ui_editor_menu.create_buttons, (go_to_editor_with_exists_quiz,)))
+        self.ui_editor_menu.imp.pressed_callback = open_editor_menu_import
         # Меню создания нового теста
         self.ui_new_quiz_menu.create.pressed_callback = go_to_editor_with_new_quiz
         self.ui_new_quiz_menu.back.pressed_callback = open_editor_menu
@@ -126,6 +135,7 @@ class Menu(Scene):
 
     def update(self, delta: float) -> None:
         self.debug_frame.update()
+        self.background.update(delta)
         self.ui_menu.layout.update(delta)
         self.ui_start_menu.layout.update(delta)
         self.ui_quiz_select_menu.update(delta)
@@ -134,9 +144,11 @@ class Menu(Scene):
         self.ui_settings_menu.layout.update(delta)
         self.ui_about_menu.layout.update(delta)
         self.ui_editor_quiz_info_menu.layout.update(delta)
+        self.explorer.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
-        surface.fill("gray")
+        surface.fill(Pallete.ATBlue5)
+        self.background.draw(surface)
         self.ui_menu.layout.draw(surface)
         self.ui_start_menu.layout.draw(surface)
         self.ui_quiz_select_menu.draw(surface)
@@ -146,3 +158,4 @@ class Menu(Scene):
         self.ui_about_menu.layout.draw(surface)
         self.ui_editor_quiz_info_menu.layout.draw(surface)
         self.debug_frame.draw(surface)
+        self.explorer.draw(surface)
