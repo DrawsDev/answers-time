@@ -58,6 +58,9 @@ class Input:
     def is_alt(self) -> bool:
         return self.is_key_down("left alt") or self.is_key_down("right alt")
 
+    def is_enter(self) -> bool:
+        return self.is_key_pressed("return") or self.is_key_pressed("enter")
+
     def is_key_pressed(self, key: str) -> bool:
         return key in self._pressed_keys
 
