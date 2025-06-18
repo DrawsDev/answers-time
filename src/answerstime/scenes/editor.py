@@ -22,8 +22,8 @@ class Editor(Scene):
         self.quiz = Quiz()
         self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.debug_frame = DebugFrame(app)
-        self.explorer = ExplorerFrame(app, 1)
-        self.warn = Warning(app)
+        self.explorer = ExplorerFrame(app)
+        self.warning = Warning(app)
         self.ui_menu = UIMenu(app)
         self.ui_quiz_editor = UIQuizEditor(app)
         self.ui_quiz_info_editor = UIQuizInfoEditor(app)
@@ -47,8 +47,8 @@ class Editor(Scene):
             self._create_quiz_with_title("Новый тест")
 
         # Проводник для импорта из файла системы
-        self.explorer.close_callback.set((self._create_quiz_from_file, ("explorer",)))
-        self.explorer._cancel.pressed_callback.set(self._open_import_select_menu)
+        # self.explorer.close_callback.set((self._create_quiz_from_file, ("explorer",)))
+        # self.explorer._cancel.pressed_callback.set(self._open_import_select_menu)
         # Меню
         self.ui_menu.back.pressed_callback.set(self._open_quiz_editor)
         self.ui_menu.save.pressed_callback.set((self._save_quiz, (filename,)))
@@ -93,7 +93,7 @@ class Editor(Scene):
         self.debug_frame.update()
         self.background.update(delta)
         self.explorer.update(delta)
-        self.warn.update(delta)
+        self.warning.update(delta)
         self.ui_menu.update(delta)
         self.ui_quiz_editor.update(delta)
         self.ui_quiz_info_editor.update(delta)
@@ -116,7 +116,7 @@ class Editor(Scene):
         self.ui_quiz_info_editor.draw(surface)
         self.ui_quiz_editor.draw(surface)
         self.ui_menu.draw(surface)
-        self.warn.draw(surface)
+        self.warning.draw(surface)
         self.explorer.draw(surface)
         self.debug_frame.draw(surface)
 
@@ -175,11 +175,11 @@ class Editor(Scene):
     def _try_remove_current_question(self) -> None:
         if len(self.quiz.questions) > 1:
             self.ui_quiz_editor.enabled = False
-            self.warn.enabled = True
-            self.warn.warn1 = "Вы уверены, что хотите удалить вопрос?"
-            self.warn.warn2 = "Данное действие невозможно будет отменить."
-            self.warn.confirm_callback.set(self._remove_current_question)
-            self.warn.deny_callback.set(self._open_quiz_editor)
+            self.warning.enabled = True
+            self.warning.warn1 = "Вы уверены, что хотите удалить вопрос?"
+            self.warning.warn2 = "Данное действие невозможно будет отменить."
+            self.warning.confirm_callback.set(self._remove_current_question)
+            self.warning.deny_callback.set(self._open_quiz_editor)
 
     def _remove_current_question(self) -> None:
         if len(self.quiz.questions) > 1:
@@ -225,11 +225,11 @@ class Editor(Scene):
         or (question.type == 3 and number_of_options > 2) \
         or (question.type == 4 and number_of_options > 2):
             self.ui_quiz_editor.enabled = False
-            self.warn.enabled = True
-            self.warn.warn1 = "Вы уверены, что хотите удалить ответ?"
-            self.warn.warn2 = "Данное действие невозможно будет отменить."
-            self.warn.confirm_callback.set((self._remove_answer, (answer_index,)))
-            self.warn.deny_callback.set(self._open_quiz_editor)
+            self.warning.enabled = True
+            self.warning.warn1 = "Вы уверены, что хотите удалить ответ?"
+            self.warning.warn2 = "Данное действие невозможно будет отменить."
+            self.warning.confirm_callback.set((self._remove_answer, (answer_index,)))
+            self.warning.deny_callback.set(self._open_quiz_editor)
 
     def _remove_answer(self, answer_index: int) -> None:
         question = self.quiz.questions[self.current_question]
@@ -338,7 +338,6 @@ class Editor(Scene):
         self._open_quiz_editor()
 
     def _create_quiz_from_file(self, filepath: str) -> None:
-        if filepath == "explorer": filepath = self.explorer._path
         self.quiz = create_quiz_from_file(filepath)
         self.current_question = 0
         self._update_quiz_info_ui()
@@ -357,11 +356,11 @@ class Editor(Scene):
     def _try_to_exit_editor(self) -> None:
         self.ui_menu.enabled = False
         self.ui_quiz_info_editor.enabled = False
-        self.warn.enabled = True
-        self.warn.warn1 = "Вы уверены, что хотите выйти?"
-        self.warn.warn2 = "Все несохранённые изменения будут потеряны."
-        self.warn.confirm_callback.set(self._exit_editor)
-        self.warn.deny_callback.set(self._open_menu)
+        self.warning.enabled = True
+        self.warning.warn1 = "Вы уверены, что хотите выйти?"
+        self.warning.warn2 = "Все несохранённые изменения будут потеряны."
+        self.warning.confirm_callback.set(self._exit_editor)
+        self.warning.deny_callback.set(self._open_menu)
 
     def _exit_editor(self) -> None:
         self.app.change_scene("Menu")
@@ -373,15 +372,13 @@ class Editor(Scene):
         self.ui_answer_edit_menu.enabled = False
         self.ui_select_quiz_to_import.enabled = False
         self.ui_question_settings.enabled = False
-        self.explorer.enabled = False
-        self.warn.enabled = False
+        self.warning.enabled = False
 
     def _open_menu(self) -> None:
         self.ui_menu.enabled = True
         self.ui_quiz_editor.enabled = False
         self.ui_quiz_info_editor.enabled = False
-        self.warn.enabled = False
-        self.explorer.enabled = False
+        self.warning.enabled = False
         self.ui_select_import_type.enabled = False
         self.ui_select_quiz_to_import.enabled = False
         self.ui_quiz_rules_editor.enabled = False
@@ -410,9 +407,23 @@ class Editor(Scene):
         self.ui_select_import_type.enabled = False
         self.ui_select_quiz_to_import.enabled = True
 
+    ################################################################
+    # Импорт содержимого из файла теста в системе из меню "Импорт" #
+    ################################################################
+
+    def _create_quiz_from_selected_file(self, path: str, filename: str) -> None:
+        self.quiz = create_quiz_from_file(os.path.join(path, filename))
+        self.current_question = 0
+        self._update_quiz_info_ui()
+        self._open_quiz_editor()
+
     def _open_import_explorer(self) -> None:
         self.ui_select_import_type.enabled = False
-        self.explorer.enabled = True
+        self.explorer.open(0)
+        self.explorer.cancel_callback.set(self._open_import_select_menu)
+        self.explorer.confirm_callback.set(self._create_quiz_from_selected_file)
+
+    ################################################################
 
     def _open_answer_edit_menu(self, answer_index: int) -> None:
         self.ui_quiz_editor.enabled = False

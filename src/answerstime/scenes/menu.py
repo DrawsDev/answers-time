@@ -6,6 +6,7 @@ from src.framework.application import Application
 from src.framework.scene import Scene
 from src.framework.scene.ui import DebugFrame
 from src.framework.scene.ui import ExplorerFrame
+from src.framework.scene.ui import *
 from src.answerstime.ui.menu.layouts import *
 from src.answerstime.ui import Background
 
@@ -13,6 +14,7 @@ class Menu(Scene):
     def __init__(self, app: Application):
         self.app = app
         self.debug_frame = DebugFrame(app)
+        self.warning = Warning(app)
         self.explorer = ExplorerFrame(app)
         self.background = Background(load_asset(SPRITES, "quiz_background.png"), 10, 10)
         self.ui_menu = UIMenu(app)
@@ -100,8 +102,9 @@ class Menu(Scene):
             self.ui_settings_menu.layout.enabled = False
             self.ui_about_menu.layout.enabled = False
         def open_editor_menu_import() -> None:
-            self.explorer.enabled = True
-            self.explorer.close_callback.set(close_editor_menu_import)
+            self.explorer.open(0)
+            self.explorer.cancel_callback.set(close_editor_menu_import)
+            self.explorer.confirm_callback.set(self._try_import_quiz_file)
             self.ui_editor_menu.enabled = False
         def close_editor_menu_import() -> None:
             self.ui_editor_menu.enabled = True
@@ -145,6 +148,7 @@ class Menu(Scene):
         self.ui_about_menu.layout.update(delta)
         self.ui_editor_quiz_info_menu.layout.update(delta)
         self.explorer.update(delta)
+        self.warning.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill(Pallete.ATBlue5)
@@ -159,3 +163,36 @@ class Menu(Scene):
         self.ui_editor_quiz_info_menu.layout.draw(surface)
         self.debug_frame.draw(surface)
         self.explorer.draw(surface)
+        self.warning.draw(surface)
+
+    def _try_import_quiz_file(self, path: str, filename: str) -> None:
+        self.ui_editor_menu.enabled = True
+        
+        if os.path.exists(asset_path(QUIZZES, filename)):
+            self.ui_editor_menu.enabled = False
+            self.warning.enabled = True
+            self.warning.warn1 = f"«{filename}» уже существует."
+            self.warning.warn2 = "Вы хотите заменить его?"
+            self.warning.confirm_callback.set((self._import_quiz_file_and_open_editor_menu, (os.path.join(path, filename), asset_path(QUIZZES))))
+            self.warning.deny_callback.set(self._open_editor_menu)
+        else:
+            self._import_quiz_file_and_open_editor_menu(os.path.join(path, filename), asset_path(QUIZZES))
+
+    def _import_quiz_file_and_open_editor_menu(self, source_path: str, destination_path: str) -> None:
+        self.explorer.copy(source_path, destination_path)
+        self._open_editor_menu()
+
+    def _open_editor_menu(self) -> None:
+            self.ui_editor_menu.enabled = True
+            self.ui_editor_menu.create_buttons(self._go_to_editor_with_exists_quiz)
+            self.ui_menu.layout.enabled = False
+            self.ui_start_menu.layout.enabled = False
+            self.ui_quiz_select_menu.enabled = False
+            self.ui_new_quiz_menu.layout.enabled = False
+            self.ui_settings_menu.layout.enabled = False
+            self.ui_about_menu.layout.enabled = False
+            self.explorer.enabled = False
+            self.warning.enabled = False
+
+    def _go_to_editor_with_exists_quiz(self, filename: str) -> None:
+        self.app.change_scene("Editor", filename=filename)

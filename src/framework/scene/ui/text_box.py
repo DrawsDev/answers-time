@@ -3,7 +3,7 @@ import pygame
 from typing import Tuple, Optional
 from src.framework.enums import *
 from src.framework.application import Application
-from src.framework.inputbox import InputBox
+from src.framework.textinput import TextInput
 from src.framework.callback import *
 from src.framework.scene.ui import *
 
@@ -20,29 +20,36 @@ class TextBox(Primitive):
         font_path: Optional[str] = None,
         font_size: int = 20,
         font_align: Align = Align.Left,
-        text_color: pygame.Color = "white",
-        maxlength: int = 64
+        text_color: pygame.Color = "#000000",
+        placeholder_color: pygame.Color = "#A0A0A0",
+        maxlength: int = 64,
+        line_length: int = 0,
+        backcolor_focus: pygame.Color = "#FFFFFF",
+        backcolor_unfocus: pygame.Color = "#FFFFFF"
     ) -> None:
         super().__init__(app, size, position, anchor, z_index)
         self._selectable = True
         self._dragging = False
         self._focus = False
         self._focus_lost_callback = Callback()
-        self._input_box = InputBox(app, text, placeholder, maxlength)
+        self._input_box = TextInput(app, text, placeholder, maxlength, line_length)
         self._input_box.enabled = True
         self._font = pygame.Font(font_path, font_size)
         self._font_path = font_path
         self._font.align = font_align
         self._text_color = text_color
+        self._placeholder_color = placeholder_color
         self._text_rect = pygame.Rect()
-        self._cursor_color = "white"
-        self._cursor_selection_color = [0, 0, 255, 100]
+        self._cursor_color = "Black"
+        self._cursor_selection_color = "Gray"
         self._cursor_visibled = True
         self._cursor_visible_time = 0.5
         self._cursor_invisible_time = 0.75
         self._cursor_previous_time = 0
         self._cursor_click_count = 0
         self._cursor_previous_click_time = 0
+        self._backcolor_focus = backcolor_focus
+        self._backcolor_unfocus = backcolor_unfocus
         self._update_image()
 
     @property
@@ -77,6 +84,32 @@ class TextBox(Primitive):
     @property
     def focus_lost_callback(self) -> Callback:
         return self._focus_lost_callback
+
+    @property
+    def textinput_enabled(self) -> bool:
+        return self._input_box.enabled
+    
+    @textinput_enabled.setter
+    def textinput_enabled(self, value: bool) -> None:
+        self._input_box.enabled = value
+
+    @property
+    def backcolor_focus(self) -> pygame.Color:
+        return self._backcolor_focus
+    
+    @backcolor_focus.setter
+    def backcolor_focus(self, value: pygame.Color) -> None:
+        self._backcolor_focus = value
+        self._update_image()
+
+    @property
+    def backcolor_unfocus(self) -> pygame.Color:
+        return self._backcolor_unfocus
+    
+    @backcolor_unfocus.setter
+    def backcolor_unfocus(self, value: pygame.Color) -> None:
+        self._backcolor_unfocus = value
+        self._update_image()
 
     def _get_cursor_position_from_mouse(self) -> int:
         mouse_position = self.app.input.get_mouse_position()
@@ -175,7 +208,7 @@ class TextBox(Primitive):
 
     def _draw_text(self) -> None:
         if self._input_box.text == "":
-            text_surface = self._font.render(self._input_box.placeholder, True, self._text_color)
+            text_surface = self._font.render(self._input_box.placeholder, True, self._placeholder_color)
             text_surface.set_alpha(150)
         else:
             text_surface = self._font.render(self._input_box.text, True, self._text_color)
@@ -192,7 +225,8 @@ class TextBox(Primitive):
             ))
 
     def _update_image(self):
-        self.image.fill("darkgray")
+        color = self.backcolor_focus if self._focus else self.backcolor_unfocus
+        pygame.draw.rect(self.image, color, ((0, 0), self.rect.size), 0, 6)
         self._draw_selection_range()
         self._draw_text()
         self._draw_cursor()
