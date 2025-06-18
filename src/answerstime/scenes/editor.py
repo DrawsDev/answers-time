@@ -33,6 +33,7 @@ class Editor(Scene):
         self.ui_answer_edit_menu = UIAnswerEditMenu(app)
         self.ui_select_import_type = UISelectImportType(app)
         self.ui_select_quiz_to_import = UISelectQuizToImport(app)
+        self.ui_select_export_type = UISelectExportType(app)
         
     def on_enter(self, **kwargs) -> None:
         title = kwargs.get("title")
@@ -46,15 +47,14 @@ class Editor(Scene):
         else:
             self._create_quiz_with_title("Новый тест")
 
-        # Проводник для импорта из файла системы
-        # self.explorer.close_callback.set((self._create_quiz_from_file, ("explorer",)))
-        # self.explorer._cancel.pressed_callback.set(self._open_import_select_menu)
         # Меню
         self.ui_menu.back.pressed_callback.set(self._open_quiz_editor)
         self.ui_menu.save.pressed_callback.set((self._save_quiz, (filename,)))
         self.ui_menu.info.pressed_callback.set(self._open_quiz_info)
         self.ui_menu.exit.pressed_callback.set(self._try_to_exit_editor)
         self.ui_menu.imp.pressed_callback.set(self._open_import_select_menu)
+        self.ui_menu.exp.pressed_callback.set(self._open_select_export_type_menu)
+
         # Кнопки и поля в редакторе
         self.ui_quiz_editor.menu.pressed_callback.set(self._open_menu)
         self.ui_quiz_editor.settings.pressed_callback.set(self._open_question_settings)
@@ -89,6 +89,9 @@ class Editor(Scene):
         # Импорт из существующего теста
         self.ui_select_quiz_to_import.back.pressed_callback.set(self._open_import_select_menu)
 
+        # Меню выбора типа экспорта
+        self.ui_select_export_type.back.pressed_callback.set(self._open_menu)
+
     def update(self, delta: float) -> None:
         self.debug_frame.update()
         self.background.update(delta)
@@ -103,6 +106,7 @@ class Editor(Scene):
         self.ui_answer_edit_menu.update(delta)
         self.ui_select_import_type.update(delta)
         self.ui_select_quiz_to_import.update(delta)
+        self.ui_select_export_type.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill(Pallete.ATBlue5)
@@ -115,6 +119,7 @@ class Editor(Scene):
         self.ui_quiz_rules_editor.draw(surface)
         self.ui_quiz_info_editor.draw(surface)
         self.ui_quiz_editor.draw(surface)
+        self.ui_select_export_type.draw(surface)
         self.ui_menu.draw(surface)
         self.warning.draw(surface)
         self.explorer.draw(surface)
@@ -382,6 +387,7 @@ class Editor(Scene):
         self.ui_select_import_type.enabled = False
         self.ui_select_quiz_to_import.enabled = False
         self.ui_quiz_rules_editor.enabled = False
+        self.ui_select_export_type.enabled = False
 
     def _open_new_question(self) -> None:
         self.ui_quiz_editor.enabled = False
@@ -449,3 +455,13 @@ class Editor(Scene):
     def _open_question_settings(self) -> None:
         self.ui_quiz_editor.enabled = False
         self.ui_question_settings.enabled = True
+
+    ###########################################
+    #              Меню экспорта              #
+    ###########################################
+
+    def _open_select_export_type_menu(self) -> None:
+        self.ui_menu.enabled = False
+        self.ui_select_export_type.enabled = True
+
+    ###########################################
