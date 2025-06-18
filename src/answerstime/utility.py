@@ -51,3 +51,7 @@ def create_quiz_from_file(filepath: str) -> Quiz:
             quiz_data.get("Author"),
             create_questions_from_dict(quiz_data.get("Questions"))
         )    
+    
+def save_quiz_to_file(quiz: Quiz, filepath: str) -> None:
+    with open(filepath, "w", encoding="utf-8") as file:
+        json.dump(quiz.dump(), file, ensure_ascii=False)
