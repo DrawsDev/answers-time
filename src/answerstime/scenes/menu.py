@@ -38,7 +38,7 @@ class Menu(Scene):
             self.ui_menu.layout.enabled = True
             self.ui_quiz_select_menu.enabled = False
             self.ui_editor_menu.enabled = False
-            self.ui_new_quiz_menu.layout.enabled = False
+            self.ui_new_quiz_menu.enabled = False
             self.ui_settings_menu.enabled = False
             self.ui_about_menu.layout.enabled = False
             self.ui_about_menu.scroll_frame.enabled = False
@@ -46,7 +46,7 @@ class Menu(Scene):
             self.ui_menu.layout.enabled = False
             self.ui_quiz_select_menu.enabled = False
             self.ui_editor_menu.enabled = True
-            self.ui_new_quiz_menu.layout.enabled = False
+            self.ui_new_quiz_menu.enabled = False
             self.ui_settings_menu.enabled = False
             self.ui_about_menu.layout.enabled = False
             self.ui_editor_menu.create_buttons(go_to_editor_with_exists_quiz)
@@ -55,14 +55,14 @@ class Menu(Scene):
             self.ui_menu.layout.enabled = False
             self.ui_quiz_select_menu.enabled = False
             self.ui_editor_menu.enabled = False
-            self.ui_new_quiz_menu.layout.enabled = False
+            self.ui_new_quiz_menu.enabled = False
             self.ui_settings_menu.enabled = True
             self.ui_about_menu.layout.enabled = False
         def open_about_menu() -> None:
             self.ui_menu.layout.enabled = False
             self.ui_quiz_select_menu.enabled = False
             self.ui_editor_menu.enabled = False
-            self.ui_new_quiz_menu.layout.enabled = False
+            self.ui_new_quiz_menu.enabled = False
             self.ui_settings_menu.enabled = False
             self.ui_about_menu.layout.enabled = True
             self.ui_about_menu.scroll_frame.reset_scrolling()
@@ -71,7 +71,7 @@ class Menu(Scene):
             self.ui_menu.layout.enabled = False
             self.ui_quiz_select_menu.enabled = False
             self.ui_editor_menu.enabled = False
-            self.ui_new_quiz_menu.layout.enabled = True
+            self.ui_new_quiz_menu.enabled = True
             self.ui_settings_menu.enabled = False
             self.ui_about_menu.layout.enabled = False
         def open_editor_menu_import() -> None:
@@ -118,7 +118,7 @@ class Menu(Scene):
         self.ui_menu.layout.update(delta)
         self.ui_quiz_select_menu.update(delta)
         self.ui_editor_menu.update(delta)
-        self.ui_new_quiz_menu.layout.update(delta)
+        self.ui_new_quiz_menu.update(delta)
         self.ui_settings_menu.update(delta)
         self.ui_about_menu.layout.update(delta)
         self.ui_editor_quiz_info_menu.layout.update(delta)
@@ -131,7 +131,7 @@ class Menu(Scene):
         self.ui_menu.layout.draw(surface)
         self.ui_quiz_select_menu.draw(surface)
         self.ui_editor_menu.draw(surface)
-        self.ui_new_quiz_menu.layout.draw(surface)
+        self.ui_new_quiz_menu.draw(surface)
         self.ui_settings_menu.draw(surface)
         self.ui_about_menu.layout.draw(surface)
         self.ui_editor_quiz_info_menu.layout.draw(surface)

@@ -145,7 +145,7 @@ class UIAboutMenu:
     def _create_back_button(self) -> None:
         self.back = TextButton(
             app=self.app,
-            text="Назад",
+            text="Вернуться в меню",
             size=(130, 40),
             position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
