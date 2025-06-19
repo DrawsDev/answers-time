@@ -80,7 +80,9 @@ class Quiz(Scene):
 
     def _update_ui_question_info(self) -> None:
         question = self.quiz.questions[self.quiz.question_index]
+        question_type_texts = ["Выберите один правильный ответ", "Выберите несколько правильных ответов", "Введите ответ при помощи клавиатуры", "Установите правильную последовательность", "Установите правильное соответствие"]
         self.ui_quiz.question_number.text = f"Вопрос {self.quiz.get_question_number()} из {len(self.quiz.questions)}"
+        self.ui_quiz.question_type.text = question_type_texts[question.type]
         self.ui_quiz.question_title.text = question.title
 
         if self.quiz.question_index == len(self.quiz.questions) - 1:

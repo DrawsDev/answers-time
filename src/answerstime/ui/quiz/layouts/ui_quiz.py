@@ -18,6 +18,7 @@ class UIQuiz:
         self._answers = []
         self._create_complete_button()
         self._create_question_number_label()
+        self._create_question_type_label()
         self._create_question_title_frame()
         self._create_question_title_label()
         self._create_answer_button()
@@ -26,6 +27,7 @@ class UIQuiz:
         self._layout.insert_child(
             self.complete,
             self.question_number,
+            self.question_type,
             self.question_frame,
             self.question_title,
             self.answer,
@@ -135,12 +137,25 @@ class UIQuiz:
         self.question_number = TextLabel(
             app=self.app,
             text="Вопрос 0 из 0",
-            position=(self.app.surface.get_width() / 2, 11),
+            position=(self.app.surface.get_width() / 2, 2),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
             text_color=Pallete.White,
+            text_wraplength=self.app.surface.get_width()
+        )
+
+    def _create_question_type_label(self) -> TextLabel:
+        self.question_type = TextLabel(
+            app=self.app,
+            text="Тип вопроса",
+            position=(self.app.surface.get_width() / 2, self.question_number.rect.bottom),
+            anchor=Anchor.MidTop,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color=Pallete.ATBlue2,
             text_wraplength=self.app.surface.get_width()
         )
 
