@@ -141,8 +141,7 @@ class UIQuizInfoEditor:
             anchor=Anchor.MidLeft,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color=Pallete.White
+            font_align=Align.Left
         )
 
     def _create_quiz_description_input(self) -> None:
@@ -155,8 +154,7 @@ class UIQuizInfoEditor:
             anchor=Anchor.MidLeft,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color=Pallete.White
+            font_align=Align.Left
         )
 
     def _create_quiz_author_input(self) -> None:
@@ -169,8 +167,7 @@ class UIQuizInfoEditor:
             anchor=Anchor.MidLeft,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color=Pallete.White
+            font_align=Align.Left
         )
 
     def _create_quiz_rules_button(self) -> None:

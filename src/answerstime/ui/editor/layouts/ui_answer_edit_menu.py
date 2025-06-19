@@ -103,8 +103,7 @@ class UIAnswerEditMenu:
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color="white"
+            font_align=Align.Left
         )
 
     def _create_text_2_textbox(self) -> None:
@@ -118,6 +117,5 @@ class UIAnswerEditMenu:
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color="white"
+            font_align=Align.Left
         )

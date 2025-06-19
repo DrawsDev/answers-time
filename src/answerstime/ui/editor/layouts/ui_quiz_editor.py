@@ -253,7 +253,5 @@ class UIQuizEditor:
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left,
-            text_color=Pallete.White,
-            line_length=10
+            font_align=Align.Left
         )
