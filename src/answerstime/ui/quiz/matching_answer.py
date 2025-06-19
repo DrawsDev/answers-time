@@ -66,9 +66,9 @@ class MatchingAnswer(Primitive):
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#8F8F9E")
-        self.image.fill("#747484", (0, 0, self.rect.width, 80))
-        pygame.draw.polygon(self.image, "#747484", [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, (0, 0, self.rect.width, 80), 0, -1, 6, 6)
+        pygame.draw.polygon(self.image, Pallete.ATBlue1, [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
     
     def _create_move_1_button(self) -> None:
         self.move_1 = TextButton(
@@ -107,7 +107,7 @@ class MatchingAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.ATBlue5,
             text_wraplength=self.rect.width
         )
 
@@ -120,7 +120,7 @@ class MatchingAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.ATBlue5,
             text_wraplength=self.rect.width
         )
 

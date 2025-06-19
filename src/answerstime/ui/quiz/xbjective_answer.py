@@ -43,9 +43,15 @@ class XobjectiveAnswer(Primitive):
         surface.blit(self.icon.image, self.icon.rect)
 
     def on_mouse_enter(self) -> None:
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
         self._layout.enabled = True
 
     def on_mouse_leave(self) -> None:
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
         self._layout.enabled = False
 
     def change_correct_state(self, value: bool = False) -> None:
@@ -55,10 +61,13 @@ class XobjectiveAnswer(Primitive):
                 self.icon.image_path = asset_path(SPRITES, "editor_correct_2.png")
             else:
                 self.icon.image_path = None
+            self._update_image()
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#747484")
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
 
     def _create_is_right_button(self) -> None:
         self.is_right = TextButton(
@@ -68,10 +77,11 @@ class XobjectiveAnswer(Primitive):
             position=self.rect.center,
             anchor=Anchor.Center,
             z_index=3,
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#282835",
-            button_icon=load_asset(SPRITES, "editor_correct.png")
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "editor_correct.png"),
+            button_border_radius=6
         )
 
     def _create_text_label(self) -> None:
@@ -83,7 +93,7 @@ class XobjectiveAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.ATBlue5,
             text_wraplength=self.rect.width
         )
 
@@ -91,7 +101,7 @@ class XobjectiveAnswer(Primitive):
         self.icon = ImageLabel(
             app=self.app,
             path=None,
-            position=self.rect.topright,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.y + GAP + GAP + 1),
             anchor=Anchor.TopRight,
             z_index=1
         )

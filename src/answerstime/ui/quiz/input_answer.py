@@ -15,7 +15,7 @@ class InputAnswer(Primitive):
         position: Tuple[int, int] = (0, 0),
         anchor: Anchor = Anchor.TopLeft,
     ) -> None:
-        super().__init__(app, (200, 90), position, anchor, 1)
+        super().__init__(app, (404, 90), position, anchor, 1)
         self._create_text_box()
         self._layout: Layout = Layout(True)
         self._layout.insert_child(self.textbox)
@@ -35,12 +35,11 @@ class InputAnswer(Primitive):
         self.textbox = TextBox(
             app=self.app,
             text="",
-            placeholder="Введите ответ",
-            size=(300, 40),
+            placeholder="Введите ваш ответ",
+            size=(404, 90),
             position=self.rect.center,
             anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Center,
-            text_color="white"
+            font_align=Align.Center
         )

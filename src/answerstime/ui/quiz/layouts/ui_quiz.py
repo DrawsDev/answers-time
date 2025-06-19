@@ -18,6 +18,7 @@ class UIQuiz:
         self._answers = []
         self._create_complete_button()
         self._create_question_number_label()
+        self._create_question_title_frame()
         self._create_question_title_label()
         self._create_answer_button()
         self._create_tip_button()
@@ -25,6 +26,7 @@ class UIQuiz:
         self._layout.insert_child(
             self.complete,
             self.question_number,
+            self.question_frame,
             self.question_title,
             self.answer,
             self.tip,
@@ -52,8 +54,8 @@ class UIQuiz:
         question = quiz.questions[quiz.question_index]
         recived = quiz.answers_recived
         
-        x = self.question_title.rect.centerx
-        y = self.question_title.rect.bottom + GAP
+        x = self.question_frame.rect.centerx
+        y = self.question_frame.rect.bottom + GAP
         if len(question.options) == 1:
             a = (Anchor.MidTop,)
             p = ((x, y),)
@@ -114,40 +116,57 @@ class UIQuiz:
     def _create_complete_button(self) -> None:
         self.complete = TextButton(
             app=self.app,
-            text="",
-            size=(34, 34),
+            text="Закончить",
+            size=(120, 40),
             position=(GAP, GAP),
             anchor=Anchor.TopLeft,
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
-            button_icon=load_asset(SPRITES, "exit.png")
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Left,
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "exit.png"),
+            button_border_radius=6
         )
 
     def _create_question_number_label(self) -> TextLabel:
         self.question_number = TextLabel(
             app=self.app,
-            text="Вопрос 1",
+            text="Вопрос 0 из 0",
             position=(self.app.surface.get_width() / 2, 11),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.White,
             text_wraplength=self.app.surface.get_width()
         )
 
-    def _create_question_title_label(self) -> TextLabel:
+    def _create_question_title_frame(self) -> None:
+        self.question_frame = Frame(
+            app=self.app,
+            color=Pallete.ATBlue3,
+            size=(404, 76),
+            position=(self.app.surface.get_width() / 2, self.complete.rect.bottom + GAP),
+            anchor=Anchor.MidTop,
+            z_index=-1,
+            border_width=4,
+            border_radius=6
+        )
+
+    def _create_question_title_label(self) -> None:
         self.question_title = TextLabel(
             app=self.app,
             text="Текст вопроса",
-            position=(self.app.surface.get_width() / 2, 42),
-            anchor=Anchor.MidTop,
+            position=(self.question_frame.rect.centerx, self.question_frame.rect.y + self.question_frame.rect.height / 2),
+            anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            text_wraplength=self.app.surface.get_width()
+            text_color=Pallete.White,
+            text_wraplength=self.question_frame.rect.width - GAP
         )
 
     def _create_answer_button(self) -> None:
@@ -160,10 +179,11 @@ class UIQuiz:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000"
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6
         )
 
     def _create_tip_button(self) -> None:
@@ -176,10 +196,11 @@ class UIQuiz:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000"
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6
         )
 
     def _create_skip_button(self) -> None:
@@ -192,8 +213,9 @@ class UIQuiz:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000"
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6
         )

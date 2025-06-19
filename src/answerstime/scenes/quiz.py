@@ -54,7 +54,7 @@ class Quiz(Scene):
         self.info.update(delta)
         if self.quiz:
             t = time.strftime("%H:%M:%S", time.gmtime(self.quiz.time_left))
-            self.ui_timer.timer.text = f"Оставшееся время: {t}"
+            self.ui_timer.timer.text = str(t)
             if self.quiz.time_left <= 0:
                 self.quiz.stop()
                 self._show_result()
@@ -80,7 +80,7 @@ class Quiz(Scene):
 
     def _update_ui_question_info(self) -> None:
         question = self.quiz.questions[self.quiz.question_index]
-        self.ui_quiz.question_number.text = f"Вопрос {self.quiz.get_question_number()}"
+        self.ui_quiz.question_number.text = f"Вопрос {self.quiz.get_question_number()} из {len(self.quiz.questions)}"
         self.ui_quiz.question_title.text = question.title
 
         if self.quiz.question_index == len(self.quiz.questions) - 1:

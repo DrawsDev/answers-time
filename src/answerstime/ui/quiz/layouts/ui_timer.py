@@ -12,7 +12,7 @@ class UITimer:
         self.app = app
         self._enabled = True
         self._layout = Layout(True)
-        self._create_timer_label()
+        self._create_timer_button()
         self._layout.insert_child(
             self.timer
         )
@@ -34,15 +34,20 @@ class UITimer:
         if self._enabled:
             self._layout.draw(surface)
 
-    def _create_timer_label(self) -> TextLabel:
-        self.timer = TextLabel(
+    def _create_timer_button(self) -> None:
+        self.timer = TextButton(
             app=self.app,
-            text="Оставшееся время: 0 с",
+            text="00:00",
+            size=(120, 40),
             position=(self.app.surface.get_width() - GAP, GAP),
             anchor=Anchor.TopRight,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Right,
-            text_color="white",
-            text_wraplength=self.app.surface.get_width()
+            font_align=Align.Center,
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue3,
+            button_press_color=Pallete.ATBlue3,
+            button_icon=load_asset(SPRITES, "timer.png"),
+            button_border_radius=6
         )
