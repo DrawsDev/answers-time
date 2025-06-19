@@ -1,6 +1,9 @@
+import csv
 import time
 import copy
 from typing import Union, List, Dict, Any
+from src.framework.settings import *
+from src.framework.utility import *
 from src.answerstime.question import Question
 
 class Quiz:
@@ -24,6 +27,7 @@ class Quiz:
         self._ended = False
         self._answers_recived = []
         self._grade_type = 0
+        self._end_time = 0
 
     @property
     def title(self) -> str:
@@ -230,7 +234,7 @@ class Quiz:
             return
         
         if self._question_index == len(self._questions) - 1:
-            self._ended = True
+            self.stop()
 
         self._check_answer()
         self._question_index += 1
@@ -253,6 +257,20 @@ class Quiz:
 
     def stop(self) -> None:
         self._ended = True
+        self._end_time = time.time()
+        self.save_quiz_result()
+
+    def save_quiz_result(self) -> None:
+        name = f"User_{time.strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+        data = [
+            ["Тест", "Тестируемый", "Начало теста", "Продолжительность теста", "Количество заданных вопросов", "Количество правильных ответов", "Итоговый балл"],
+            [self.title, "User", time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(self._start_time)), time.strftime("%H-%M-%S", time.localtime(self._end_time - self._start_time)), self._number_of_correct_answers, self.get_grade()]
+        ]
+
+        with open(asset_path(QUIZZES, name), "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(data)
+
 
     def dump(self) -> Dict[str, Any]:
         return {
