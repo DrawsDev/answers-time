@@ -30,7 +30,7 @@ class InputAnswer(Primitive):
             self._layout.update(delta)
         else:
             self.text.update(delta)
-            self.icon.update(delta)
+        self.icon.update(delta)
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
@@ -44,13 +44,18 @@ class InputAnswer(Primitive):
 
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
 
     def on_mouse_leave(self) -> None:
         self._layout.enabled = False
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill(Pallete.LightGray4)
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
     
     def _create_delete_button(self) -> None:
         self.delete = TextButton(
@@ -91,7 +96,7 @@ class InputAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color=Pallete.White,
+            text_color=Pallete.Black,
             text_wraplength=self.rect.width
         )
 
@@ -99,7 +104,7 @@ class InputAnswer(Primitive):
         self.icon = ImageLabel(
             app=self.app,
             path=asset_path(SPRITES, "editor_correct_2.png"),
-            position=self.rect.topright,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.y + GAP + GAP + 1),
             anchor=Anchor.TopRight,
             z_index=1
         )

@@ -33,7 +33,7 @@ class XbjectiveAnswer(Primitive):
             self._layout.update(delta)
         else:
             self.text.update(delta)
-            self.icon.update(delta)
+        self.icon.update(delta)
     
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
@@ -46,9 +46,15 @@ class XbjectiveAnswer(Primitive):
             surface.blit(self.text.image, self.text.rect)
 
     def on_mouse_enter(self) -> None:
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
         self._layout.enabled = True
 
     def on_mouse_leave(self) -> None:
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
         self._layout.enabled = False
 
     def change_correct_state(self, value: bool = False) -> None:
@@ -58,10 +64,13 @@ class XbjectiveAnswer(Primitive):
                 self.icon.image_path = asset_path(SPRITES, "editor_correct_2.png")
             else:
                 self.icon.image_path = None
+            self._update_image()
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#747484")
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        if self._is_correct:
+            pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
     
     def _create_delete_button(self) -> None:
         self.delete = TextButton(
@@ -132,7 +141,7 @@ class XbjectiveAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.Black,
             text_wraplength=self.rect.width
         )
 
@@ -140,7 +149,7 @@ class XbjectiveAnswer(Primitive):
         self.icon = ImageLabel(
             app=self.app,
             path=None,
-            position=self.rect.topright,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.y + GAP + GAP + 1),
             anchor=Anchor.TopRight,
             z_index=1
         )

@@ -24,7 +24,7 @@ class UIQuizEditor:
         self._create_question_type_label()
         self._create_prev_button()
         self._create_next_button()
-        self._create_question_title_input_box()
+        self._create_question_title_textbox()
         self._layout.insert_child(
             self.menu,
             self.settings,
@@ -252,7 +252,7 @@ class UIQuizEditor:
             text_wraplength=200
         )
 
-    def _create_question_title_input_box(self) -> TextBox:
+    def _create_question_title_textbox(self) -> TextBox:
         self.question_title = TextBox(
             app=self.app,
             text="",
@@ -263,5 +263,13 @@ class UIQuizEditor:
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
-            font_align=Align.Left
+            font_align=Align.Left,
+            text_color=Pallete.White,
+            backcolor_focus=Pallete.Empty,
+            backcolor_unfocus=Pallete.Empty,
+            border_color=Pallete.ATBlue3,
+            border_width=4,
+            border_radius=6,
+            cursor_color=Pallete.White,
+            cursor_selection_color=Pallete.ATBlue2
         )

@@ -53,9 +53,17 @@ class MatchingAnswer(Primitive):
 
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((0, 0), self.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, self.rect.height - 34 - GAP), (34, 34)), 0, 6)
 
     def on_mouse_leave(self) -> None:
         self._layout.enabled = False
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, (0, 0, self.rect.width, 80), 0, -1, 6, 6)
+        pygame.draw.polygon(self.image, Pallete.ATBlue1, [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
+        pygame.draw.rect(self.image, Pallete.ATBlue2, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, self.rect.height - 34 - GAP), (34, 34)), 0, 6)
 
     def change_number(self, value: int = 1, index: int = 0) -> None:
         nums = ("editor_one.png", "editor_two.png", "editor_three.png")
@@ -67,9 +75,11 @@ class MatchingAnswer(Primitive):
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#8F8F9E")
-        self.image.fill("#747484", (0, 0, self.rect.width, 80))
-        pygame.draw.polygon(self.image, "#747484", [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, (0, 0, self.rect.width, 80), 0, -1, 6, 6)
+        pygame.draw.polygon(self.image, Pallete.ATBlue1, [(0, 80), (self.rect.width / 2, 110), (self.rect.width, 80)])
+        pygame.draw.rect(self.image, Pallete.ATBlue2, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, self.rect.height - 34 - GAP), (34, 34)), 0, 6)
     
     def _create_delete_button(self) -> None:
         self.delete = TextButton(
@@ -125,7 +135,7 @@ class MatchingAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.Black,
             text_wraplength=self.rect.width
         )
 
@@ -138,7 +148,7 @@ class MatchingAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.Black,
             text_wraplength=self.rect.width
         )
 
@@ -146,7 +156,7 @@ class MatchingAnswer(Primitive):
         self.icon_1 = ImageLabel(
             app=self.app,
             path=None,
-            position=self.rect.topright,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.y + GAP + GAP + 1),
             anchor=Anchor.TopRight,
             z_index=1
         )
@@ -155,7 +165,7 @@ class MatchingAnswer(Primitive):
         self.icon_2 = ImageLabel(
             app=self.app,
             path=None,
-            position=(self.rect.right, self.rect.centery),
-            anchor=Anchor.TopRight,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.bottom - GAP - GAP - 1),
+            anchor=Anchor.BottomRight,
             z_index=1
         )

@@ -45,9 +45,13 @@ class SequenceAnswer(Primitive):
 
     def on_mouse_enter(self) -> None:
         self._layout.enabled = True
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
 
     def on_mouse_leave(self) -> None:
         self._layout.enabled = False
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
 
     def change_number(self, value: int = 1) -> None:
         nums = ("editor_one.png", "editor_two.png", "editor_three.png", "editor_four.png")
@@ -56,7 +60,8 @@ class SequenceAnswer(Primitive):
 
     def _update_image(self):
         super()._update_image()
-        self.image.fill("#747484")
+        pygame.draw.rect(self.image, Pallete.White, ((0, 0), self.rect.size), 0, 6)
+        pygame.draw.rect(self.image, Pallete.ATBlue1, ((self.rect.width - 34 - GAP, GAP), (34, 34)), 0, 6)
     
     def _create_delete_button(self) -> None:
         self.delete = TextButton(
@@ -112,7 +117,7 @@ class SequenceAnswer(Primitive):
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.ATBlue5,
             text_wraplength=self.rect.width
         )
 
@@ -120,7 +125,7 @@ class SequenceAnswer(Primitive):
         self.icon = ImageLabel(
             app=self.app,
             path=None,
-            position=self.rect.topright,
+            position=(self.rect.right - GAP - GAP - 1, self.rect.y + GAP + GAP + 1),
             anchor=Anchor.TopRight,
             z_index=1
         )
