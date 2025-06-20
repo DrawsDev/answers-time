@@ -18,13 +18,15 @@ class Notification(Primitive):
         self._enabled = False
         self._layout = Layout(False)
         self._confirm_callback = Callback(confirm_callback)
+        
+        self._create_background()
+        self._create_window()
+        self._create_notification_label()
         self._create_info_label(info)
-        self._create_title_line()
-        self._create_title_label()
         self._create_confirm_button()
+
         self._layout.insert_child(
-            self._title,
-            self._title_line,
+            self._notification,
             self._info,
             self._confirm
         )
@@ -60,59 +62,63 @@ class Notification(Primitive):
 
     def draw(self, surface: pygame.Surface) -> None:
         if self._enabled:
-            surface.fill("black")
+            surface.blit(self._background)
+            surface.blit(self.image, self.rect)
             self._layout.draw(surface)
 
-    def _create_title_label(self) -> TextLabel:
-        self._title = TextLabel(
+    def _create_background(self) -> None:
+        self._background = pygame.Surface(SURFACE_SIZE)
+        self._background.fill(Pallete.ATBlue5)
+        self._background.set_alpha(200)
+
+    def _create_window(self) -> None:
+        self.image = pygame.Surface((337, 172))
+        self.rect = self.image.get_rect(center=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2))
+        pygame.draw.rect(self.image, Pallete.ATBlue2, ((0, 0), self.image.get_size()), 0, 6)
+        pygame.draw.rect(self.image, Pallete.White, ((4, 52 - 4), (329, 120)), 0, 6)
+
+    def _create_notification_label(self) -> None:
+        self._notification = TextLabel(
             app=self.app,
             text="Уведомление",
-            position=(self._title_line.rect.centerx, self._title_line.rect.top),
-            anchor=Anchor.MidBottom,
-            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
-            font_size=16,
-            font_align=Align.Center,
-            text_color=Pallete.White,
-            text_wraplength=self.app.surface.get_width()
-        )
-    
-    def _create_title_line(self) -> Frame:
-        self._title_line = Frame(
-            app=self.app,
-            color=Pallete.White,
-            size=(self.app.surface.get_width() / 2, 2),
-            position=(self._info.rect.centerx, self._info.rect.top - 4),
-            anchor=Anchor.MidBottom
-        )
-
-    def _create_info_label(self, text: str = "") -> TextLabel:
-        self._info = TextLabel(
-            app=self.app,
-            text=text,
-            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2),
+            position=(self.rect.centerx, self.rect.y + 24),
             anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            text_wraplength=self._size[0]
+            text_color=Pallete.White,
+            text_wraplength=self.rect.width
         )
 
-    def _create_confirm_button(self) -> TextButton:
+    def _create_info_label(self, text: str = "") -> None:
+        self._info = TextLabel(
+            app=self.app,
+            text=text,
+            position=(self.rect.centerx, self.rect.y + 52),
+            anchor=Anchor.MidTop,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color=Pallete.Black,
+            text_wraplength=self.rect.width
+        )
+
+    def _create_confirm_button(self) -> None:
         self._confirm = TextButton(
             app=self.app,
             text="ОК",
             size=(130, 40),
-            position=(self._info.rect.centerx, self._info.rect.bottom + 10),
-            anchor=Anchor.MidTop,
+            position=(self.rect.centerx - 2, self.rect.bottom - 8),
+            anchor=Anchor.MidBottom,
             z_index=21,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
             text_color=Pallete.White,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6,
             button_icon=load_asset(SPRITES, "warn_confirm.png")
         )
         self._confirm.pressed_callback.set(self._confirm_callback)
