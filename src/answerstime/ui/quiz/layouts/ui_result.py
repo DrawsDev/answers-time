@@ -13,6 +13,8 @@ class UIResult:
         self._enabled = False
         self._layout = Layout(False)
 
+        self._create_title_label()
+        self._create_title_line()
         self._create_window()
         self._create_grade_label()
         self._create_info_1_label()
@@ -22,6 +24,8 @@ class UIResult:
         self._create_back_button()
 
         self._layout.insert_child(
+            self.title,
+            self.title_line,
             self.grade,
             self.info,
             self.info2,
@@ -47,6 +51,28 @@ class UIResult:
         if self._enabled:
             surface.blit(self.window, self.window_rect)
             self._layout.draw(surface)
+
+    def _create_title_label(self) -> TextLabel:
+        self.title = TextLabel(
+            app=self.app,
+            text="Результаты",
+            position=(self.app.surface.get_width() / 2, 0),
+            anchor=Anchor.MidTop,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color=Pallete.White,
+            text_wraplength=self.app.surface.get_width()
+        )
+    
+    def _create_title_line(self) -> Frame:
+        self.title_line = Frame(
+            app=self.app,
+            color=Pallete.White,
+            size=(self.app.surface.get_width() - 10, 2),
+            position=(self.title.rect.centerx, self.title.rect.bottom),
+            anchor=Anchor.MidTop
+        )
 
     def _create_window(self) -> None:
         self.window = pygame.Surface((337, 225))
