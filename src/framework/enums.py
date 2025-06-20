@@ -44,6 +44,8 @@ class Pallete(Color, Enum):
     ATBlue3 = "#0080FF"
     ATBlue4 = "#0048C1"
     ATBlue5 = "#000D2C"
-
-
-__all__ = ["Anchor", "Align", "ButtonState", "Pallete"]
+    ATRed1 = "#FF93C9"
+    ATRed2 = "#FF4F98"
+    ATRed3 = "#FF007D"
+    ATRed4 = "#A0005E"
+    ATRed5 = "#4C0026"
