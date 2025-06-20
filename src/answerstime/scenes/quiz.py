@@ -56,7 +56,6 @@ class Quiz(Scene):
             t = time.strftime("%H:%M:%S", time.gmtime(self.quiz.time_left))
             self.ui_timer.timer.text = str(t)
             if self.quiz.time_left <= 0:
-                self.quiz.stop()
                 self._show_result()
     
     def draw(self, surface: pygame.Surface) -> None:
@@ -70,6 +69,7 @@ class Quiz(Scene):
         self.ui_timer.draw(surface)
 
     def _show_result(self) -> None:
+        self.quiz.stop()
         self.warn.enabled = False
         self.ui_quiz.enabled = False
         self.ui_tip.enabled = False
