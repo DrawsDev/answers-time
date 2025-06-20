@@ -22,12 +22,13 @@ class Quiz:
         self._answered_questions = []
         self._question_index = 0
         self._number_of_correct_answers = 0
-        self._start_time = 0
+        self._start_time: float = 0
         self._duration = 600
         self._ended = False
         self._answers_recived = []
-        self._grade_type = 0
-        self._end_time = 0
+        self._grade_type: int = 0
+        self._end_time: float = 0
+        self._tester_name: str = "User"
 
     @property
     def title(self) -> str:
@@ -96,12 +97,11 @@ class Quiz:
 
     @property
     def start_time(self) -> float:
-        self._start_time
+        return self._start_time
 
-    @start_time.setter
-    def start_time(self, value: float) -> None:
-        if self._start_time != value:
-            self._start_time = value
+    @property
+    def end_time(self) -> float:
+        return self._end_time
 
     @property
     def time_left(self) -> float:
@@ -112,6 +112,15 @@ class Quiz:
     @property
     def ended(self) -> bool:
         return self._ended
+
+    @property
+    def tester_name(self) -> str:
+        return self._tester_name
+    
+    @tester_name.setter
+    def tester_name(self, value: str) -> None:
+        if len(value) > 0:
+            self._tester_name = value
 
     def _check_answer(self) -> None:
         correct = 0
@@ -261,16 +270,32 @@ class Quiz:
         self.save_quiz_result()
 
     def save_quiz_result(self) -> None:
-        name = f"User_{time.strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+        start_date = time.strftime('%Y-%m-%d_%H-%M-%S')
+        name = f"{self.tester_name}_{start_date}.csv"
         data = [
-            ["Тест", "Тестируемый", "Начало теста", "Продолжительность теста", "Количество заданных вопросов", "Количество правильных ответов", "Итоговый балл"],
-            [self.title, "User", time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(self._start_time)), time.strftime("%H-%M-%S", time.localtime(self._end_time - self._start_time)), self._number_of_correct_answers, self.get_grade()]
+            [
+                "Название теста", 
+                "Имя тестируемого", 
+                "Дата начала теста", 
+                "Время выполнения теста", 
+                "Количество отвеченных вопросов", 
+                "Количество правильных ответов", 
+                "Итоговый балл"
+            ],
+            [
+                self.title, 
+                self.tester_name, 
+                time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime(self.start_time)), 
+                time.strftime("%H-%M-%S", time.gmtime(self.end_time - self.start_time)), 
+                len(self.answered_questions),
+                self.number_of_correct_answers, 
+                self.get_grade()
+            ]
         ]
 
-        with open(asset_path(QUIZZES, name), "w", newline="") as file:
+        with open(asset_path(QUIZZES, name), "w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
             writer.writerows(data)
-
 
     def dump(self) -> Dict[str, Any]:
         return {
