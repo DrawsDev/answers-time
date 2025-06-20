@@ -25,8 +25,8 @@ class Warning(Primitive):
         self._create_background()
         self._create_window()
         self._create_warning_label()
-        self._warn1 = self._create_warn_1_label(warn1)
-        self._warn2 = self._create_warn_2_label(warn2)
+        self._create_warn_1_label(warn1)
+        self._create_warn_2_label(warn2)
         self._create_confirm_button()
         self._create_deny_button()
         
@@ -101,7 +101,7 @@ class Warning(Primitive):
         self._warning = TextLabel(
             app=self.app,
             text="Предупреждение",
-            position=(self.rect.centerx, self.rect.y + 26),
+            position=(self.rect.centerx, self.rect.y + 24),
             anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
@@ -110,8 +110,8 @@ class Warning(Primitive):
             text_wraplength=self.rect.width
         )
 
-    def _create_warn_1_label(self, text: str = "") -> TextLabel:
-        warn = TextLabel(
+    def _create_warn_1_label(self, text: str = "") -> None:
+        self._warn1 = TextLabel(
             app=self.app,
             text=text,
             position=(self.rect.centerx, self.rect.y + 52),
@@ -122,10 +122,9 @@ class Warning(Primitive):
             text_color=Pallete.Black,
             text_wraplength=self.rect.width
         )
-        return warn
 
-    def _create_warn_2_label(self, text: str = "") -> TextLabel:
-        warn = TextLabel(
+    def _create_warn_2_label(self, text: str = "") -> None:
+        self._warn2 = TextLabel(
             app=self.app,
             text=text,
             position=(self._warn1.rect.centerx, self._warn1.rect.bottom),
@@ -136,7 +135,6 @@ class Warning(Primitive):
             text_color=Pallete.ATRed3,
             text_wraplength=self.rect.width
         )
-        return warn
 
     def _create_confirm_button(self) -> None:
         self._confirm = TextButton(
