@@ -22,27 +22,32 @@ class Quiz(Scene):
         self.ui_result = UIResult(app)
         self.ui_timer = UITimer(app)
         self.ui_tip = UITip(app)
-        self.warn = Warning(app, "Вы уверены, что хотите прервать тестирование?", "")
-        self.info = Notification(app, "Не указан вариант ответа.")
+        self.ui_registration = UIRegistration(app)
+        self.warning = Warning(app, "Вы уверены, что хотите прервать тестирование?", "")
+        self.notification = Notification(app)
 
     def on_enter(self, **kwargs):
         filename = kwargs.get("filename")
         if not filename:
             self._quit_quiz()
         
-        quiz = create_quiz_from_file(asset_path(QUIZZES, filename))
+        quiz: QuizObject = create_quiz_from_file(asset_path(QUIZZES, filename))
         if len(quiz.questions) <= 0:
             self._quit_quiz()
         
-        self._start_quiz(quiz)
+        self._open_registration(quiz)
         self.ui_quiz.complete.pressed_callback.set(self._complete_quiz)
         self.ui_quiz.tip.pressed_callback.set(self._open_tip)
         self.ui_quiz.skip.pressed_callback.set(self._skip_question)
         self.ui_quiz.answer.pressed_callback.set(self._next_question)
         self.ui_result.back.pressed_callback.set(self._quit_quiz)
-        self.warn.confirm_callback.set(self._show_result)
-        self.warn.deny_callback.set(self._back_to_quiz)
+        self.warning.confirm_callback.set(self._show_result)
+        self.warning.deny_callback.set(self._back_to_quiz)
         self.ui_tip.back.pressed_callback.set(self._back_to_quiz)
+
+        # Окно регистрации
+        self.ui_registration.back.pressed_callback.set(self._quit_quiz)
+        self.ui_registration.start.pressed_callback.set((self._try_start_quiz, (quiz,)))
 
     def update(self, delta: float) -> None:
         self.background.update(delta)
@@ -50,8 +55,9 @@ class Quiz(Scene):
         self.ui_result.update(delta)
         self.ui_tip.update(delta)
         self.ui_timer.update(delta)
-        self.warn.update(delta)
-        self.info.update(delta)
+        self.ui_registration.update(delta)
+        self.warning.update(delta)
+        self.notification.update(delta)
         if self.quiz:
             t = time.strftime("%H:%M:%S", time.gmtime(self.quiz.time_left))
             self.ui_timer.timer.text = str(t)
@@ -64,13 +70,30 @@ class Quiz(Scene):
         self.ui_quiz.draw(surface)
         self.ui_result.draw(surface)
         self.ui_tip.draw(surface)
-        self.warn.draw(surface)
-        self.info.draw(surface)
+        self.ui_registration.draw(surface)
+        self.warning.draw(surface)
+        self.notification.draw(surface)
         self.ui_timer.draw(surface)
+
+    def _open_registration(self, quiz: QuizObject) -> None:
+        self.notification.enabled = False
+        self.notification.confirm_callback.set((self._open_registration, (quiz,)))
+        self.ui_registration.enabled = True
+
+    def _try_start_quiz(self, quiz: QuizObject) -> None:
+        if len(self.ui_registration.name_input.text.replace(" ", "")) <= 0:
+            self.notification.enabled = True
+            self.notification.text = "Введено пустое имя."
+            self.ui_registration.enabled = False
+            self.ui_registration.name_input.text = ""
+        else:
+            self._start_quiz(quiz)
+            self.quiz.tester_name = self.ui_registration.name_input.text
+            self.ui_registration.enabled = False
 
     def _show_result(self) -> None:
         self.quiz.stop()
-        self.warn.enabled = False
+        self.warning.enabled = False
         self.ui_quiz.enabled = False
         self.ui_tip.enabled = False
         self.ui_result.enabled = True
@@ -117,24 +140,26 @@ class Quiz(Scene):
 
     def _open_no_answered_info(self) -> None:
         self.ui_quiz.enabled = False
-        self.info.enabled = True
-        self.info.confirm_callback.set(self._back_to_quiz)
+        self.notification.enabled = True
+        self.notification.text = "Не указан вариант ответа."
+        self.notification.confirm_callback.set(self._back_to_quiz)
 
     def _back_to_quiz(self) -> None:
         self.ui_quiz.enabled = True
         self.ui_tip.enabled = False
-        self.warn.enabled = False
-        self.info.enabled = False
+        self.warning.enabled = False
+        self.notification.enabled = False
 
     def _complete_quiz(self) -> None:
         self.ui_quiz.enabled = False
-        self.warn.enabled = True
-        self.warn.warn2 = f"Отвеченных вопросов: {len(self.quiz.answered_questions)} из {len(self.quiz.questions)}"
+        self.warning.enabled = True
+        self.warning.warn2 = f"Отвеченных вопросов: {len(self.quiz.answered_questions)} из {len(self.quiz.questions)}"
 
-    def _start_quiz(self, quiz: Quiz) -> None:
+    def _start_quiz(self, quiz: QuizObject) -> None:
         self.quiz = copy.deepcopy(quiz)
         self.quiz.start()
         self.ui_quiz.enabled = True
+        self.ui_timer.enabled = True
         self._update_ui_question_info()
 
     def _quit_quiz(self) -> None:

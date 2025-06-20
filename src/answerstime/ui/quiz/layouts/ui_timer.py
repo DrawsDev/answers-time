@@ -10,8 +10,8 @@ GAP = 4
 class UITimer:
     def __init__(self, app: Application) -> None:
         self.app = app
-        self._enabled = True
-        self._layout = Layout(True)
+        self._enabled = False
+        self._layout = Layout(False)
         self._create_timer_button()
         self._layout.insert_child(
             self.timer
