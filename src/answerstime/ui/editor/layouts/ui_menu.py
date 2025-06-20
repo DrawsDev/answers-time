@@ -122,7 +122,7 @@ class UIMenu:
             button_hover_color=Pallete.ATBlue2,
             button_press_color=Pallete.ATBlue4,
             button_border_radius=6,
-            button_icon=load_asset(SPRITES, "test2.png")
+            button_icon=load_asset(SPRITES, "save.png")
         )
 
     def _create_info_button(self) -> None:
@@ -140,7 +140,7 @@ class UIMenu:
             button_hover_color=Pallete.ATBlue2,
             button_press_color=Pallete.ATBlue4,
             button_border_radius=6,
-            button_icon=load_asset(SPRITES, "test2.png")
+            button_icon=load_asset(SPRITES, "editor.png")
         )
     
     def _create_export_button(self) -> None:
