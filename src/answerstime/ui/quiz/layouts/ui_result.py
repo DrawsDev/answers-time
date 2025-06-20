@@ -41,13 +41,13 @@ class UIResult:
     def _create_rating_label(self) -> TextLabel:
         self.rating = TextLabel(
             app=self.app,
-            text="5",
+            text="0",
             position=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2 - 20),
             anchor=Anchor.Center,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=55,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.White,
             text_wraplength=self.app.surface.get_width()
         )
 
@@ -60,23 +60,24 @@ class UIResult:
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
+            text_color=Pallete.White,
             text_wraplength=self.app.surface.get_width()
         )
 
     def _create_back_button(self) -> None:
         self.back = TextButton(
             app=self.app,
-            text="Выйти",
+            text="Вернуться в меню",
             size=(130, 40),
             position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
-            button_icon=load_asset("back.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "exit.png"),
+            button_border_radius=6
         )
