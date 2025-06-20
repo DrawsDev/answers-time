@@ -10,7 +10,7 @@ class Notification(Primitive):
     def __init__(
         self, 
         app: Application, 
-        info: str = "Info",
+        text: str = "Text",
         confirm_callback: CallbackType = None
     ) -> None:
         super().__init__(app, SURFACE_SIZE, z_index=20)
@@ -22,7 +22,7 @@ class Notification(Primitive):
         self._create_background()
         self._create_window()
         self._create_notification_label()
-        self._create_info_label(info)
+        self._create_info_label(text)
         self._create_confirm_button()
 
         self._layout.insert_child(
@@ -47,11 +47,11 @@ class Notification(Primitive):
         return self._confirm_callback
 
     @property
-    def info_text(self) -> str:
+    def text(self) -> str:
         return self._info.text
     
-    @info_text.setter
-    def info_text(self, value: str) -> None:
+    @text.setter
+    def text(self, value: str) -> None:
         if self._info.text != value:
             self._info.text = value
 
