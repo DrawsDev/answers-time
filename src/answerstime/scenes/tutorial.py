@@ -218,7 +218,7 @@ class Tutorial(Scene):
     def _create_timer_button(self) -> None:
         self.timer = TextButton(
             app=self.app,
-            text="10:00",
+            text="00:10:00",
             size=(120, 40),
             position=(self.app.surface.get_width() - GAP, GAP),
             anchor=Anchor.TopRight,
