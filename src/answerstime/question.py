@@ -31,17 +31,11 @@ class Question:
         elif self._type == 2:
             return
         elif self._type == 4:
-            while True:
-                self._shuffle_options = random.sample(self._options, len(self._options))
-                self._shuffle_answers = random.sample(self._answers, len(self._answers))
-                if len(self._options) <= 1:
-                    break
-                if all(v == self._options[0] for v in self._options):
-                    break
-                if all(v == self._answers[0] for v in self._answers):
-                    break
-                if self._shuffle_options != self._options and self._shuffle_answers != self._answers:
-                    break
+            if len(self._options) != len(self._answers):
+                return
+            
+            self._shuffle_options = random.sample(self._options, len(self._options))
+            self._shuffle_answers = random.sample(self._answers, len(self._answers))
 
     @property
     def title(self) -> str:
