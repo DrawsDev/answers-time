@@ -49,7 +49,7 @@ class UIAnswerEditMenu:
     def change_state(self, index: int = 0) -> None:
         if index == 0:
             self._layout.remove_child(self.text_2_label, self.text_2)
-            self.text_1_label.text = "Текст"
+            self.text_1_label.text = "Текст ответа"
             self.text_1_label.position = (self.app.surface.get_width() / 3.75, self.app.surface.get_height() / 3)
             self.text_1.placeholder = "Введите текст ответа"
             self.text_1.position = (self.text_1_label.rect.x, self.text_1_label.rect.bottom)

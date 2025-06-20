@@ -24,6 +24,7 @@ class Editor(Scene):
         self.debug_frame = DebugFrame(app)
         self.explorer = ExplorerFrame(app)
         self.warning = Warning(app)
+        self.notification = Notification(app)
         self.ui_menu = UIMenu(app)
         self.ui_quiz_editor = UIQuizEditor(app)
         self.ui_quiz_info_editor = UIQuizInfoEditor(app)
@@ -63,14 +64,17 @@ class Editor(Scene):
         self.ui_quiz_editor.prev.pressed_callback.set((self._move_to_next_question, (-1,)))
         self.ui_quiz_editor.next.pressed_callback.set((self._move_to_next_question, (1,)))
         self.ui_quiz_editor.question_title.focus_lost_callback.set(self._update_question_info)
+        
         # Настройка информации о тесте
         self.ui_quiz_info_editor.title_input.focus_lost_callback.set(self._update_quiz_info)
         self.ui_quiz_info_editor.description_input.focus_lost_callback.set(self._update_quiz_info)
         self.ui_quiz_info_editor.author_input.focus_lost_callback.set(self._update_quiz_info)
         self.ui_quiz_info_editor.rules.pressed_callback.set(self._open_quiz_rules_editor)
         self.ui_quiz_info_editor.back.pressed_callback.set(self._open_menu)
+        
         # Настройка правил теста
         self.ui_quiz_rules_editor.back.pressed_callback.set(self._open_quiz_info)
+        
         # Выбор типа нового вопроса
         self.ui_new_question.back.pressed_callback.set(self._open_quiz_editor)
         self.ui_new_question.objective.pressed_callback.set((self._create_new_question, (0,)))
@@ -85,10 +89,12 @@ class Editor(Scene):
        
         # Настройка ответа
         self.ui_answer_edit_menu.back.pressed_callback.set(self._open_quiz_editor)
+        
         # Выбор типа импорта
         self.ui_select_import_type.back.pressed_callback.set(self._open_menu)
         self.ui_select_import_type.from_file.pressed_callback.set(self._open_import_explorer)
         self.ui_select_import_type.from_exists_quiz.pressed_callback.set(self._open_select_quiz_menu)
+        
         # Импорт из существующего теста
         self.ui_select_quiz_to_import.back.pressed_callback.set(self._open_import_select_menu)
 
@@ -111,6 +117,7 @@ class Editor(Scene):
         self.ui_select_import_type.update(delta)
         self.ui_select_quiz_to_import.update(delta)
         self.ui_select_export_type.update(delta)
+        self.notification.update(delta)
 
     def draw(self, surface: pygame.Surface) -> None:
         surface.fill(Pallete.ATBlue5)
@@ -127,6 +134,7 @@ class Editor(Scene):
         self.ui_menu.draw(surface)
         self.warning.draw(surface)
         self.explorer.draw(surface)
+        self.notification.draw(surface)
         self.debug_frame.draw(surface)
 
     def _update_quiz_editor_ui(self) -> None:
@@ -361,6 +369,25 @@ class Editor(Scene):
             path = asset_path(QUIZZES, f"{filename}.json")
         with open(path, "w", encoding="utf-8") as file:
             json.dump(self.quiz.dump(), file, ensure_ascii=False)
+        self._show_save_quiz_notification()
+
+    #######################################################################
+    #                            Уведомления                              # 
+    #######################################################################
+
+    def _show_save_quiz_notification(self) -> None:
+        self.ui_menu.enabled = False
+        self.notification.enabled = True
+        self.notification.text = "Тест успешно сохранен."
+        self.notification.confirm_callback.set(self._open_menu)
+
+    def _show_export_quiz_file_notification(self, filepath: str = "") -> None:
+        self.ui_menu.enabled = False
+        self.notification.enabled = True
+        self.notification.text = f"Файл теста успешно экспортирован по пути: «{filepath}»."
+        self.notification.confirm_callback.set(self._open_menu)
+
+    #######################################################################
 
     def _try_to_exit_editor(self) -> None:
         self.ui_menu.enabled = False
@@ -392,6 +419,7 @@ class Editor(Scene):
         self.ui_select_quiz_to_import.enabled = False
         self.ui_quiz_rules_editor.enabled = False
         self.ui_select_export_type.enabled = False
+        self.notification.enabled = False
 
     def _open_new_question(self) -> None:
         self.ui_quiz_editor.enabled = False
@@ -486,6 +514,7 @@ class Editor(Scene):
             self.warning.confirm_callback.set((self._export_quiz_file, (filename, destination_path)))
         else:
             self._export_quiz_file(filename, destination_path)
+        self._show_export_quiz_file_notification(os.path.join(destination_path, filename))
 
     def _export_quiz_file(self, filename: str, destination_path: str) -> None:
         save_quiz_to_file(self.quiz, os.path.join(destination_path, filename))
