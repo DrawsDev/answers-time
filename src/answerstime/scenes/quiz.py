@@ -97,8 +97,11 @@ class Quiz(Scene):
         self.ui_quiz.enabled = False
         self.ui_tip.enabled = False
         self.ui_result.enabled = True
-        self.ui_result.rating.text = f"{self.quiz.get_grade()}%"
-        self.ui_result.info.text = f"Правильных ответов: {self.quiz.number_of_correct_answers} из {len(self.quiz.questions)}"        
+        self.ui_result.grade.text = f"{self.quiz.get_grade()}%"
+        self.ui_result.info.text = f"Отвеченных вопросов: {self.quiz.number_of_correct_answers} из {len(self.quiz.questions)}" 
+        self.ui_result.info2.text = f"Правильных ответов: {self.quiz.number_of_correct_answers}"
+        self.ui_result.info3.text = f"Неправильных ответов: {self.quiz.number_of_incorrect_answers}"
+        self.ui_result.info4.text = f"Время выполнения тестирования: {time.strftime('%H:%M:%S', time.gmtime(self.quiz.end_time - self.quiz.start_time))}"
         self.ui_timer.enabled = False
 
     def _update_ui_question_info(self) -> None:
