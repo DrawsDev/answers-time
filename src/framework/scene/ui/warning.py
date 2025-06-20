@@ -21,11 +21,22 @@ class Warning(Primitive):
         self._layout = Layout(False)
         self._confirm_callback = Callback(confirm_callback)
         self._deny_callback = Callback(deny_callback)
+        
+        self._create_background()
+        self._create_window()
+        self._create_warning_label()
         self._warn1 = self._create_warn_1_label(warn1)
         self._warn2 = self._create_warn_2_label(warn2)
-        self._confirm = self._create_confirm_button()
-        self._deny = self._create_deny_button()
-        self._layout.insert_child(self._warn1, self._warn2, self._confirm, self._deny)
+        self._create_confirm_button()
+        self._create_deny_button()
+        
+        self._layout.insert_child(
+            self._warning, 
+            self._warn1, 
+            self._warn2, 
+            self._confirm, 
+            self._deny
+        )
 
     @property
     def enabled(self) -> bool:
@@ -71,20 +82,45 @@ class Warning(Primitive):
 
     def draw(self, surface: pygame.Surface) -> None:
         if self._enabled:
-            surface.fill("black")
+            surface.blit(self._background)
+            surface.blit(self.image, self.rect)
             self._layout.draw(surface)
+
+    def _create_background(self) -> None:
+        self._background = pygame.Surface(SURFACE_SIZE)
+        self._background.fill(Pallete.ATRed5)
+        self._background.set_alpha(200)
+
+    def _create_window(self) -> None:
+        self.image = pygame.Surface((337, 215))
+        self.rect = self.image.get_rect(center=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2))
+        pygame.draw.rect(self.image, Pallete.ATRed3, ((0, 0), self.image.get_size()), 0, 6)
+        pygame.draw.rect(self.image, Pallete.White, ((4, 52 - 4), (329, 163)), 0, 6)
+
+    def _create_warning_label(self) -> None:
+        self._warning = TextLabel(
+            app=self.app,
+            text="Предупреждение",
+            position=(self.rect.centerx, self.rect.y + 26),
+            anchor=Anchor.Center,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Center,
+            text_color=Pallete.White,
+            text_wraplength=self.rect.width
+        )
 
     def _create_warn_1_label(self, text: str = "") -> TextLabel:
         warn = TextLabel(
             app=self.app,
             text=text,
-            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2 - 20),
-            anchor=Anchor.Center,
+            position=(self.rect.centerx, self.rect.y + 52),
+            anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            text_wraplength=self._size[0]
+            text_color=Pallete.Black,
+            text_wraplength=self.rect.width
         )
         return warn
 
@@ -92,52 +128,52 @@ class Warning(Primitive):
         warn = TextLabel(
             app=self.app,
             text=text,
-            position=(self._warn1.rect.centerx, self._warn1.rect.bottom + 10),
-            anchor=Anchor.Center,
+            position=(self._warn1.rect.centerx, self._warn1.rect.bottom),
+            anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="red",
-            text_wraplength=self._size[0]
+            text_color=Pallete.ATRed3,
+            text_wraplength=self.rect.width
         )
         return warn
 
-    def _create_confirm_button(self) -> TextButton:
-        button = TextButton(
+    def _create_confirm_button(self) -> None:
+        self._confirm = TextButton(
             app=self.app,
             text="Да",
             size=(130, 40),
-            position=(self._warn2.rect.centerx - 2, self._warn2.rect.bottom + 10),
-            anchor=Anchor.TopRight,
+            position=(self.rect.centerx - 2, self.rect.bottom - 8),
+            anchor=Anchor.BottomRight,
             z_index=21,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
+            text_color=Pallete.White,
+            button_color=Pallete.ATRed3,
+            button_hover_color=Pallete.ATRed2,
+            button_press_color=Pallete.ATRed4,
+            button_border_radius=6,
             button_icon=load_asset(SPRITES, "warn_confirm.png")
         )
-        button.pressed_callback.set(self._confirm_callback)
-        return button
+        self._confirm.pressed_callback.set(self._confirm_callback)
 
-    def _create_deny_button(self) -> TextButton:
-        button = TextButton(
+    def _create_deny_button(self) -> None:
+        self._deny = TextButton(
             app=self.app,
             text="Нет",
             size=(130, 40),
-            position=(self._warn2.rect.centerx + 2, self._warn2.rect.bottom + 10),
-            anchor=Anchor.TopLeft,
+            position=(self.rect.centerx + 2, self.rect.bottom - 8),
+            anchor=Anchor.BottomLeft,
             z_index=21,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
+            text_color=Pallete.White,
+            button_color=Pallete.LightGray3,
+            button_hover_color=Pallete.LightGray2,
+            button_press_color=Pallete.LightGray4,
+            button_border_radius=5,
             button_icon=load_asset(SPRITES, "warn_deny.png")
         )
-        button.pressed_callback.set(self._deny_callback)
-        return button
+        self._deny.pressed_callback.set(self._deny_callback)
