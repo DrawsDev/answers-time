@@ -78,17 +78,18 @@ class UIAnswerEditMenu:
     def _create_back_button(self) -> None:
         self.back = TextButton(
             app=self.app,
-            text="Назад",
+            text="Вернуться в редактор",
             size=(130, 40),
             position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
-            text_color="white",
-            button_color="#4E4E56",
-            button_hover_color="#64646E",
-            button_press_color="#000000",
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6,
             button_icon=load_asset(SPRITES, "back.png")
         )
 

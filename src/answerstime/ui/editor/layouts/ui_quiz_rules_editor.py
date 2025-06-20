@@ -63,7 +63,7 @@ class UIQuizRulesEditor:
     def _create_back_button(self) -> None:
         self.back = TextButton(
             app=self.app,
-            text="Назад",
+            text="Вернуться в настройки",
             size=(130, 40),
             position=(self.app.surface.get_width() / 2, self.app.surface.get_height() - GAP),
             anchor=Anchor.MidBottom,
@@ -71,8 +71,9 @@ class UIQuizRulesEditor:
             font_size=16,
             font_align=Align.Center,
             text_color=Pallete.White,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6,
             button_icon=load_asset(SPRITES, "back.png")
         )

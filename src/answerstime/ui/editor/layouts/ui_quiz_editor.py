@@ -145,10 +145,12 @@ class UIQuizEditor:
             size=(34, 34),
             position=(GAP, GAP),
             anchor=Anchor.TopLeft,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
-            button_icon=load_asset(SPRITES, "menu.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "menu.png"),
+            button_border_radius=6
         )
     
     def _create_question_settings_button(self) -> None:
@@ -158,10 +160,12 @@ class UIQuizEditor:
             size=(34, 34),
             position=(GAP, self.menu.rect.bottom + GAP),
             anchor=Anchor.TopLeft,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
-            button_icon=load_asset(SPRITES, "settings.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "settings.png"),
+            button_border_radius=6
         )    
     
     def _create_new_question_button(self) -> None:
@@ -171,10 +175,12 @@ class UIQuizEditor:
             size=(34, 34),
             position=(GAP, self.settings.rect.bottom + GAP),
             anchor=Anchor.TopLeft,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
-            button_icon=load_asset(SPRITES, "add.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "add.png"),
+            button_border_radius=6
         )
     
     def _create_delete_question_button(self) -> None:
@@ -184,10 +190,12 @@ class UIQuizEditor:
             size=(34, 34),
             position=(GAP, self.new.rect.bottom + GAP),
             anchor=Anchor.TopLeft,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
-            button_icon=load_asset(SPRITES, "delete.png")
+            text_color=Pallete.White,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "delete.png"),
+            button_border_radius=6
         )
 
     def _create_prev_button(self) -> TextLabel:
@@ -197,10 +205,11 @@ class UIQuizEditor:
             size=(34, 34),
             position=(self.question_number.rect.left, GAP),
             anchor=Anchor.TopRight,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
-            button_icon=load_asset(SPRITES, "editor_prev.png")
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_icon=load_asset(SPRITES, "editor_prev.png"),
+            button_border_radius=6
         )
 
     def _create_next_button(self) -> TextLabel:
@@ -210,36 +219,37 @@ class UIQuizEditor:
             size=(34, 34),
             position=(self.question_number.rect.right, GAP),
             anchor=Anchor.TopLeft,
-            button_color=Pallete.Gray2,
-            button_hover_color=Pallete.Gray1,
-            button_press_color=Pallete.Gray3,
+            button_color=Pallete.ATBlue3,
+            button_hover_color=Pallete.ATBlue2,
+            button_press_color=Pallete.ATBlue4,
+            button_border_radius=6,
             button_icon=load_asset(SPRITES, "editor_next.png")
         )
 
     def _create_question_number_label(self) -> TextLabel:
         self.question_number = TextLabel(
             app=self.app,
-            text="Вопрос 1",
-            position=(self.app.surface.get_width() / 2, 11),
+            text="Вопрос 0 из 0",
+            position=(self.app.surface.get_width() / 2, 2),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
             font_align=Align.Center,
             text_color=Pallete.White,
-            text_wraplength=160
+            text_wraplength=200
         )
 
     def _create_question_type_label(self) -> TextLabel:
         self.question_type = TextLabel(
             app=self.app,
             text="Тип вопроса",
-            position=(self.question_number.rect.centerx, self.question_number.rect.bottom + GAP),
+            position=(self.app.surface.get_width() / 2, self.question_number.rect.bottom),
             anchor=Anchor.MidTop,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
-            font_size=16,
+            font_size=13,
             font_align=Align.Center,
-            text_color=Pallete.White,
-            text_wraplength=160
+            text_color=Pallete.ATBlue2,
+            text_wraplength=200
         )
 
     def _create_question_title_input_box(self) -> TextBox:
@@ -247,8 +257,8 @@ class UIQuizEditor:
             app=self.app,
             text="",
             placeholder="Введите текст вопроса",
-            size=(500, 80),
-            position=(self.question_type.rect.centerx, self.question_type.rect.bottom + GAP),
+            size=(404, 76),
+            position=(self.question_type.rect.centerx, self.menu.rect.bottom + GAP),
             anchor=Anchor.MidTop,
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),

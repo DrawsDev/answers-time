@@ -15,7 +15,7 @@ class NewAnswerButton(PrimitiveButton):
         anchor: Anchor = Anchor.TopLeft,
     ) -> None:
         self._new_answer_icon: pygame.Surface = load_asset(SPRITES, "editor_new_answer.png")
-        super().__init__(app, size, position, anchor, 2, "#8F8F9E", "#848491", "#747484")
+        super().__init__(app, size, position, anchor, 2, Pallete.ATBlue3, Pallete.ATBlue2, Pallete.ATBlue4)
 
     def _update_image(self) -> None:
         super()._update_image()
