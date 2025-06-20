@@ -22,6 +22,7 @@ class Quiz:
         self._answered_questions = []
         self._question_index = 0
         self._number_of_correct_answers = 0
+        self._number_of_incorrect_answers = 0
         self._start_time: float = 0
         self._duration = 600
         self._ended = False
@@ -96,6 +97,10 @@ class Quiz:
         return self._number_of_correct_answers
 
     @property
+    def number_of_incorrect_answers(self) -> int:
+        return self._number_of_incorrect_answers
+
+    @property
     def start_time(self) -> float:
         return self._start_time
 
@@ -134,6 +139,8 @@ class Quiz:
             
             if index in question.answers:
                 self._number_of_correct_answers += 1
+            else:
+                self._number_of_incorrect_answers += 1
         elif question.type == 1 and len(self._answers_recived) > 0:
             for recived_answer in self._answers_recived:
                 recived_option = question.shuffle_options[recived_answer]
@@ -145,12 +152,16 @@ class Quiz:
                     wrong += 1
             if correct == len(question.answers) and wrong == 0:
                 self._number_of_correct_answers += 1
+            else:
+                self._number_of_incorrect_answers += 1
         elif question.type == 2 and len(self._answers_recived) > 0:
             recived_answer = str(self._answers_recived[0])
             recived_answer = recived_answer.lower().replace(" ", "").replace("\n", "")
             options = [i.lower().replace(" ", "").replace("\n", "") for i in question.options]
             if recived_answer in options:
                 self._number_of_correct_answers += 1
+            else:
+                self._number_of_incorrect_answers += 1
         elif question.type == 3:
             for i, v in enumerate(question.shuffle_options):
                 if question.options[i] == question.shuffle_options[i]:
@@ -159,6 +170,8 @@ class Quiz:
                     wrong += 1
             if correct == len(question.options) and wrong == 0:
                 self._number_of_correct_answers += 1
+            else:
+                self._number_of_incorrect_answers += 1
         elif question.type == 4:
             shuffle_options = question.shuffle_options
             shuffle_answers = question.shuffle_answers
@@ -172,6 +185,8 @@ class Quiz:
                     wrong += 1
             if correct == len(question.options) and wrong == 0:
                 self._number_of_correct_answers += 1
+            else:
+                self._number_of_incorrect_answers += 1
         else:
             return
             
