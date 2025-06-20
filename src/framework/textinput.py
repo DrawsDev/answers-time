@@ -175,12 +175,9 @@ class TextInput:
             self._insert(unicode)
 
     def update(self) -> None:
-        self._handle_events()
-
-    def _handle_events(self) -> None:
-        if not self._enabled: 
+        if not self._enabled:
             return
-         
+        
         if self.app.input.is_key_pressed("backspace"):
             self.backspace()
         elif self.app.input.is_key_pressed("delete"):
