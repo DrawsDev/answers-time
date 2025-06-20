@@ -12,13 +12,19 @@ class UIQuestionSettings:
         self.app = app
         self._enabled = False
         self._layout = Layout(False)
+
         self._create_title_label()
         self._create_title_line()
         self._create_back_button()
+        self._create_tip_label()
+        self._create_tip_textbox()
+
         self._layout.insert_child(
             self.title,
             self.title_line,
-            self.back
+            self.back,
+            self.tip_label,
+            self.tip_textbox
         )
 
     @property
@@ -76,4 +82,31 @@ class UIQuestionSettings:
             button_press_color=Pallete.ATBlue4,
             button_border_radius=6,
             button_icon=load_asset(SPRITES, "back.png")
+        )
+
+    def _create_tip_label(self) -> None:
+        self.tip_label = TextLabel(
+            app=self.app,
+            text="Текст подсказки",
+            position=(self.app.surface.get_width() / 3.75, self.app.surface.get_height() / 3),
+            anchor=Anchor.TopLeft,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=13,
+            font_align=Align.Left,
+            text_color=Pallete.White,
+            text_wraplength=200
+        )
+
+    def _create_tip_textbox(self) -> None:
+        self.tip_textbox = TextBox(
+            app=self.app,
+            text="",
+            placeholder="Введите текст подсказки",
+            size=(300, 80),
+            position=(self.tip_label.rect.x, self.tip_label.rect.bottom),
+            anchor=Anchor.TopLeft,
+            z_index=1,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=16,
+            font_align=Align.Left
         )

@@ -78,8 +78,11 @@ class Editor(Scene):
         self.ui_new_question.input.pressed_callback.set((self._create_new_question, (2,)))
         self.ui_new_question.sequence.pressed_callback.set((self._create_new_question, (3,)))
         self.ui_new_question.matching.pressed_callback.set((self._create_new_question, (4,)))
+        
         # Настройка вопроса
         self.ui_question_settings.back.pressed_callback.set(self._open_quiz_editor)
+        self.ui_question_settings.tip_textbox.focus_lost_callback.set(self._update_question_tip)
+       
         # Настройка ответа
         self.ui_answer_edit_menu.back.pressed_callback.set(self._open_quiz_editor)
         # Выбор типа импорта
@@ -456,6 +459,7 @@ class Editor(Scene):
     def _open_question_settings(self) -> None:
         self.ui_quiz_editor.enabled = False
         self.ui_question_settings.enabled = True
+        self.ui_question_settings.tip_textbox.text = self.quiz.questions[self.current_question].tip
 
     ###########################################
     #              Меню экспорта              #
@@ -488,3 +492,8 @@ class Editor(Scene):
         self._open_menu()
 
     ###########################################
+
+    def _update_question_tip(self, text: str) -> None:
+        question = self.quiz.questions[self.current_question]
+        if len(text) > 0:
+            question.tip = text

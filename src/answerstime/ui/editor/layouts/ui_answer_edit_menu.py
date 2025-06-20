@@ -12,15 +12,20 @@ class UIAnswerEditMenu:
         self.app = app
         self._enabled = True
         self._layout = Layout(False)
+
         self._create_title_label()
         self._create_title_line()
         self._create_back_button()
+        self._create_text_1_label()
         self._create_text_1_textbox()
+        self._create_text_2_label()
         self._create_text_2_textbox()
+
         self._layout.insert_child(
             self.title,
             self.title_line,
             self.back,
+            self.text_1_label,
             self.text_1
         )
 
@@ -43,15 +48,19 @@ class UIAnswerEditMenu:
 
     def change_state(self, index: int = 0) -> None:
         if index == 0:
-            self._layout.remove_child(self.text_2)
+            self._layout.remove_child(self.text_2_label, self.text_2)
+            self.text_1_label.text = "Текст"
+            self.text_1_label.position = (self.app.surface.get_width() / 3.75, self.app.surface.get_height() / 3)
             self.text_1.placeholder = "Введите текст ответа"
-            self.text_1.position = (self.app.surface.get_width() / 2, self.app.surface.get_height() / 2)
-            self.text_1.anchor = Anchor.Center
+            self.text_1.position = (self.text_1_label.rect.x, self.text_1_label.rect.bottom)
         elif index == 1:
-            self._layout.insert_child(self.text_2)
+            self._layout.insert_child(self.text_2_label, self.text_2)
+            self.text_1_label.text = "Текст верхнего варианта"
+            self.text_1_label.position = (self.app.surface.get_width() / 3.75, self.app.surface.get_height() / 5)
             self.text_1.placeholder = "Введите текста верхнего варианта"
-            self.text_1.position = (self.app.surface.get_width() / 2, self.app.surface.get_height() / 2 - GAP / 2)
-            self.text_1.anchor = Anchor.MidBottom
+            self.text_1.position = (self.text_1_label.rect.x, self.text_1_label.rect.bottom)
+            self.text_2_label.position = (self.text_1_label.rect.x, self.text_1.rect.bottom + GAP)
+            self.text_2.position = (self.text_1_label.rect.x, self.text_2_label.rect.bottom)
 
     def _create_title_label(self) -> None:
         self.title = TextLabel(
@@ -93,14 +102,40 @@ class UIAnswerEditMenu:
             button_icon=load_asset(SPRITES, "back.png")
         )
 
+    def _create_text_1_label(self) -> None:
+        self.text_1_label = TextLabel(
+            app=self.app,
+            text="Текст",
+            position=(self.app.surface.get_width() / 3.75, self.app.surface.get_height() / 3),
+            anchor=Anchor.TopLeft,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=13,
+            font_align=Align.Left,
+            text_color=Pallete.White,
+            text_wraplength=200
+        )
+
+    def _create_text_2_label(self) -> None:
+        self.text_2_label = TextLabel(
+            app=self.app,
+            text="Текст нижнего варианта",
+            position=(self.text_1_label.rect.x, self.text_1.rect.bottom + GAP),
+            anchor=Anchor.TopLeft,
+            font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
+            font_size=13,
+            font_align=Align.Left,
+            text_color=Pallete.White,
+            text_wraplength=200
+        )
+
     def _create_text_1_textbox(self) -> None:
         self.text_1 = TextBox(
             app=self.app,
             text="",
             placeholder="Введите текст ответа",
             size=(300, 80),
-            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2),
-            anchor=Anchor.Center,
+            position=(self.text_1_label.rect.x, self.text_1_label.rect.bottom),
+            anchor=Anchor.TopLeft,
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
@@ -113,8 +148,8 @@ class UIAnswerEditMenu:
             text="",
             placeholder="Введите текст нижнего варианта",
             size=(300, 80),
-            position=(self.app.surface.get_width() / 2, self.app.surface.get_height() / 2 + GAP / 2),
-            anchor=Anchor.MidTop,
+            position=(self.text_1_label.rect.x, self.text_2_label.rect.bottom),
+            anchor=Anchor.TopLeft,
             z_index=1,
             font_path=asset_path(FONTS, "Ramona-Bold.ttf"),
             font_size=16,
