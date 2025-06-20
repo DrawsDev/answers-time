@@ -86,7 +86,7 @@ class UIRegistration:
     def _create_start_button(self) -> None:
         self.start = TextButton(
             app=self.app,
-            text="Начать тестестирование",
+            text="Начать тестирование",
             size=(200, 40),
             position=(self.name_input.rect.centerx, self.name_input.rect.bottom + GAP),
             anchor=Anchor.MidTop,
