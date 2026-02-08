@@ -3,6 +3,7 @@ import pygame
 from .window import Window
 from .keyboard import Keyboard
 from .mouse import Mouse
+from .scene import SceneManager
 
 pygame.init()
 
@@ -11,6 +12,7 @@ class Application:
         self.window = Window(title, width, height)
         self.keyboard = Keyboard()
         self.mouse = Mouse()
+        self.scene = SceneManager(self)
 
     def run(self) -> None:
         while not self.window.is_should_close():
@@ -18,12 +20,14 @@ class Application:
         self.quit()
 
     def quit(self) -> None:
+        self.scene.unload()
         sys.exit(0)
         pygame.quit()
 
     def process(self) -> None:
         self.window.process()
         self._fullscreen_key_handler()
+        self.scene.process(self.window.get_delta())
 
     def _fullscreen_key_handler(self) -> None:
         if self.keyboard.is_just_pressed("f11") \
