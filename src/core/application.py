@@ -1,12 +1,14 @@
 import sys
 import pygame
 from .window import Window
+from .keyboard import Keyboard
 
 pygame.init()
 
 class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
         self.window = Window(title, width, height)
+        self.keyboard = Keyboard()
 
     def run(self) -> None:
         while not self.window.is_should_close():
