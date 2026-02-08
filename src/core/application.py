@@ -23,3 +23,6 @@ class Application:
 
     def process(self) -> None:
         self.window.process()
+        
+        if self.keyboard.is_just_pressed("f11"):
+            self.window.toggle_fullscreen()
