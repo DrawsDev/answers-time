@@ -1,2 +1,2 @@
 from .application import Application
-from .keyboard import Key
+from .keyboard import Key, ModifierKey

@@ -142,6 +142,24 @@ class Key(enum.Enum):
     KEY_EURO = "euro"
     KEY_ANDROIDBACK = "androidback"
 
+class ModifierKey(enum.Enum):
+    MODKEY_NONE = "none"
+    MODKEY_LSHIFT = "lshift"
+    MODKEY_RSHIFT = "rshift"
+    MODKEY_SHIFT = "shift"
+    MODKEY_LCTRL = "lctrl"
+    MODKEY_RCTRL = "rctrl"
+    MODKEY_CTRL = "ctrl"
+    MODKEY_LALT = "lalt"
+    MODKEY_RALT = "ralt"
+    MODKEY_ALT = "alt"
+    MODKEY_LMETA = "lmeta"
+    MODKEY_RMETA = "rmeta"
+    MODKEY_META = "meta"
+    MODKEY_CAPS = "capslock"
+    MODKEY_NUM = "numlock"
+    MODKEY_MODE = "mode"
+
 STRING_TO_SCANCODE = {
     "unknown": pygame.K_UNKNOWN,
     "a": pygame.K_a,
@@ -284,6 +302,25 @@ STRING_TO_SCANCODE = {
     "androidback": pygame.K_AC_BACK
 }
 
+STRING_TO_MODKEY = {
+    "none": pygame.KMOD_NONE,
+    "lshift": pygame.KMOD_LSHIFT,
+    "rshift": pygame.KMOD_RSHIFT,
+    "shift": pygame.KMOD_SHIFT,
+    "lctrl": pygame.KMOD_LCTRL,
+    "rctrl": pygame.KMOD_RCTRL,
+    "ctrl": pygame.KMOD_CTRL,
+    "lalt": pygame.KMOD_LALT,
+    "ralt": pygame.KMOD_RALT,
+    "alt": pygame.KMOD_ALT,
+    "lmeta": pygame.KMOD_LMETA,
+    "rmeta": pygame.KMOD_RMETA,
+    "meta": pygame.KMOD_META,
+    "capslock": pygame.KMOD_CAPS,
+    "numlock": pygame.KMOD_NUM,
+    "mode": pygame.KMOD_MODE
+}
+
 class Keyboard:
     def is_pressed(self, key: Key) -> bool:
         wrapper = pygame.key.get_pressed()
@@ -302,3 +339,8 @@ class Keyboard:
         wrapper = pygame.key.get_just_released()
         keycode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
         return wrapper[keycode]
+
+    def is_modifier_active(self, modifier: ModifierKey) -> bool:
+        bitmask = pygame.key.get_mods()
+        modkey = STRING_TO_MODKEY.get(modifier, pygame.KMOD_NONE)
+        return bool(bitmask & modkey)
