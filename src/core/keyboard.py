@@ -322,23 +322,24 @@ STRING_TO_MODKEY = {
 }
 
 class Keyboard:
+    def _get_key_state(self, key: Key, wrapper: pygame.key.ScancodeWrapper) -> bool:
+        scancode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
+        return wrapper[scancode]
+    
     def is_pressed(self, key: Key) -> bool:
         wrapper = pygame.key.get_pressed()
-        keycode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
-        return wrapper[keycode]
+        return self._get_key_state(key, wrapper)
 
     def is_released(self, key: Key) -> bool:
         return not self.is_pressed(key)
 
     def is_just_pressed(self, key: Key) -> bool:
         wrapper = pygame.key.get_just_pressed()
-        keycode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
-        return wrapper[keycode]
+        return self._get_key_state(key, wrapper)
 
     def is_just_released(self, key: Key) -> bool:
         wrapper = pygame.key.get_just_released()
-        keycode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
-        return wrapper[keycode]
+        return self._get_key_state(key, wrapper)
 
     def is_modifier_active(self, modifier: ModifierKey) -> bool:
         bitmask = pygame.key.get_mods()
