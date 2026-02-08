@@ -23,6 +23,9 @@ class Application:
 
     def process(self) -> None:
         self.window.process()
-        
-        if self.keyboard.is_just_pressed("f11"):
-            self.window.toggle_fullscreen()
+        self._fullscreen_key_handler()
+
+    def _fullscreen_key_handler(self) -> None:
+        if self.keyboard.is_just_pressed("f11") \
+        or self.keyboard.is_just_pressed("return") and self.keyboard.is_modifier_active("alt"):
+            self.window.toggle_fullscreen()        
