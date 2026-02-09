@@ -13,9 +13,9 @@ class SceneManager:
         self.unload()
         self.scene = scene(self.app, **kwargs)
 
-    def unload(self) -> None:
+    def unload(self, **kwargs) -> None:
         if self.scene:
-            self.scene.unload()
+            self.scene.unload(**kwargs)
             self.scene = None
 
     def process(self, delta: float) -> None:

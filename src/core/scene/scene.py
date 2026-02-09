@@ -8,14 +8,14 @@ class Scene:
         self.app = app
         self.on_enter(**kwargs)
 
-    def unload(self) -> None:
+    def unload(self, **kwargs) -> None:
         self.on_exit()
         self.app = None
 
     def on_enter(self, **kwargs) -> None:
         pass
 
-    def on_exit(self) -> None:
+    def on_exit(self, **kwargs) -> None:
         pass
 
     def process(self, delta: float) -> None:

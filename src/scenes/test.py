@@ -4,7 +4,7 @@ class Test(Scene):
     def on_enter(self, **kwargs):
         print("enter")
     
-    def on_exit(self):
+    def on_exit(self, **kwargs):
         print("exit")
     
     def process(self, delta):
