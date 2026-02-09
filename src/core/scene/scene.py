@@ -9,7 +9,7 @@ class Scene:
         self.on_enter(**kwargs)
 
     def unload(self, **kwargs) -> None:
-        self.on_exit()
+        self.on_exit(**kwargs)
         self.app = None
 
     def on_enter(self, **kwargs) -> None:
