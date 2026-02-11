@@ -345,3 +345,8 @@ class Keyboard:
         bitmask = pygame.key.get_mods()
         modkey = STRING_TO_MODKEY.get(modifier, pygame.KMOD_NONE)
         return bool(bitmask & modkey)
+
+    def get_axis(self, negative_key: Key, positive_key: Key) -> int:
+        negative_pressed = self.is_pressed(negative_key)
+        positive_pressed = self.is_pressed(positive_key)
+        return positive_pressed - negative_pressed
