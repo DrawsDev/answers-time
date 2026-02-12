@@ -2,22 +2,22 @@ import pygame
 
 class Window:
     def __init__(self, title: str, width: int, height: int) -> None:
-        self.screen = pygame.display.set_mode((width, height), pygame.SCALED)
-        self.clock = pygame.Clock()
-        self.delta = 0.0
-        self.framerate = 60.0
-        self.should_close = False
+        self._screen = pygame.display.set_mode((width, height), pygame.SCALED)
+        self._clock = pygame.Clock()
+        self._delta = 0.0
+        self._framerate = 60.0
+        self._should_close = False
         self.set_title(title)
 
     def get_delta(self) -> float:
-        return self.delta
+        return self._delta
 
     def set_framerate(self, framerate: float) -> None:
-        if self.framerate != framerate:
-            self.framerate = framerate
+        if self._framerate != framerate:
+            self._framerate = framerate
 
     def get_framerate(self) -> float:
-        return self.clock.get_fps()
+        return self._clock.get_fps()
 
     def toggle_fullscreen(self) -> None:
         pygame.display.toggle_fullscreen()
@@ -32,9 +32,9 @@ class Window:
         return pygame.display.get_caption()[0]
 
     def is_should_close(self) -> bool:
-        return self.should_close
+        return self._should_close
 
     def process(self) -> None:
-        self.delta = self.clock.tick(self.framerate) / 1000
-        self.should_close = pygame.event.get(pygame.QUIT)
+        self._delta = self._clock.tick(self._framerate) / 1000
+        self._should_close = pygame.event.get(pygame.QUIT)
         pygame.display.update()
