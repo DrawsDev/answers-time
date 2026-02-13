@@ -42,6 +42,9 @@ class Window:
         width, height = self._screen.get_size()
         return width, height
 
+    def get_surface(self) -> pygame.Surface:
+        return self._screen
+
     def fill(self, color: pygame.Color) -> None:
         self._screen.fill(color)
 
