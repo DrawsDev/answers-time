@@ -21,7 +21,7 @@ class Window:
 
     def get_framerate(self) -> int:
         framerate = self._clock.get_fps()
-        return round(framerate)
+        return int(framerate)
 
     def toggle_fullscreen(self) -> None:
         pygame.display.toggle_fullscreen()
