@@ -1,7 +1,7 @@
-import enum
+from enum import Enum
 import pygame
 
-class Key(enum.Enum):
+class Key(Enum):
     KEY_UNKNOWN = "unknown"
     KEY_A = "a"
     KEY_B = "b"
@@ -142,7 +142,7 @@ class Key(enum.Enum):
     KEY_EURO = "euro"
     KEY_ANDROIDBACK = "androidback"
 
-class ModifierKey(enum.Enum):
+class ModifierKey(Enum):
     MODKEY_NONE = "none"
     MODKEY_LSHIFT = "lshift"
     MODKEY_RSHIFT = "rshift"
@@ -322,31 +322,38 @@ STRING_TO_MODKEY = {
 }
 
 class Keyboard:
-    def _get_key_state(self, key: Key, wrapper: pygame.key.ScancodeWrapper) -> bool:
+    @staticmethod
+    def _get_key_state(key: Key, wrapper: pygame.key.ScancodeWrapper) -> bool:
         scancode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
         return wrapper[scancode]
     
-    def is_pressed(self, key: Key) -> bool:
+    @staticmethod
+    def is_pressed(key: Key) -> bool:
         wrapper = pygame.key.get_pressed()
-        return self._get_key_state(key, wrapper)
+        return Keyboard._get_key_state(key, wrapper)
 
-    def is_released(self, key: Key) -> bool:
-        return not self.is_pressed(key)
+    @staticmethod
+    def is_released(key: Key) -> bool:
+        return not Keyboard.is_pressed(key)
 
-    def is_just_pressed(self, key: Key) -> bool:
+    @staticmethod
+    def is_just_pressed(key: Key) -> bool:
         wrapper = pygame.key.get_just_pressed()
-        return self._get_key_state(key, wrapper)
+        return Keyboard._get_key_state(key, wrapper)
 
-    def is_just_released(self, key: Key) -> bool:
+    @staticmethod
+    def is_just_released(key: Key) -> bool:
         wrapper = pygame.key.get_just_released()
-        return self._get_key_state(key, wrapper)
+        return Keyboard._get_key_state(key, wrapper)
 
-    def is_modifier_active(self, modifier: ModifierKey) -> bool:
+    @staticmethod
+    def is_modifier_active(modifier: ModifierKey) -> bool:
         bitmask = pygame.key.get_mods()
         modkey = STRING_TO_MODKEY.get(modifier, pygame.KMOD_NONE)
         return bool(bitmask & modkey)
 
-    def get_axis(self, negative_key: Key, positive_key: Key) -> int:
-        negative_pressed = self.is_pressed(negative_key)
-        positive_pressed = self.is_pressed(positive_key)
+    @staticmethod
+    def get_axis(negative_key: Key, positive_key: Key) -> int:
+        negative_pressed = Keyboard.is_pressed(negative_key)
+        positive_pressed = Keyboard.is_pressed(positive_key)
         return positive_pressed - negative_pressed
