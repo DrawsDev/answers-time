@@ -45,7 +45,7 @@ class Window:
     def get_surface(self) -> pygame.Surface:
         return self._screen
 
-    def fill(self, color: pygame.Color) -> None:
+    def clear(self, color: pygame.Color = "black") -> None:
         self._screen.fill(color)
 
     def print(self, text: str, x: int = 0, y: int = 0) -> None:
