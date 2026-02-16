@@ -6,6 +6,7 @@ from .mouse import Mouse
 from .scene import SceneManager
 
 pygame.init()
+pygame.mixer.init()
 
 class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
