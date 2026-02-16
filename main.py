@@ -1,5 +1,5 @@
 from src.core import Application
-from src.scenes import Test
+from src.answerstime import Test
 
 TITLE = "Answers Time"
 WIDTH = 1280
