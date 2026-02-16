@@ -7,9 +7,6 @@ class Window:
         self._delta = 0.0
         self._framerate = 60.0
         self._should_close = False
-        self._font = pygame.Font()
-        self._color = "white"
-        self._antialias = True
         self.set_title(title)
 
     def get_delta(self) -> float:
@@ -44,13 +41,6 @@ class Window:
 
     def get_surface(self) -> pygame.Surface:
         return self._screen
-
-    def clear(self, color: pygame.Color = "black") -> None:
-        self._screen.fill(color)
-
-    def print(self, text: str, x: int = 0, y: int = 0) -> None:
-        surface = self._font.render(text, self._antialias, self._color)
-        self._screen.blit(surface, (x, y))
 
     def process(self) -> None:
         self._delta = self._clock.tick(self._framerate) / 1000

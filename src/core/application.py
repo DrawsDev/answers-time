@@ -1,18 +1,22 @@
 import sys
+
 import pygame
-from .window import Window
+
+from .graphics import Graphics
 from .keyboard import Keyboard
 from .mouse import Mouse
 from .scene import SceneManager
+from .window import Window
 
 pygame.init()
 pygame.mixer.init()
 
 class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
-        self.window = Window(title, width, height)
         self.keyboard = Keyboard()
         self.mouse = Mouse()
+        self.window = Window(title, width, height)
+        self.graphics = Graphics(self)
         self.scene = SceneManager(self)
 
     def run(self) -> None:
@@ -33,4 +37,4 @@ class Application:
     def _fullscreen_key_handler(self) -> None:
         if self.keyboard.is_just_pressed("f11") \
         or self.keyboard.is_just_pressed("return") and self.keyboard.is_modifier_active("alt"):
-            self.window.toggle_fullscreen()        
+            self.window.toggle_fullscreen()
