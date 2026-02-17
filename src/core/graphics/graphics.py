@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class Graphics:
     def __init__(self, app: "Application") -> None:
         self._app = app
-        self._font = pygame.Font()
+        self._font = pygame.Font(size=24)
         self._color = "white"
         self._antialias = True
 
