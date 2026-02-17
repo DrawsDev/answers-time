@@ -32,11 +32,21 @@ class Test(Scene):
         self.app.graphics.clear(BACKGROUND)
         self.app.graphics.draw(self.scroll)
         self.app.graphics.draw(self.sprite)
+        self._debug_info_process()
+
+    def _debug_info_process(self) -> None:
         self._fps_counter_process()
+        self._versions_process()
+
+    def _versions_process(self) -> None:
+        version = self.app.version.text
+        wrapper_version = self.app.wrapper_version.text
+        self.app.graphics.print("Answers Time v" + version, 0, 0)
+        self.app.graphics.print("Wrapper v" + wrapper_version, 0, 20)
 
     def _fps_counter_process(self) -> None:
         framerate = self.app.window.get_framerate()
-        self.app.graphics.print(str(framerate))
+        self.app.graphics.print("FPS: " + str(framerate), 0, 40)
 
     def _sprite_process(self, delta: float) -> None:
         velocity = Vector2(

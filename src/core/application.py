@@ -6,7 +6,10 @@ from .graphics import Graphics
 from .keyboard import Keyboard
 from .mouse import Mouse
 from .scene import SceneManager
+from .version import Version
 from .window import Window
+
+VERSION = "0.1.0.alpha.official"
 
 pygame.init()
 pygame.mixer.init()
@@ -18,6 +21,21 @@ class Application:
         self.window = Window(title, width, height)
         self.graphics = Graphics(self)
         self.scene = SceneManager(self)
+        self._version = None
+        self._wrapper_version = Version.from_text(VERSION)
+
+    @property
+    def version(self) -> Version:
+        return self._version
+
+    @version.setter
+    def version(self, value: str) -> None:
+        if self._version == None: # yea i'm dumbass
+            self._version = Version.from_text(value)
+
+    @property
+    def wrapper_version(self) -> Version:
+        return self._wrapper_version
 
     def run(self) -> None:
         while not self.window.is_should_close():
