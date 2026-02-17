@@ -1,4 +1,5 @@
 # Answers Time
+The quiz game
 
 [![Version](https://img.shields.io/badge/version-v2.0.0--alpha-blue?style=flat-square)]() [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![Python](https://img.shields.io/badge/python-3.8.10-blue?style=flat-square)](https://www.python.org/downloads/release/python-3810/)
 
