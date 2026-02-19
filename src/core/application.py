@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from .clock import Clock
 from .graphics import Graphics
 from .keyboard import Keyboard
 from .mouse import Mouse
@@ -16,11 +17,12 @@ pygame.mixer.init()
 
 class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
-        self.keyboard = Keyboard()
-        self.mouse = Mouse()
+        self.clock = Clock()
         self.window = Window(title, width, height)
         self.graphics = Graphics(self)
         self.scene = SceneManager(self)
+        self.keyboard = Keyboard()
+        self.mouse = Mouse()
         self._version = None
         self._wrapper_version = Version.from_text(VERSION)
 
@@ -38,7 +40,7 @@ class Application:
         return self._wrapper_version
 
     def run(self) -> None:
-        while not self.window.is_should_close():
+        while not pygame.event.get(pygame.QUIT):
             self.process()
         self.quit()
 
@@ -48,9 +50,10 @@ class Application:
         pygame.quit()
 
     def process(self) -> None:
-        self.window.process()
+        self.clock.tick()
+        self.window.flip()
+        self.scene.process(self.clock.delta)
         self._fullscreen_key_handler()
-        self.scene.process(self.window.get_delta())
 
     def _fullscreen_key_handler(self) -> None:
         if self.keyboard.is_just_pressed("f11") \

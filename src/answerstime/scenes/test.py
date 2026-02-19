@@ -6,7 +6,7 @@ SPEED = 100
 
 class Test(Scene):
     def on_enter(self, **kwargs) -> None:
-        width, height = self.app.window.get_mode()
+        width, height, _ = self.app.window.get_mode()
         sprite_surface = self.app.graphics.load_surface("res/textures/dev.png")
         pattern_surface = self.app.graphics.load_surface("res/textures/pattern.png")
 
@@ -45,7 +45,7 @@ class Test(Scene):
         self.app.graphics.print("Wrapper v" + wrapper_version, 0, 20)
 
     def _fps_counter_process(self) -> None:
-        framerate = self.app.window.get_framerate()
+        framerate = self.app.clock.framerate
         self.app.graphics.print("FPS: " + str(framerate), 0, 40)
 
     def _sprite_process(self, delta: float) -> None:
