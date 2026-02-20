@@ -1,8 +1,10 @@
+import math
+
 from src.core import Scene, Vector2
-from src.core.objects import ScrollingBackground, Sprite
+from src.core.objects import *
 
 BACKGROUND = "#a0a0a0"
-SPEED = 100
+SPEED = 500
 
 class Test(Scene):
     def on_enter(self, **kwargs) -> None:
@@ -16,6 +18,13 @@ class Test(Scene):
         self.scroll = ScrollingBackground(pattern_surface)
         self.scroll.angle = 15
         self.scroll.speed = 100
+
+        self.label = Label()
+        self.label.anchor = "center"
+        self.label.position = Vector2(width / 2, 100)
+        self.label.text = "Hello World!"
+        self.label.font_filepath = "res/fonts/Ramona-Bold.ttf"
+        self.label.font_size = 60
     
     def on_exit(self, **kwargs) -> None:
         pass
@@ -26,12 +35,14 @@ class Test(Scene):
 
     def _objects_process(self, delta: float) -> None:
         self._sprite_process(delta)
+        self._label_process(delta)
         self.scroll.process(delta)
 
     def _graphics_process(self) -> None:
         self.app.graphics.clear(BACKGROUND)
         self.app.graphics.draw(self.scroll)
         self.app.graphics.draw(self.sprite)
+        self.app.graphics.draw(self.label)
         self._debug_info_process()
 
     def _debug_info_process(self) -> None:
@@ -47,6 +58,12 @@ class Test(Scene):
     def _fps_counter_process(self) -> None:
         framerate = self.app.clock.framerate
         self.app.graphics.print("FPS: " + str(framerate), 0, 40)
+
+    def _label_process(self, delta: float) -> None:
+        self.label.offset = Vector2(
+            math.cos(self.app.clock.get_ticks() / 500) * 50,
+            math.sin(self.app.clock.get_ticks() / 250) * 25
+        )
 
     def _sprite_process(self, delta: float) -> None:
         velocity = Vector2(
