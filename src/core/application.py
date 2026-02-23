@@ -53,6 +53,7 @@ class Application:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit()
+            self.scene.event(event)
 
     def process(self) -> None:
         self.clock.tick()

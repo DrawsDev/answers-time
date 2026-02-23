@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 
+import pygame
+
 if TYPE_CHECKING:
-    from ..application import Application
+    from src.core.application import Application
 
 class Scene:
     def __init__(self, app: "Application", **kwargs) -> None:
@@ -16,6 +18,9 @@ class Scene:
         pass
 
     def on_exit(self, **kwargs) -> None:
+        pass
+
+    def event(self, event: pygame.Event) -> None:
         pass
 
     def process(self, delta: float) -> None:

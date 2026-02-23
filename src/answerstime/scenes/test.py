@@ -1,6 +1,7 @@
 import math
 
-from src.core import Scene, Vector2
+from src.core import Scene
+from src.core.common import *
 from src.core.objects import *
 
 BACKGROUND = "#a0a0a0"
@@ -29,6 +30,9 @@ class Test(Scene):
     def on_exit(self, **kwargs) -> None:
         pass
     
+    def event(self, event: Event) -> None:
+        pass
+
     def process(self, delta: float) -> None:
         self._objects_process(delta)
         self._graphics_process()
