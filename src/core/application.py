@@ -40,14 +40,19 @@ class Application:
         return self._wrapper_version
 
     def run(self) -> None:
-        while not pygame.event.get(pygame.QUIT):
+        while True:
+            self.event()
             self.process()
-        self.quit()
 
     def quit(self) -> None:
         self.scene.unload()
         sys.exit(0)
         pygame.quit()
+
+    def event(self) -> None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.quit()
 
     def process(self) -> None:
         self.clock.tick()
