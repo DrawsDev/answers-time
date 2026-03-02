@@ -2,18 +2,19 @@ import sys
 
 import pygame
 
-from .clock import Clock
-from .graphics import Graphics
-from .keyboard import Keyboard
-from .mouse import Mouse
-from .scene import SceneManager
-from .version import Version
-from .window import Window
+from src.core.clock import Clock
+from src.core.graphics import Graphics
+from src.core.keyboard import Keyboard
+from src.core.mouse import Mouse
+from src.core.scene import SceneManager
+from src.core.version import Version
+from src.core.window import Window
 
 VERSION = "0.1.0.alpha.official"
 
 pygame.init()
 pygame.mixer.init()
+
 
 class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
