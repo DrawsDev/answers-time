@@ -63,6 +63,9 @@ class Application:
         self._fullscreen_key_handler()
 
     def _fullscreen_key_handler(self) -> None:
-        if self.keyboard.is_just_pressed("f11") \
-        or self.keyboard.is_just_pressed("return") and self.keyboard.is_modifier_active("alt"):
+        if (
+            self.keyboard.is_just_pressed("f11")
+            or self.keyboard.is_just_pressed("return")
+            and self.keyboard.is_modifier_active("alt")
+        ):
             self.window.toggle_fullscreen()
