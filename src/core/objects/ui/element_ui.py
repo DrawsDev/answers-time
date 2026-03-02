@@ -60,9 +60,7 @@ class ElementUI(Drawable):
         pass
 
     def has_point(self, point: Tuple[int, int]) -> bool:
-        if self._mouse_filter == 1:
-            return False
-        return self._rect.collidepoint(point)
+        return self._mouse_filter == 0 and self._rect.collidepoint(point)
 
     def adjust(self) -> pygame.FRect:
         return self._rect
