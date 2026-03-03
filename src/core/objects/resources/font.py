@@ -21,11 +21,11 @@ class Font:
         self._update_parent_surface()
 
     @property
-    def antialiase(self) -> bool:
+    def antialias(self) -> bool:
         return self._font.antialiased
 
-    @antialiase.setter
-    def antialiase(self, value: bool) -> None:
+    @antialias.setter
+    def antialias(self, value: bool) -> None:
         self._font.antialiased = value
         self._update_parent_surface()
 
