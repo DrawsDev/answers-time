@@ -3,17 +3,17 @@ from typing import Iterable, List, Optional, Tuple, Union
 import pygame
 
 from src.core.graphics import Drawable
-from src.core.objects.ui.element_ui import ElementUI
+from src.core.objects.gui import Element
 
 
 class Container(Drawable):
     def __init__(self) -> None:
-        self._elements: List[ElementUI] = []
-        self._captured: Optional[ElementUI] = None
+        self._elements: List[Element] = []
+        self._captured: Optional[Element] = None
 
-    def add(self, *elements: Union[ElementUI, Iterable[ElementUI]]) -> None:
+    def add(self, *elements: Union[Element, Iterable[Element]]) -> None:
         for element in elements:
-            if isinstance(element, ElementUI):
+            if isinstance(element, Element):
                 if not self.has(element):
                     self._elements.append(element)
             else:
@@ -22,9 +22,9 @@ class Container(Drawable):
                 except:
                     pass
 
-    def remove(self, *elements: Union[ElementUI, Iterable[ElementUI]]) -> None:
+    def remove(self, *elements: Union[Element, Iterable[Element]]) -> None:
         for element in elements:
-            if isinstance(element, ElementUI):
+            if isinstance(element, Element):
                 if self.has(element):
                     self._elements.remove(element)
             else:
@@ -36,18 +36,18 @@ class Container(Drawable):
     def clear(self) -> None:
         self._elements.clear()
 
-    def has(self, element: ElementUI) -> bool:
+    def has(self, element: Element) -> bool:
         return element in self._elements
 
-    def find_element_at_point(self, point: Tuple[int, int]) -> Optional[ElementUI]:
+    def find_element_at_point(self, point: Tuple[int, int]) -> Optional[Element]:
         for element in reversed(self._elements):
             if element.has_point(point):
                 return element
 
-    def get_captured(self) -> Optional[ElementUI]:
+    def get_captured(self) -> Optional[Element]:
         return self._captured
 
-    def get_children(self) -> List[ElementUI]:
+    def get_children(self) -> List[Element]:
         return self._elements
 
     def draw(self, surface: pygame.Surface) -> None:

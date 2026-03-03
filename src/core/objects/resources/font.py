@@ -3,11 +3,11 @@ from typing import Optional
 import pygame
 import pygame.freetype
 
-from src.core.objects.ui.element_ui import ElementUI
+from src.core.objects.gui import Element
 
 
 class Font:
-    def __init__(self, parent: Optional[ElementUI] = None) -> None:
+    def __init__(self, parent: Optional[Element] = None) -> None:
         self._parent = parent
         self._font = pygame.freetype.Font(None, 24)
 

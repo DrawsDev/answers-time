@@ -5,7 +5,7 @@ import pygame
 from src.core.graphics import Drawable
 
 
-class ElementUI(Drawable):
+class Element(Drawable):
     def __init__(self) -> None:
         self._anchor = "topleft"
         self._position = pygame.Vector2()

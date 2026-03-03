@@ -1,17 +1,17 @@
 from typing import Callable, Optional
 
 import pygame
-import pygame.freetype
 
-from src.core.objects.ui.element_ui import ElementUI
+from src.core.objects.gui import Element
+from src.core.objects.resources import Font
 
 
-class Button(ElementUI):
+class Button(Element):
     def __init__(self) -> None:
         super().__init__()
         self._offset = pygame.Vector2()
         self._text = ""
-        self._font = pygame.freetype.Font(None, 24)
+        self._font = Font(self)
         self._font_color = "white"
         self._hover_color = "#97AACD"
         self._normal_color = "#717F99"
@@ -43,6 +43,10 @@ class Button(ElementUI):
         self._update_surface()
 
     @property
+    def font(self) -> Font:
+        return self._font
+
+    @property
     def font_color(self) -> pygame.Color:
         return self._font_color
     
@@ -50,25 +54,6 @@ class Button(ElementUI):
     def font_color(self, value: pygame.Color):
         self._font_color = value
         self._update_surface()
-
-    @property
-    def font_filepath(self) -> str:
-        return self._font.path
-    
-    @font_filepath.setter
-    def font_filepath(self, value: str) -> None:
-        self._font = pygame.freetype.Font(value, self._font.size)
-        self._update_surface()
-    
-    @property
-    def font_size(self) -> int:
-        return self._font.size
-    
-    @font_size.setter
-    def font_size(self, value: int) -> None:
-        if value > 0:
-            self._font.size = value
-            self._update_surface()
 
     @property
     def callback(self) -> Optional[Callable]:
@@ -84,7 +69,7 @@ class Button(ElementUI):
         self._rect = self._surface.get_frect(**{self._anchor: position})
 
     def _update_surface(self) -> None:
-        text_surface, _ = self._font.render(self._text, self._font_color)
+        text_surface = self._font.render(self._text, self._font_color)
         button_surface = pygame.Surface(text_surface.size)
 
         if self._hovered and not self._held:
@@ -93,7 +78,6 @@ class Button(ElementUI):
             button_surface.fill(self._pressed_color)
         else:
             button_surface.fill(self._normal_color)
-        
         button_surface.blit(text_surface)
 
         self._surface = button_surface
