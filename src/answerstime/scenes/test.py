@@ -5,7 +5,7 @@ from src.core import Scene
 from src.core.common import *
 from src.core.objects import *
 
-BACKGROUND = "#a0a0a0"
+BACKGROUND = Color("#a0a0a0")
 
 
 class Test(Scene):
@@ -18,21 +18,33 @@ class Test(Scene):
         self.scroll.angle = 15
         self.scroll.speed = 100
 
+        self.label_theme = LabelTheme()
+        self.label_theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
+        self.label_theme.font.size = 64
+
+        self.button_theme = ButtonTheme()
+        self.button_theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
+        self.button_theme.font.size = 64
+        self.button_theme.box_style.corner_radius = 8
+
         self.label = Label()
         self.label.anchor = "center"
         self.label.position = Vector2(width / 2, height / 2)
         self.label.text = "Hello World!"
+        self.label.theme = self.label_theme
 
         self.button = Button()
         self.button.anchor = "midbottom"
         self.button.position = Vector2(width / 2, height - 100)
         self.button.text = "random size"
+        self.button.theme = self.button_theme
         self.button.callback = self._set_random_font_size
 
         self.button2 = Button()
         self.button2.anchor = "midbottom"
         self.button2.position = Vector2(width / 2, height - 130)
         self.button2.text = "nope"
+        self.button2.theme = self.button_theme
         self.button2.callback = lambda: print("A")
 
         self.container = Container()
@@ -80,4 +92,4 @@ class Test(Scene):
         )
 
     def _set_random_font_size(self) -> None:
-        pass
+        self.label_theme.font.size = random.randint(16, 128)

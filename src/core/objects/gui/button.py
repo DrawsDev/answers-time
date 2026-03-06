@@ -3,6 +3,7 @@ from typing import Callable, Optional
 import pygame
 
 from src.core.objects.gui import Element
+from src.core.objects.resources import ButtonTheme
 
 
 class Button(Element):
@@ -10,9 +11,7 @@ class Button(Element):
         super().__init__()
         self._offset = pygame.Vector2()
         self._text = ""
-        self._hover_color = "#97AACD"
-        self._normal_color = "#717F99"
-        self._pressed_color = "#383F4C"
+        self._theme = ButtonTheme()
         self._held = False
         self._callback = None
         self._update_surface()
@@ -39,8 +38,17 @@ class Button(Element):
         self._text = value
         self._update_surface()
 
-
+    @property
+    def theme(self) -> ButtonTheme:
+        return self._theme
     
+    @theme.setter
+    def theme(self, value: ButtonTheme) -> None:
+        if self._theme != value:
+            self._theme.changed.disconnect(self._update_surface)
+            self._theme = value
+            self._theme.changed.connect(self._update_surface)
+            self._update_surface()
 
     @property
     def callback(self) -> Optional[Callable]:
@@ -56,16 +64,18 @@ class Button(Element):
         self._rect = self._surface.get_frect(**{self._anchor: position})
 
     def _update_surface(self) -> None:
-        button_surface = pygame.Surface(text_surface.size)
-
         if self._hovered and not self._held:
-            button_surface.fill(self._hover_color)
+            box_color = self.theme.box_hover_color
         elif self._hovered and self._held:
-            button_surface.fill(self._pressed_color)
+            box_color = self.theme.box_pressed_color
         else:
-            button_surface.fill(self._normal_color)
+            box_color = self.theme.box_normal_color
+        
+        text_surface = self.theme.font.get_render(self._text, self.theme.font_color)
 
-        self._surface = button_surface
+        self._surface = self.theme.box_style.get_render(text_surface.get_frect(), box_color)
+        self._surface.blit(text_surface, self.theme.box_style.get_offset())
+
         self._update_rect()
 
     def draw(self, surface: pygame.Surface) -> None:
