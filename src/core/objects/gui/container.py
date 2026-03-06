@@ -68,12 +68,10 @@ class Container(Drawable):
     def process(self, delta: float) -> None:
         for element in self._elements:
             element.process(delta)
-            element.hovered = False
+            if element != self._captured:
+                element.hovered = False
 
-        if self._captured:
-            self._captured.hovered = True
-        else:
-            point = pygame.mouse.get_pos()
-            element = self.find_element_at_point(point)
-            if element:
-                element.hovered = True
+        point = pygame.mouse.get_pos()
+        element = self.find_element_at_point(point)
+        if element:
+            element.hovered = True
