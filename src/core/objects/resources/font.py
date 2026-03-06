@@ -3,12 +3,12 @@ from typing import Optional
 import pygame
 import pygame.freetype
 
-from src.core.objects.gui import Element
+from src.core.objects.resources import Resource
 
 
-class Font:
-    def __init__(self, parent: Optional[Element] = None) -> None:
-        self._parent = parent
+class Font(Resource):
+    def __init__(self) -> None:
+        super().__init__()
         self._font = pygame.freetype.Font(None, 24)
 
     @property
@@ -18,7 +18,7 @@ class Font:
     @filepath.setter
     def filepath(self, value: Optional[str]) -> None:
         self._font = pygame.freetype.Font(value, self._font.size)
-        self._update_parent_surface()
+        self._changed.emit()
 
     @property
     def antialias(self) -> bool:
@@ -27,7 +27,7 @@ class Font:
     @antialias.setter
     def antialias(self, value: bool) -> None:
         self._font.antialiased = value
-        self._update_parent_surface()
+        self._changed.emit()
 
     @property
     def size(self) -> float:
@@ -37,12 +37,8 @@ class Font:
     def size(self, value: float) -> None:
         if value > 0:
             self._font.size = value
-            self._update_parent_surface()
+            self._changed.emit()
 
-    def _update_parent_surface(self) -> None:
-        if self._parent:
-            self._parent._update_surface()
-
-    def render(self, text: str, color: pygame.Color) -> pygame.Surface:
+    def get_render(self, text: str, color: pygame.Color) -> pygame.Surface:
         surface, _ = self._font.render(text, color)
         return surface

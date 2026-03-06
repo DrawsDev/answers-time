@@ -1,7 +1,6 @@
 import pygame
 
 from src.core.objects.gui import Element
-from src.core.objects.resources import Font
 
 
 class Label(Element):
@@ -9,7 +8,6 @@ class Label(Element):
         super().__init__()
         self._offset = pygame.Vector2()
         self._text = ""
-        self._font = Font(self)
         self._update_surface()
 
     @property
@@ -30,12 +28,7 @@ class Label(Element):
         self._text = value
         self._update_surface()
 
-    @property
-    def font(self) -> Font:
-        return self._font
-
     def _update_surface(self) -> None:
-        self._surface = self._font.render(self._text, "white")
         self._update_rect()
 
     def _update_rect(self) -> None:

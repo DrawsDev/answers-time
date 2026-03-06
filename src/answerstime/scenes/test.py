@@ -22,23 +22,17 @@ class Test(Scene):
         self.label.anchor = "center"
         self.label.position = Vector2(width / 2, height / 2)
         self.label.text = "Hello World!"
-        self.label.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
-        self.label.font.size = 64
 
         self.button = Button()
         self.button.anchor = "midbottom"
         self.button.position = Vector2(width / 2, height - 100)
         self.button.text = "random size"
-        self.button.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
-        self.button.font.size = 64
-        self.button.callback = lambda: self._set_random_font_size()
+        self.button.callback = self._set_random_font_size
 
         self.button2 = Button()
         self.button2.anchor = "midbottom"
         self.button2.position = Vector2(width / 2, height - 130)
         self.button2.text = "nope"
-        self.button2.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
-        self.button2.font.size = 48
         self.button2.callback = lambda: print("A")
 
         self.container = Container()
@@ -86,4 +80,4 @@ class Test(Scene):
         )
 
     def _set_random_font_size(self) -> None:
-        self.label.font.size = random.randint(16, 128)
+        pass

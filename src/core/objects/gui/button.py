@@ -3,7 +3,6 @@ from typing import Callable, Optional
 import pygame
 
 from src.core.objects.gui import Element
-from src.core.objects.resources import Font
 
 
 class Button(Element):
@@ -11,8 +10,6 @@ class Button(Element):
         super().__init__()
         self._offset = pygame.Vector2()
         self._text = ""
-        self._font = Font(self)
-        self._font_color = "white"
         self._hover_color = "#97AACD"
         self._normal_color = "#717F99"
         self._pressed_color = "#383F4C"
@@ -42,18 +39,8 @@ class Button(Element):
         self._text = value
         self._update_surface()
 
-    @property
-    def font(self) -> Font:
-        return self._font
 
-    @property
-    def font_color(self) -> pygame.Color:
-        return self._font_color
     
-    @font_color.setter
-    def font_color(self, value: pygame.Color):
-        self._font_color = value
-        self._update_surface()
 
     @property
     def callback(self) -> Optional[Callable]:
@@ -69,7 +56,6 @@ class Button(Element):
         self._rect = self._surface.get_frect(**{self._anchor: position})
 
     def _update_surface(self) -> None:
-        text_surface = self._font.render(self._text, self._font_color)
         button_surface = pygame.Surface(text_surface.size)
 
         if self._hovered and not self._held:
@@ -78,7 +64,6 @@ class Button(Element):
             button_surface.fill(self._pressed_color)
         else:
             button_surface.fill(self._normal_color)
-        button_surface.blit(text_surface)
 
         self._surface = button_surface
         self._update_rect()
