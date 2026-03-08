@@ -2,7 +2,7 @@ import math
 import random
 
 from src.core import *
-from src.core.objects import *
+from src.objects import *
 from src.utils import *
 
 BACKGROUND = Color("#a0a0a0")

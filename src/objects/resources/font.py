@@ -3,7 +3,7 @@ from typing import Optional
 import pygame
 import pygame.freetype
 
-from src.core.objects.resources import Resource
+from src.objects.resources import Resource
 
 
 class Font(Resource):

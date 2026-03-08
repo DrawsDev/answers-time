@@ -1,8 +1,9 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 import pygame
 
 from src.core.graphics import Drawable
+from src.objects.resources import Theme
 
 
 class Element(Drawable):

@@ -1,7 +1,7 @@
 import pygame
 
-from src.core.objects.gui import Element
-from src.core.objects.resources import LabelTheme
+from src.objects.gui import Element
+from src.objects.resources import LabelTheme
 
 
 class Label(Element):
@@ -34,14 +34,6 @@ class Label(Element):
     @property
     def theme(self) -> LabelTheme:
         return self._theme
-    
-    @theme.setter
-    def theme(self, value: LabelTheme) -> None:
-        if self._theme != value:
-            self._theme.changed.disconnect(self._update_surface)
-            self._theme = value
-            self._theme.changed.connect(self._update_surface)
-            self._update_surface()
     
     def _update_surface(self) -> None:
         text_surface = self.theme.font.get_render(self.text, self.theme.font_color)

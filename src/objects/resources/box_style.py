@@ -2,7 +2,7 @@ from typing import Tuple
 
 import pygame
 
-from src.core.objects.resources import Resource
+from src.objects.resources import Resource
 
 
 class BoxStyle(Resource):

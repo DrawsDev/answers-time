@@ -2,7 +2,7 @@ from typing import Optional
 
 import pygame
 
-from src.core.objects.resources import Resource, Font, BoxStyle
+from src.objects.resources import Resource, Font, BoxStyle
 
 
 class LabelTheme(Resource):

@@ -3,7 +3,7 @@ from typing import Iterable, List, Optional, Tuple, Union
 import pygame
 
 from src.core.graphics import Drawable
-from src.core.objects.gui import Element
+from src.objects.gui import Element
 
 
 class Container(Drawable):

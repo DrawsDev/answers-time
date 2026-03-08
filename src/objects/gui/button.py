@@ -2,8 +2,8 @@ from typing import Callable, Optional
 
 import pygame
 
-from src.core.objects.gui import Element
-from src.core.objects.resources import ButtonTheme
+from src.objects.gui import Element
+from src.objects.resources import ButtonTheme
 
 
 class Button(Element):
@@ -43,14 +43,6 @@ class Button(Element):
     def theme(self) -> ButtonTheme:
         return self._theme
     
-    @theme.setter
-    def theme(self, value: ButtonTheme) -> None:
-        if self._theme != value:
-            self._theme.changed.disconnect(self._update_surface)
-            self._theme = value
-            self._theme.changed.connect(self._update_surface)
-            self._update_surface()
-
     @property
     def callback(self) -> Optional[Callable]:
         return self._callback
