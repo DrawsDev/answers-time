@@ -47,12 +47,11 @@ class LabelTheme(Resource):
             self._changed.emit()
 
     def free(self):
-        self._box_style.free()
-        self._font.free()
         super().free()
-
-        self._box_style = None
+        self._font.free()
+        self._box_style.free()
         self._font = None
+        self._box_style = None
 
 
 class ButtonTheme(Resource):
@@ -121,9 +120,32 @@ class ButtonTheme(Resource):
             self._changed.emit()
 
     def free(self):
-        self._box_style.free()
-        self._font.free()
         super().free()
-
-        self._box_style = None
+        self._font.free()
+        self._box_style.free()
         self._font = None
+        self._box_style = None
+
+
+class Theme(Resource):
+    def __init__(self) -> None:
+        super().__init__()
+        self._label = LabelTheme()
+        self._button = ButtonTheme()
+        self._label.changed.connect(self.changed.emit)
+        self._button.changed.connect(self.changed.emit)
+
+    @property
+    def label(self) -> LabelTheme:
+        return self._label
+    
+    @property
+    def button(self) -> ButtonTheme:
+        return self._button
+
+    def free(self):
+        super().free()
+        self._label.free()
+        self._button.free()
+        self._label = None
+        self._button = None
