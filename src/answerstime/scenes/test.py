@@ -1,9 +1,9 @@
 import math
 import random
 
-from src.core import Scene
-from src.core.common import *
+from src.core import *
 from src.core.objects import *
+from src.utils import *
 
 BACKGROUND = Color("#a0a0a0")
 
@@ -54,6 +54,7 @@ class Test(Scene):
         self.app.graphics.clear(BACKGROUND)
         self.app.graphics.draw(self.scroll)
         self.app.graphics.draw(self.container)
+        self.label.theme.font_color = rainbow(s=50.0)
         self._debug_info_process()
 
     def _debug_info_process(self) -> None:
