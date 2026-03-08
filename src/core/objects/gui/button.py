@@ -14,6 +14,7 @@ class Button(Element):
         self._theme = ButtonTheme()
         self._held = False
         self._callback = None
+        self._theme.changed.connect(self._update_surface)
         self._update_surface()
     
     @property

@@ -10,6 +10,7 @@ class Label(Element):
         self._offset = pygame.Vector2()
         self._text = ""
         self._theme = LabelTheme()
+        self._theme.changed.connect(self._update_surface)
         self._update_surface()
 
     @property
