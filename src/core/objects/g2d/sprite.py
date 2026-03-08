@@ -1,14 +1,32 @@
+from typing import Optional
+
 import pygame
 
 from src.core.graphics import Drawable
 
 
-class Sprite(pygame.sprite.Sprite, Drawable):
-    def __init__(self, surface: pygame.Surface) -> None:
+class Sprite(Drawable):
+    def __init__(self) -> None:
         super().__init__()
+        self._surface = None
+        self._rect = pygame.FRect()
         self._anchor = "center"
-        self._position = pygame.Vector2(0, 0)
-        self._update_image(surface)
+        self._offset = pygame.Vector2()
+        self._position = pygame.Vector2()
+
+    @property
+    def surface(self) -> Optional[pygame.Surface]:
+        return self._surface
+    
+    @surface.setter
+    def surface(self, value: Optional[pygame.Surface]) -> None:
+        if self._surface != value:
+            self._surface = value
+            self._update_rect()
+
+    @property
+    def rect(self) -> pygame.FRect:
+        return self._rect
 
     @property
     def anchor(self) -> str:
@@ -20,6 +38,15 @@ class Sprite(pygame.sprite.Sprite, Drawable):
         self._update_rect()
 
     @property
+    def offset(self) -> pygame.Vector2:
+        return self._offset
+    
+    @offset.setter
+    def offset(self, value: pygame.Vector2):
+        self._offset = value
+        self._update_rect()
+
+    @property
     def position(self) -> pygame.Vector2:
         return self._position
 
@@ -28,12 +55,12 @@ class Sprite(pygame.sprite.Sprite, Drawable):
         self._position = value
         self._update_rect()
 
-    def _update_image(self, surface: pygame.Surface) -> None:
-        self.image = surface
-        self._update_rect()
-    
     def _update_rect(self) -> None:
-        self.rect = self.image.get_frect(**{self._anchor: self._position})
+        if self._surface:
+            self._rect = self._surface.get_frect(**{self._anchor: self._position})
+        else:
+            setattr(self._rect, self._anchor, self._position)
 
     def draw(self, surface: pygame.Surface) -> None:
-        surface.blit(self.image, self.rect)
+        if self._surface:
+            surface.blit(self._surface, self._rect)
