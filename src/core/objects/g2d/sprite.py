@@ -2,6 +2,7 @@ import pygame
 
 from src.core.graphics import Drawable
 
+
 class Sprite(pygame.sprite.Sprite, Drawable):
     def __init__(self, surface: pygame.Surface) -> None:
         super().__init__()
