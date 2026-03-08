@@ -18,37 +18,23 @@ class Test(Scene):
         self.scroll.angle = 15
         self.scroll.speed = 100
 
-        self.label_theme = LabelTheme()
-        self.label_theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
-        self.label_theme.font.size = 64
-
-        self.button_theme = ButtonTheme()
-        self.button_theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
-        self.button_theme.font.size = 64
-        self.button_theme.box_style.corner_radius = 8
-
         self.label = Label()
         self.label.anchor = "center"
         self.label.position = Vector2(width / 2, height / 2)
         self.label.text = "Hello World!"
-        self.label.theme = self.label_theme
+        self.label.theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
+        self.label.theme.font.size = 64
 
         self.button = Button()
         self.button.anchor = "midbottom"
         self.button.position = Vector2(width / 2, height - 100)
-        self.button.text = "random size"
-        self.button.theme = self.button_theme
-        self.button.callback = self._set_random_font_size
-
-        self.button2 = Button()
-        self.button2.anchor = "midbottom"
-        self.button2.position = Vector2(width / 2, height - 130)
-        self.button2.text = "nope"
-        self.button2.theme = self.button_theme
-        self.button2.callback = lambda: print("A")
+        self.button.text = "Button"
+        self.button.theme.font.filepath = "res/fonts/Baloo-Cyrillic.ttf"
+        self.button.theme.font.size = 64
+        self.button.theme.box_style.corner_radius = 8
 
         self.container = Container()
-        self.container.add(self.label, self.button, self.button2)
+        self.container.add(self.label, self.button)
     
     def on_exit(self, **kwargs) -> None:
         pass
@@ -63,7 +49,6 @@ class Test(Scene):
     def _objects_process(self, delta: float) -> None:
         self.scroll.process(delta)
         self.container.process(delta)
-        self._label_process(delta)
 
     def _graphics_process(self) -> None:
         self.app.graphics.clear(BACKGROUND)
@@ -84,12 +69,3 @@ class Test(Scene):
     def _fps_counter_process(self) -> None:
         framerate = self.app.clock.framerate
         self.app.graphics.print("FPS: " + str(framerate), 0, 40)
-
-    def _label_process(self, delta: float) -> None:
-        self.label.offset = Vector2(
-            math.cos(self.app.clock.get_ticks() / 1000) * 50,
-            math.sin(self.app.clock.get_ticks() / 500) * 25
-        )
-
-    def _set_random_font_size(self) -> None:
-        self.label_theme.font.size = random.randint(16, 128)
