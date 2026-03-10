@@ -333,7 +333,7 @@ ModifierLike = Union[str, Modifier]
 class Keyboard:
     @staticmethod
     def _get_key_state(key: KeyLike, wrapper: pygame.key.ScancodeWrapper) -> bool:
-        keycode = STRING_TO_KEYCODE.get(key, pygame.K_UNKNOWN)
+        keycode = STRING_TO_KEYCODE.get(key.lower(), pygame.K_UNKNOWN)
         return wrapper[keycode]
     
     @staticmethod
@@ -358,7 +358,7 @@ class Keyboard:
     @staticmethod
     def is_modifier_active(modifier: ModifierLike) -> bool:
         bitmask = pygame.key.get_mods()
-        modcode = STRING_TO_MODCODE.get(modifier, pygame.KMOD_NONE)
+        modcode = STRING_TO_MODCODE.get(modifier.lower(), pygame.KMOD_NONE)
         return bool(bitmask & modcode)
 
     @staticmethod
