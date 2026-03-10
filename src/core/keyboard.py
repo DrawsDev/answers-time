@@ -160,7 +160,7 @@ class ModifierKey(Enum):
     MODKEY_NUM = "numlock"
     MODKEY_MODE = "mode"
 
-STRING_TO_SCANCODE = {
+STRING_TO_KEYCODE = {
     "unknown": pygame.K_UNKNOWN,
     "a": pygame.K_a,
     "b": pygame.K_b,
@@ -324,8 +324,8 @@ STRING_TO_MODKEY = {
 class Keyboard:
     @staticmethod
     def _get_key_state(key: Key, wrapper: pygame.key.ScancodeWrapper) -> bool:
-        scancode = STRING_TO_SCANCODE.get(key, pygame.K_UNKNOWN)
-        return wrapper[scancode]
+        keycode = STRING_TO_KEYCODE.get(key, pygame.K_UNKNOWN)
+        return wrapper[keycode]
     
     @staticmethod
     def is_pressed(key: Key) -> bool:
