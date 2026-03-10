@@ -302,7 +302,7 @@ STRING_TO_KEYCODE = {
     "androidback": pygame.K_AC_BACK
 }
 
-STRING_TO_MODKEY = {
+STRING_TO_MODCODE = {
     "none": pygame.KMOD_NONE,
     "lshift": pygame.KMOD_LSHIFT,
     "rshift": pygame.KMOD_RSHIFT,
@@ -349,8 +349,8 @@ class Keyboard:
     @staticmethod
     def is_modifier_active(modifier: ModifierKey) -> bool:
         bitmask = pygame.key.get_mods()
-        modkey = STRING_TO_MODKEY.get(modifier, pygame.KMOD_NONE)
-        return bool(bitmask & modkey)
+        modcode = STRING_TO_MODCODE.get(modifier, pygame.KMOD_NONE)
+        return bool(bitmask & modcode)
 
     @staticmethod
     def get_axis(negative_key: Key, positive_key: Key) -> int:
