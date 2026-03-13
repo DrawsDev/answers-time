@@ -11,7 +11,7 @@ BACKGROUND = Color("#a0a0a0")
 class Test(Scene):
     def on_enter(self, **kwargs) -> None:
         width, height, _ = self.app.window.get_mode()
-        pattern_surface = self.app.graphics.load_surface("res/textures/pattern.png")
+        pattern_surface = self.app.graphics.load_surface("res/textures/pattern1.png")
 
         self.scroll = ScrollingBackground()
         self.scroll.pattern = pattern_surface
