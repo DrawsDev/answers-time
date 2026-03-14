@@ -58,15 +58,12 @@ class Test(Scene):
         self._debug_info_process()
 
     def _debug_info_process(self) -> None:
-        self._fps_counter_process()
         self._versions_process()
+        self.app.graphics.print(f"FPS: {self.app.clock.framerate}", 0, 40)
+        self.app.graphics.print(f"MP: {self.app.mouse.get_position()}", 0, 60)
 
     def _versions_process(self) -> None:
-        version = self.app.version.text
-        wrapper_version = self.app.wrapper_version.text
-        self.app.graphics.print("Answers Time v" + version, 0, 0)
-        self.app.graphics.print("Wrapper v" + wrapper_version, 0, 20)
-
-    def _fps_counter_process(self) -> None:
-        framerate = self.app.clock.framerate
-        self.app.graphics.print("FPS: " + str(framerate), 0, 40)
+        version = self.app.get_version().as_text()
+        wrapper_version = self.app.get_wrapper_version().as_text()
+        self.app.graphics.print("Wrapper v" + wrapper_version, 0, 0)
+        self.app.graphics.print("Answers Time v" + version, 0, 20)

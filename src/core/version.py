@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class Version:
     major: int
@@ -7,11 +8,6 @@ class Version:
     patch: int
     status: str
     build: str
-
-    @property
-    def text(self) -> str:
-        version = f"{self.major}.{self.minor}.{self.patch}"
-        return f"{version}.{self.status}.{self.build}"
 
     @staticmethod
     def from_text(version: str) -> "Version":
@@ -22,3 +18,6 @@ class Version:
         status = parts[3]
         build = parts[4]
         return Version(major, minor, patch, status, build)
+
+    def as_text(self) -> str:
+        return f"{self.major}.{self.minor}.{self.patch}.{self.status}.{self.build}"

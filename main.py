@@ -8,6 +8,6 @@ HEIGHT = 720
 
 if __name__ == "__main__":
     application = Application(TITLE, WIDTH, HEIGHT)
-    application.version = VERSION
+    application.set_version(VERSION)
     application.scene.load(Test)
     application.run()

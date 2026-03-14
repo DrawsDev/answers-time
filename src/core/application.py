@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 
 import pygame
 
@@ -27,18 +28,15 @@ class Application:
         self._version = None
         self._wrapper_version = Version.from_text(VERSION)
 
-    @property
-    def version(self) -> Version:
+    def get_wrapper_version(self) -> Version:
+        return self._wrapper_version
+
+    def get_version(self) -> Optional[Version]:
         return self._version
 
-    @version.setter
-    def version(self, value: str) -> None:
+    def set_version(self, version: str) -> None:
         if self._version == None: # yea i'm dumbass
-            self._version = Version.from_text(value)
-
-    @property
-    def wrapper_version(self) -> Version:
-        return self._wrapper_version
+            self._version = Version.from_text(version)
 
     def run(self) -> None:
         while True:
