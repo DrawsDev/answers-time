@@ -1,3 +1,4 @@
+import os
 import sys
 from typing import Optional
 
@@ -12,6 +13,10 @@ from src.core.version import Version
 from src.core.window import Window
 
 VERSION = "0.1.0.alpha.official"
+
+if sys.platform == "win32":
+    os.environ["SDL_WINDOWS_DPI_AWARENESS"] = "system"
+os.environ["SDL_VIDEO_CENTERED"] = "1"
 
 pygame.init()
 pygame.mixer.init()
@@ -52,6 +57,7 @@ class Application:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit()
+            self.window.event(event)
             self.scene.event(event)
 
     def process(self) -> None:
@@ -66,4 +72,7 @@ class Application:
             or self.keyboard.is_just_pressed("return")
             and self.keyboard.is_modifier_active("alt")
         ):
-            self.window.toggle_fullscreen()
+            if self.window.is_fullscreen():
+                self.window.set_windowed()
+            else:
+                self.window.set_fullscreen()
