@@ -1,4 +1,4 @@
-from src.core.signal import Signal
+from ..signal import Signal
 
 
 class Resource:
