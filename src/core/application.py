@@ -5,13 +5,11 @@ from typing import Optional
 import pygame
 
 from . import keyboard
-from src.core.clock import Clock
-from src.core.graphics import Graphics
-from src.core.scene import SceneManager
-from src.core.version import Version
-from src.core.window import Window
-
-VERSION = "0.1.0.alpha.official"
+from .clock import Clock
+from .graphics import Graphics
+from .scene import SceneManager
+from .version import Version
+from .window import Window
 
 if sys.platform == "win32":
     os.environ["SDL_WINDOWS_DPI_AWARENESS"] = "system"
@@ -28,10 +26,6 @@ class Application:
         self.graphics = Graphics(self)
         self.scene = SceneManager(self)
         self._version = None
-        self._wrapper_version = Version.from_text(VERSION)
-
-    def get_wrapper_version(self) -> Version:
-        return self._wrapper_version
 
     def get_version(self) -> Optional[Version]:
         return self._version
