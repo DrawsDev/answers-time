@@ -2,11 +2,10 @@ from typing import Iterable, List, Optional, Tuple, Union
 
 import pygame
 
-from src.core.graphics import Drawable
 from src.objects.gui import Element
 
 
-class Container(Drawable):
+class Container:
     def __init__(self) -> None:
         self._elements: List[Element] = []
         self._captured: Optional[Element] = None

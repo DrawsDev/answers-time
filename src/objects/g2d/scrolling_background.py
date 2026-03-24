@@ -3,10 +3,8 @@ from typing import Tuple
 
 import pygame
 
-from src.core.graphics import Drawable
 
-
-class ScrollingBackground(Drawable):
+class ScrollingBackground:
     def __init__(self) -> None:
         self._pattern = None
         self._angle = 0

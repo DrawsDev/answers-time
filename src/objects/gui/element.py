@@ -2,11 +2,10 @@ from typing import Tuple, Optional
 
 import pygame
 
-from src.core.graphics import Drawable
 from src.objects.resources import Theme
 
 
-class Element(Drawable):
+class Element:
     def __init__(self) -> None:
         self._anchor = "topleft"
         self._position = pygame.Vector2()

@@ -4,7 +4,6 @@ import pygame
 
 if TYPE_CHECKING:
     from src.core.application import Application
-    from src.core.graphics import Drawable
 
 
 class Graphics:

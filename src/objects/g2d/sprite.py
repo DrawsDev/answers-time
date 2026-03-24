@@ -2,10 +2,8 @@ from typing import Optional
 
 import pygame
 
-from src.core.graphics import Drawable
 
-
-class Sprite(Drawable):
+class Sprite:
     def __init__(self) -> None:
         super().__init__()
         self._surface = None
