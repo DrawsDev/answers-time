@@ -51,9 +51,9 @@ class Test(Scene):
         self.container.process(delta)
 
     def _graphics_process(self) -> None:
-        self.app.graphics.clear(BACKGROUND)
-        self.app.graphics.draw(self.scroll)
-        self.app.graphics.draw(self.container)
+	 surface = self.app.window.get_surface()
+	 self.scroll.draw(surface)
+	 self.container.draw(surface)
         self.label.theme.font_color = rainbow(s=50.0)
         self._debug_info_process()
 

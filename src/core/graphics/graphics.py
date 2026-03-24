@@ -24,6 +24,3 @@ class Graphics:
     def print(self, text: str, x: int = 0, y: int = 0) -> None:
         text_surface = self._font.render(text, self._antialias, self._color)
         self._app.window.get_surface().blit(text_surface, (x, y))
-
-    def draw(self, drawable: "Drawable") -> None:
-        drawable.draw(self._app.window.get_surface())
