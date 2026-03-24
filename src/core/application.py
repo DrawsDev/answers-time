@@ -4,9 +4,9 @@ from typing import Optional
 
 import pygame
 
+from . import keyboard
 from src.core.clock import Clock
 from src.core.graphics import Graphics
-from src.core.keyboard import Keyboard
 from src.core.mouse import Mouse
 from src.core.scene import SceneManager
 from src.core.version import Version
@@ -28,7 +28,6 @@ class Application:
         self.window = Window(title, width, height)
         self.graphics = Graphics(self)
         self.scene = SceneManager(self)
-        self.keyboard = Keyboard()
         self.mouse = Mouse()
         self._version = None
         self._wrapper_version = Version.from_text(VERSION)
@@ -68,9 +67,9 @@ class Application:
 
     def _fullscreen_key_handler(self) -> None:
         if (
-            self.keyboard.is_just_pressed("f11")
-            or self.keyboard.is_just_pressed("return")
-            and self.keyboard.is_modifier_active("alt")
+            keyboard.is_just_pressed("f11")
+            or keyboard.is_just_pressed("return")
+            and keyboard.is_modifier_active("alt")
         ):
             if self.window.is_fullscreen():
                 self.window.set_windowed()

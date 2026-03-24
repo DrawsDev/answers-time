@@ -330,39 +330,37 @@ KeyLike = Union[str, Key]
 ModifierLike = Union[str, Modifier]
 
 
-class Keyboard:
-    @staticmethod
-    def _get_key_state(key: KeyLike, wrapper: pygame.key.ScancodeWrapper) -> bool:
-        keycode = STRING_TO_KEYCODE.get(key.lower(), pygame.K_UNKNOWN)
-        return wrapper[keycode]
-    
-    @staticmethod
-    def is_pressed(key: KeyLike) -> bool:
-        wrapper = pygame.key.get_pressed()
-        return Keyboard._get_key_state(key, wrapper)
+def _get_key_state(key: KeyLike, wrapper: pygame.key.ScancodeWrapper) -> bool:
+    keycode = STRING_TO_KEYCODE.get(key.lower(), pygame.K_UNKNOWN)
+    return wrapper[keycode]
 
-    @staticmethod
-    def is_released(key: KeyLike) -> bool:
-        return not Keyboard.is_pressed(key)
 
-    @staticmethod
-    def is_just_pressed(key: KeyLike) -> bool:
-        wrapper = pygame.key.get_just_pressed()
-        return Keyboard._get_key_state(key, wrapper)
+def is_pressed(key: KeyLike) -> bool:
+    wrapper = pygame.key.get_pressed()
+    return _get_key_state(key, wrapper)
 
-    @staticmethod
-    def is_just_released(key: KeyLike) -> bool:
-        wrapper = pygame.key.get_just_released()
-        return Keyboard._get_key_state(key, wrapper)
 
-    @staticmethod
-    def is_modifier_active(modifier: ModifierLike) -> bool:
-        bitmask = pygame.key.get_mods()
-        modcode = STRING_TO_MODCODE.get(modifier.lower(), pygame.KMOD_NONE)
-        return bool(bitmask & modcode)
+def is_released(key: KeyLike) -> bool:
+    return not is_pressed(key)
 
-    @staticmethod
-    def get_axis(negative_key: KeyLike, positive_key: KeyLike) -> int:
-        negative_pressed = Keyboard.is_pressed(negative_key)
-        positive_pressed = Keyboard.is_pressed(positive_key)
-        return positive_pressed - negative_pressed
+
+def is_just_pressed(key: KeyLike) -> bool:
+    wrapper = pygame.key.get_just_pressed()
+    return _get_key_state(key, wrapper)
+
+
+def is_just_released(key: KeyLike) -> bool:
+    wrapper = pygame.key.get_just_released()
+    return _get_key_state(key, wrapper)
+
+
+def is_modifier_active(modifier: ModifierLike) -> bool:
+    bitmask = pygame.key.get_mods()
+    modcode = STRING_TO_MODCODE.get(modifier.lower(), pygame.KMOD_NONE)
+    return bool(bitmask & modcode)
+
+
+def get_axis(negative_key: KeyLike, positive_key: KeyLike) -> int:
+    negative_pressed = is_pressed(negative_key)
+    positive_pressed = is_pressed(positive_key)
+    return positive_pressed - negative_pressed
