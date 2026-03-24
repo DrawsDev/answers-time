@@ -7,7 +7,6 @@ import pygame
 from . import keyboard
 from src.core.clock import Clock
 from src.core.graphics import Graphics
-from src.core.mouse import Mouse
 from src.core.scene import SceneManager
 from src.core.version import Version
 from src.core.window import Window
@@ -28,7 +27,6 @@ class Application:
         self.window = Window(title, width, height)
         self.graphics = Graphics(self)
         self.scene = SceneManager(self)
-        self.mouse = Mouse()
         self._version = None
         self._wrapper_version = Version.from_text(VERSION)
 

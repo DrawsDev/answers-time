@@ -63,4 +63,4 @@ class Test(Scene):
         self.app.graphics.print(f"Wrapper v{wrapper_version}", 0, 0)
         self.app.graphics.print(f"Answers Time v{version}", 0, 20)
         self.app.graphics.print(f"FPS: {self.app.clock.framerate}", 0, 40)
-        self.app.graphics.print(f"MP: {self.app.mouse.get_position()}", 0, 60)
+        self.app.graphics.print(f"MP: {mouse.get_position()}", 0, 60)
