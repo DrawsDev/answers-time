@@ -17,3 +17,7 @@ def clear(color: pygame.Color = pygame.Color(0, 0, 0)) -> None:
 
 def print(text: str, x: int = 0, y: int = 0) -> None:
     pygame.display.get_surface().blit(_font.render(text, _antialias, _color), (x, y))
+
+
+def draw(surface: pygame.Surface, rect: pygame.typing.RectLike) -> None:
+    pygame.display.get_surface().blit(surface, rect)
