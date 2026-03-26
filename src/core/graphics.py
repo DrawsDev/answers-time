@@ -12,10 +12,8 @@ def load_surface(filepath: str) -> pygame.Surface:
 
 
 def clear(color: pygame.Color = pygame.Color(0, 0, 0)) -> None:
-    surface = pygame.display.get_surface()
-    surface.fill(color)
+    pygame.display.get_surface().fill(color)
 
 
 def print(text: str, x: int = 0, y: int = 0) -> None:
-    surface = pygame.display.get_surface()
-    surface.blit(_font.render(text, _antialias, _color), (x, y))
+    pygame.display.get_surface().blit(_font.render(text, _antialias, _color), (x, y))
