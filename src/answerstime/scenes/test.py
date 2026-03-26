@@ -5,13 +5,13 @@ from src.core import *
 from src.objects import *
 from src.utils import *
 
-BACKGROUND = Color("#a0a0a0")
+BACKGROUND = Color("#000D2C")
 
 
 class Test(Scene):
     def on_enter(self, **kwargs) -> None:
         width, height = self.app.window.get_mode()
-        pattern_surface = self.app.graphics.load_surface("res/textures/pattern1.png")
+        pattern_surface = graphics.load_surface("res/textures/pattern1.png")
 
         self.scroll = ScrollingBackground()
         self.scroll.pattern = pattern_surface
@@ -49,18 +49,18 @@ class Test(Scene):
     def _objects_process(self, delta: float) -> None:
         self.scroll.process(delta)
         self.container.process(delta)
+        self.label.theme.font_color = rainbow(s=50.0)
 
     def _graphics_process(self) -> None:
-	 surface = self.app.window.get_surface()
-	 self.scroll.draw(surface)
-	 self.container.draw(surface)
-        self.label.theme.font_color = rainbow(s=50.0)
+        surface = self.app.window.get_surface()
+        self.scroll.draw(surface)
+        self.container.draw(surface)
         self._debug_info_process()
 
     def _debug_info_process(self) -> None:
-        wrapper_version = self.app.get_wrapper_version().as_text()
+        wrapper_version = get_wrapper_version().as_text()
         version = self.app.get_version().as_text()
-        self.app.graphics.print(f"Wrapper v{wrapper_version}", 0, 0)
-        self.app.graphics.print(f"Answers Time v{version}", 0, 20)
-        self.app.graphics.print(f"FPS: {self.app.clock.framerate}", 0, 40)
-        self.app.graphics.print(f"MP: {mouse.get_position()}", 0, 60)
+        graphics.print(f"Wrapper v{wrapper_version}", 0, 0)
+        graphics.print(f"Answers Time v{version}", 0, 20)
+        graphics.print(f"FPS: {self.app.clock.framerate}", 0, 40)
+        graphics.print(f"MP: {mouse.get_position()}", 0, 60)

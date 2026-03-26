@@ -6,7 +6,6 @@ import pygame
 
 from . import keyboard
 from .clock import Clock
-from .graphics import Graphics
 from .scene import SceneManager
 from .version import Version
 from .window import Window
@@ -23,7 +22,6 @@ class Application:
     def __init__(self, title: str, width: int, height: int) -> None:
         self.clock = Clock()
         self.window = Window(title, width, height)
-        self.graphics = Graphics(self)
         self.scene = SceneManager(self)
         self._version = None
 
