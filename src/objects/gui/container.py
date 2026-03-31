@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple
 
 import pygame
 
@@ -10,27 +10,15 @@ class Container:
         self._elements: List[Element] = []
         self._captured: Optional[Element] = None
 
-    def add(self, *elements: Union[Element, Iterable[Element]]) -> None:
+    def add(self, *elements: Element) -> None:
         for element in elements:
-            if isinstance(element, Element):
-                if not self.has(element):
-                    self._elements.append(element)
-            else:
-                try: # yeah
-                    self.add(*element)
-                except:
-                    pass
+            if not self.has(element):
+                self._elements.append(element)
 
-    def remove(self, *elements: Union[Element, Iterable[Element]]) -> None:
+    def remove(self, *elements: Element) -> None:
         for element in elements:
-            if isinstance(element, Element):
-                if self.has(element):
-                    self._elements.remove(element)
-            else:
-                try: # nah..
-                    self.remove(*element)
-                except:
-                    pass
+            if self.has(element):
+                self._elements.remove(element)
 
     def clear(self) -> None:
         self._elements.clear()
