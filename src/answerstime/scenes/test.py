@@ -63,5 +63,5 @@ class Test(Scene):
         graphics.print(get_pygame_welcome_message(), 0, 0)
         graphics.print(f"Wrapper v{wrapper_version}", 0, 20)
         graphics.print(f"Answers Time v{version}", 0, 40)
-        graphics.print(f"FPS: {self.app.clock.framerate}", 0, 60)
+        graphics.print(f"FPS: {self.app.clock.get_framerate()}", 0, 60)
         graphics.print(f"WMP: {mouse.get_position()}", 0, 80)

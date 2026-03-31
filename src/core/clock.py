@@ -3,6 +3,10 @@ import pygame
 MS_PER_SEC = 1000
 
 
+def get_ticks() -> int:
+    return pygame.time.get_ticks()
+
+
 class Clock:
     def __init__(self) -> None:
         self._clock = pygame.Clock()
@@ -10,28 +14,20 @@ class Clock:
         self._delta = 0.0
         self._accurate = False
     
-    @property
-    def delta(self) -> float:
+    def get_delta(self) -> float:
         return self._delta
     
-    @property
-    def framerate(self) -> int:
+    def get_framerate(self) -> int:
         return int(self._clock.get_fps())
-    
-    @framerate.setter
-    def framerate(self, value: int) -> None:
-        self._framerate = value
 
-    @property
-    def accurate(self) -> bool:
+    def set_framerate(self, framerate: float) -> None:
+        self._framerate = framerate
+
+    def is_accurate(self) -> bool:
         return self._accurate
     
-    @accurate.setter
-    def accurate(self, value: bool) -> None:
-        self._accurate = value
-
-    def get_ticks(self) -> int:
-        return pygame.time.get_ticks()
+    def set_accurate(self, enabled: bool) -> None:
+        self._accurate = enabled
 
     def tick(self) -> None:
         if self._accurate:

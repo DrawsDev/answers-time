@@ -1,6 +1,6 @@
 from pygame import Color, Event, Vector2, Vector3
 
-from . import graphics, keyboard, mouse
+from . import clock, graphics, keyboard, mouse
 from .version import Version
 from .application import Application
 from .scene import Scene

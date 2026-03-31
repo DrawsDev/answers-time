@@ -52,7 +52,7 @@ class Application:
     def process(self) -> None:
         self.clock.tick()
         self.window.flip()
-        self.scene.process(self.clock.delta)
+        self.scene.process(self.clock.get_delta())
         self._fullscreen_key_handler()
 
     def _fullscreen_key_handler(self) -> None:
