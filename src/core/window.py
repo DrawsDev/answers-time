@@ -26,6 +26,7 @@ class Window:
             if not desktop:
                 self._surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
             else:
+                self.restore()
                 self._surface = pygame.display.set_mode(
                     pygame.display.get_desktop_sizes()[self._display_index], pygame.NOFRAME
                 )
@@ -47,6 +48,9 @@ class Window:
 
     def get_surface(self) -> pygame.Surface:
         return self._surface
+
+    def restore(self) -> None:
+        pygame.Window.from_display_module().restore()
 
     def event(self, event: pygame.Event) -> None:
         if event.type == pygame.WINDOWDISPLAYCHANGED:
