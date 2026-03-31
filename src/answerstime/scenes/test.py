@@ -60,7 +60,8 @@ class Test(Scene):
     def _debug_info_process(self) -> None:
         wrapper_version = get_wrapper_version().as_text()
         version = self.app.get_version().as_text()
-        graphics.print(f"Wrapper v{wrapper_version}", 0, 0)
-        graphics.print(f"Answers Time v{version}", 0, 20)
-        graphics.print(f"FPS: {self.app.clock.framerate}", 0, 40)
-        graphics.print(f"MP: {mouse.get_position()}", 0, 60)
+        graphics.print(get_pygame_welcome_message(), 0, 0)
+        graphics.print(f"Wrapper v{wrapper_version}", 0, 20)
+        graphics.print(f"Answers Time v{version}", 0, 40)
+        graphics.print(f"FPS: {self.app.clock.framerate}", 0, 60)
+        graphics.print(f"WMP: {mouse.get_position()}", 0, 80)
