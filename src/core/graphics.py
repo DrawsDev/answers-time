@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pygame
 
 pygame.font.init()
@@ -21,3 +23,7 @@ def print(text: str, x: int = 0, y: int = 0) -> None:
 
 def draw(surface: pygame.Surface, rect: pygame.typing.RectLike) -> None:
     pygame.display.get_surface().blit(surface, rect)
+
+
+def draw_batch(*batch: Tuple[pygame.Surface, pygame.typing.RectLike]) -> None:
+    pygame.display.get_surface().blits(batch)
