@@ -43,6 +43,7 @@ class Test(Scene):
         self.container.event(event)
 
     def process(self, delta: float) -> None:
+        self._fullscreen_key_handler()
         self._objects_process(delta)
         self._graphics_process()
 
@@ -65,3 +66,14 @@ class Test(Scene):
         graphics.print(f"Answers Time v{version}", 0, 40)
         graphics.print(f"FPS: {self.app.clock.get_framerate()}", 0, 60)
         graphics.print(f"WMP: {mouse.get_position()}", 0, 80)
+
+    def _fullscreen_key_handler(self) -> None:
+        if (
+            keyboard.is_just_pressed("f11")
+            or keyboard.is_just_pressed("return")
+            and keyboard.is_modifier_active("alt")
+        ):
+            if self.app.window.is_fullscreen():
+                self.app.window.set_windowed()
+            else:
+                self.app.window.set_fullscreen()

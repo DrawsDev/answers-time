@@ -4,7 +4,6 @@ from typing import Optional
 
 import pygame
 
-from . import keyboard
 from .clock import Clock
 from .scene import SceneManager
 from .version import Version
@@ -53,15 +52,3 @@ class Application:
         self.clock.tick()
         self.window.flip()
         self.scene.process(self.clock.get_delta())
-        self._fullscreen_key_handler()
-
-    def _fullscreen_key_handler(self) -> None:
-        if (
-            keyboard.is_just_pressed("f11")
-            or keyboard.is_just_pressed("return")
-            and keyboard.is_modifier_active("alt")
-        ):
-            if self.window.is_fullscreen():
-                self.window.set_windowed()
-            else:
-                self.window.set_fullscreen()
