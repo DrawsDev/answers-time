@@ -4,8 +4,8 @@ The quiz game
 
 [![VERSION](https://img.shields.io/badge/version-v2.0.0--alpha-blue?style=flat-square)]() 
 [![PYTHON](https://img.shields.io/badge/python-3.8.10-blue?style=flat-square)](https://www.python.org/downloads/release/python-3810/)
-[![LICENSE-CODE](https://img.shields.io/badge/license--code-GNU%20GPLv3-blue?style=flat-square)](https://opensource.org/license/MIT)
-[![LICENSE-ASSETS](https://img.shields.io/badge/license--assets-CC%20BY--SA%204.0-blue?style=flat-square)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![LICENSE-CODE](https://img.shields.io/badge/license--code-GNU%20GPLv3-blue?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![LICENSE-ASSETS](https://img.shields.io/badge/license--assets-CC%20BY--SA%204.0-blue?style=flat-square)](https://creativecommons.org/licenses/by-sa/4.0/)
 
 > [!WARNING]
 > This is an `alpha` version. Project is under development and may differ from previous builds.
